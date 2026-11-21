@@ -402,6 +402,10 @@
             transition: background-color 0.3s var(--m3-effects-standard), color 0.25s var(--m3-effects-standard);
         }
 
+        body.is-replace-mode .tab-bar-wrapper {
+            display: none;
+        }
+
         /* --- Material Symbols --- */
         .material-symbols-rounded {
             font-family: 'Material Symbols Rounded';
@@ -786,6 +790,52 @@
             transform: rotate(90deg) scale(0.92);
         }
 
+        /* --- Mobile Replace Mode Sub-Tabs (Hidden on Desktop) --- */
+        .mobile-patch-tabs {
+            display: none;
+            width: 100%;
+            max-width: 1440px;
+            gap: 8px;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            background: var(--md-surface-container);
+            padding: 4px;
+            border-radius: 18px;
+        }
+
+        .mobile-patch-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--md-on-surface-variant);
+            border-radius: 14px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.2s, color 0.2s, transform 0.2s;
+        }
+        .mobile-patch-tab-btn .material-symbols-rounded { font-size: 17px; }
+        .mobile-patch-tab-btn:active { transform: scale(0.96); }
+        .mobile-patch-tab-btn.active {
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+            box-shadow: var(--m3-shadow-1);
+        }
+        .mobile-patch-badge {
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.08);
+        }
+        :root[data-theme="dark"] .mobile-patch-badge {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
         /* --- Main Workspace Container --- */
         .container {
             display: flex;
@@ -848,6 +898,18 @@
             transition: background-color 0.3s var(--m3-effects-standard), border-color 0.3s var(--m3-effects-standard);
         }
 
+        .pane-footer {
+            background: var(--md-surface-container-low);
+            padding: 10px 14px;
+            border-top: 1px solid var(--md-surface-container-high);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-shrink: 0;
+            min-height: 54px;
+        }
+
         .pane-title {
             white-space: nowrap;
             overflow: hidden;
@@ -901,7 +963,7 @@
         }
         .header-btn .material-symbols-rounded { font-size: 16px; }
         .header-btn:disabled {
-            opacity: 0.45;
+            opacity: 0.42;
             cursor: not-allowed;
             box-shadow: none;
             transform: none !important;
@@ -1089,6 +1151,101 @@
         }
         .patch-meta-file .material-symbols-rounded { font-size: 15px; color: var(--md-primary); }
 
+        .patch-footer-info {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--md-on-surface-variant);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Compact Mobile Target Code Card inside Patches pane */
+        .mobile-target-card {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--md-surface-container);
+            border-bottom: 1px solid var(--md-surface-container-high);
+            flex-shrink: 0;
+        }
+
+        .mobile-target-info {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .mobile-step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+            font-size: 12px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .mobile-target-text {
+            min-width: 0;
+        }
+        .mobile-target-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--md-on-surface);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .mobile-target-sub {
+            font-size: 11.5px;
+            color: var(--md-on-surface-variant);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mobile-target-actions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .compact-pill-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 6px 10px;
+            min-height: 32px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--md-surface-container-highest);
+            color: var(--md-on-surface);
+            transition: transform 0.2s;
+        }
+        .compact-pill-btn .material-symbols-rounded { font-size: 15px; }
+        .compact-pill-btn:active { transform: scale(0.93); }
+        .compact-pill-btn.primary {
+            background: var(--md-primary);
+            color: var(--md-on-primary);
+        }
+        .compact-pill-btn.secondary {
+            background: var(--md-secondary-container);
+            color: var(--md-on-secondary-container);
+        }
+
         .patch-ai-input-wrap {
             display: flex;
             flex-direction: column;
@@ -1103,39 +1260,30 @@
             justify-content: space-between;
             gap: 8px;
             padding: 8px 14px;
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 700;
-            color: var(--md-on-surface-variant);
-            cursor: pointer;
+            color: var(--md-on-surface);
             user-select: none;
         }
 
         .patch-subbar-left {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
+            min-width: 0;
         }
-        .patch-subbar-left .material-symbols-rounded { font-size: 16px; color: var(--md-primary); }
 
-        .patch-collapse-pill {
+        .patch-subbar-actions {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 3px 9px;
-            border-radius: 12px;
-            background: var(--md-surface-container-high);
-            color: var(--md-on-surface);
-            font-size: 11.5px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
+            gap: 5px;
+            flex-shrink: 0;
         }
-        .patch-collapse-pill .material-symbols-rounded { font-size: 15px; }
 
         .patch-ai-input-body {
             display: flex;
             flex-direction: column;
-            height: 150px;
+            height: 140px;
             border-top: 1px solid var(--md-surface-container-high);
             transition: height 0.25s var(--m3-shape-ease), opacity 0.2s;
             overflow: hidden;
@@ -1152,35 +1300,76 @@
             line-height: 1.5;
         }
 
+        /* Tappable Filter Pills Bar */
         .patch-summary-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
             gap: 8px;
-            padding: 10px 14px;
+            padding: 8px 14px;
             background: var(--md-surface-container-low);
             border-bottom: 1px solid var(--md-surface-container-high);
             flex-shrink: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+        .patch-summary-bar::-webkit-scrollbar { display: none; }
 
         .patch-stat-pills {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 6px;
+        }
+
+        .patch-filter-btn {
+            border: 1px solid var(--md-outline-variant);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 11px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            background: var(--md-surface-container-lowest);
+            color: var(--md-on-surface-variant);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.18s, background-color 0.2s, border-color 0.2s, color 0.2s;
+        }
+        .patch-filter-btn:active { transform: scale(0.94); }
+        .patch-filter-btn.active {
+            border-color: transparent;
+            box-shadow: var(--m3-shadow-1);
+        }
+        .patch-filter-btn[data-filter="all"].active {
+            background: var(--md-on-surface);
+            color: var(--md-surface);
+        }
+        .patch-filter-btn[data-filter="ready"].active {
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+        }
+        .patch-filter-btn[data-filter="applied"].active {
+            background: var(--md-secondary-container);
+            color: var(--md-on-secondary-container);
+        }
+        .patch-filter-btn[data-filter="missing"].active {
+            background: var(--md-error-container);
+            color: var(--md-on-error-container);
         }
 
         .patch-stat-pill {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11.5px;
+            padding: 3px 9px;
+            border-radius: 10px;
+            font-size: 11px;
             font-weight: 700;
             background: var(--md-surface-container-high);
             color: var(--md-on-surface-variant);
+            white-space: nowrap;
         }
         .patch-stat-pill.ready {
             background: var(--md-primary-container);
@@ -1202,10 +1391,10 @@
         #patch-list {
             flex: 1;
             overflow-y: auto;
-            padding: 14px;
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             background: var(--md-surface-container-lowest);
             -webkit-overflow-scrolling: touch;
         }
@@ -1214,7 +1403,7 @@
             text-align: center;
             color: var(--md-on-surface-variant);
             margin: auto;
-            padding: 28px 16px;
+            padding: 24px 16px;
             max-width: 380px;
             font-size: 0.9rem;
             line-height: 1.55;
@@ -1238,13 +1427,13 @@
             flex-shrink: 0;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .patch-card.is-ready { border-color: color-mix(in srgb, var(--md-primary) 45%, var(--md-outline-variant)); }
-        .patch-card.is-applied { border-color: color-mix(in srgb, var(--md-secondary) 45%, var(--md-outline-variant)); opacity: 0.88; }
-        .patch-card.is-missing { border-color: color-mix(in srgb, #ef4444 45%, var(--md-outline-variant)); }
+        .patch-card.is-ready { border-color: color-mix(in srgb, var(--md-primary) 48%, var(--md-outline-variant)); }
+        .patch-card.is-applied { border-color: color-mix(in srgb, var(--md-secondary) 42%, var(--md-outline-variant)); opacity: 0.88; }
+        .patch-card.is-missing { border-color: color-mix(in srgb, #ef4444 48%, var(--md-outline-variant)); }
 
         .patch-card-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             gap: 8px;
             padding: 10px 12px;
@@ -1254,7 +1443,7 @@
 
         .patch-card-title-wrap {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 8px;
             min-width: 0;
             flex: 1;
@@ -1278,10 +1467,12 @@
         .patch-card-title {
             font-size: 12.5px;
             font-weight: 700;
+            line-height: 1.35;
             color: var(--md-on-surface);
-            white-space: nowrap;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .patch-card-actions {
@@ -1328,7 +1519,10 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            border-left: 3px solid transparent;
         }
+        .patch-snippet-col.find-col { border-left-color: #f87171; }
+        .patch-snippet-col.replace-col { border-left-color: #34d399; }
 
         .patch-snippet-label {
             display: flex;
@@ -1345,11 +1539,11 @@
         .patch-snippet-code {
             margin: 0;
             font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 11.8px;
+            font-size: 12px;
             line-height: 1.45;
             white-space: pre-wrap;
             word-break: break-all;
-            max-height: 110px;
+            max-height: 96px;
             overflow: auto;
             color: #e2e8f0;
         }
@@ -1357,6 +1551,9 @@
             font-style: italic;
             opacity: 0.55;
         }
+
+        .mobile-only-inline { display: none; }
+        .desktop-only-inline { display: inline-flex; }
 
         /* --- Markdown Elements & Math Styling --- */
         .markdown-text {
@@ -1823,9 +2020,23 @@
                 height: 28px;
             }
 
-            .container.patch-mode {
-                flex-direction: column;
-                gap: 10px;
+            body.is-replace-mode .mobile-patch-tabs {
+                display: flex;
+            }
+
+            .mobile-only-inline { display: inline-flex; }
+            .desktop-only-inline { display: none; }
+
+            .mobile-target-card { display: flex; }
+
+            /* Hide desktop top header on Patches pane on mobile since sub-tabs + Step 1/Step 2 handle it cleanly */
+            #pane-patch-ai > .pane-header {
+                display: none;
+            }
+
+            #pane-patch-code.mobile-patch-hidden,
+            #pane-patch-ai.mobile-patch-hidden {
+                display: none;
             }
 
             .pane { border-radius: 20px; }
@@ -1833,6 +2044,12 @@
             .pane-header {
                 padding: 8px 12px;
                 min-height: 50px;
+            }
+
+            .pane-footer {
+                padding: 8px 10px;
+                min-height: 52px;
+                gap: 6px;
             }
 
             .pane-title { display: none; }
@@ -1865,8 +2082,26 @@
             }
 
             #patch-ai-input { font-size: 15px; }
-            .patch-ai-input-body { height: 112px; }
+            .patch-ai-input-body { height: 105px; }
             .patch-diff-grid { grid-template-columns: 1fr; }
+
+            /* Mobile Sticky Footer inside Patches pane */
+            .mobile-patch-footer-bar {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: space-between;
+                gap: 6px;
+            }
+            .mobile-patch-footer-bar .paste-btn {
+                flex: 1;
+                min-height: 40px;
+            }
+            .mobile-patch-footer-bar .clear-btn,
+            .mobile-patch-footer-bar .export-btn {
+                min-height: 40px;
+                padding: 7px 10px;
+            }
 
             #output { padding: 14px; }
 
@@ -1911,6 +2146,7 @@
             .brand-group h1 { font-size: 0.94rem; }
             .switcher-btn { padding: 6px 8px; font-size: 11.5px; gap: 3px; }
             .switcher-btn .material-symbols-rounded { font-size: 14px; }
+            .compact-pill-btn { padding: 5px 8px; font-size: 11.5px; }
         }
     </style>
 </head>
@@ -1960,11 +2196,25 @@
         </div>
     </header>
 
-    <!-- Tab Bar -->
+    <!-- Tab Bar (Hidden in Replace mode) -->
     <div class="tab-bar-wrapper">
         <div class="tab-list" id="tab-list"></div>
         <button class="tab-add-btn m3-ripple" id="btn-add-tab" title="New Tab" aria-label="New Tab">
             <span class="material-symbols-rounded">add</span>
+        </button>
+    </div>
+
+    <!-- Mobile Replace Sub-Tabs (Visible only on <=840px in Replace mode) -->
+    <div class="mobile-patch-tabs" id="mobile-patch-tabs">
+        <button class="mobile-patch-tab-btn active m3-ripple" data-patch-sub="patches">
+            <span class="material-symbols-rounded">checklist</span>
+            <span>Patches</span>
+            <span class="mobile-patch-badge" id="mobile-sub-badge-patches">0</span>
+        </button>
+        <button class="mobile-patch-tab-btn m3-ripple" data-patch-sub="code">
+            <span class="material-symbols-rounded">code</span>
+            <span>Target Code</span>
+            <span class="mobile-patch-badge" id="mobile-sub-badge-code">Empty</span>
         </button>
     </div>
 
@@ -2030,17 +2280,13 @@
         <!-- Find & Replace Pane 1: Original / Patched Code -->
         <section class="pane hidden-pane" id="pane-patch-code">
             <div class="pane-header">
-                <span class="pane-title">Original / Patched Code</span>
+                <span class="pane-title">1. Target Code</span>
                 <div class="header-btn-group">
                     <button id="btn-patch-import" class="header-btn import-btn m3-ripple" title="Import target code file">
                         <span class="material-symbols-rounded">upload_file</span>
                         <span>Import</span>
                     </button>
                     <div class="m3-connected-group">
-                        <button id="btn-patch-undo" class="header-btn clear-btn m3-ripple" title="Undo last replacement" disabled>
-                            <span class="material-symbols-rounded">undo</span>
-                            <span>Undo</span>
-                        </button>
                         <button id="btn-patch-clear-code" class="header-btn clear-btn m3-ripple">
                             <span class="material-symbols-rounded">delete_sweep</span>
                             <span>Clear</span>
@@ -2048,16 +2294,6 @@
                         <button id="btn-patch-paste-code" class="header-btn paste-btn m3-ripple">
                             <span class="material-symbols-rounded" id="patch-paste-code-icon">content_paste</span>
                             <span id="patch-paste-code-label">Paste</span>
-                        </button>
-                    </div>
-                    <div class="m3-connected-group">
-                        <button id="btn-patch-copy-code" class="header-btn clear-btn m3-ripple" title="Copy patched code">
-                            <span class="material-symbols-rounded" id="patch-copy-icon">content_copy</span>
-                            <span id="patch-copy-label">Copy</span>
-                        </button>
-                        <button id="btn-patch-download" class="header-btn export-btn m3-ripple" title="Download patched file">
-                            <span class="material-symbols-rounded">download</span>
-                            <span>Save</span>
                         </button>
                     </div>
                 </div>
@@ -2070,12 +2306,28 @@
                 <span id="patch-code-meta">0 lines · 0 chars</span>
             </div>
             <textarea id="patch-code-input" placeholder="Paste your original code here (or tap Import / drop a code file)..."></textarea>
+            <div class="pane-footer">
+                <button id="btn-patch-undo" class="header-btn clear-btn m3-ripple" title="Undo last replacement" disabled>
+                    <span class="material-symbols-rounded">undo</span>
+                    <span>Undo</span>
+                </button>
+                <div class="m3-connected-group">
+                    <button id="btn-patch-copy-code" class="header-btn clear-btn m3-ripple" title="Copy patched code">
+                        <span class="material-symbols-rounded" id="patch-copy-icon">content_copy</span>
+                        <span id="patch-copy-label">Copy</span>
+                    </button>
+                    <button id="btn-patch-download" class="header-btn export-btn m3-ripple" title="Download patched file">
+                        <span class="material-symbols-rounded">download</span>
+                        <span>Save</span>
+                    </button>
+                </div>
+            </div>
         </section>
 
         <!-- Find & Replace Pane 2: AI Reply & Detected Patches -->
         <section class="pane hidden-pane" id="pane-patch-ai">
             <div class="pane-header">
-                <span class="pane-title">AI Reply & Patches</span>
+                <span class="pane-title">2. AI Reply & Patches</span>
                 <div class="header-btn-group">
                     <button id="btn-patch-from-tab" class="header-btn import-btn m3-ripple" title="Load Markdown from the active tab">
                         <span class="material-symbols-rounded">article</span>
@@ -2086,44 +2338,106 @@
                             <span class="material-symbols-rounded">delete_sweep</span>
                             <span>Clear</span>
                         </button>
-                        <button id="btn-patch-paste-ai" class="header-btn clear-btn m3-ripple">
+                        <button id="btn-patch-paste-ai" class="header-btn paste-btn m3-ripple">
                             <span class="material-symbols-rounded" id="patch-paste-ai-icon">content_paste</span>
                             <span id="patch-paste-ai-label">Paste</span>
                         </button>
                     </div>
-                    <button id="btn-patch-replace-all" class="header-btn paste-btn m3-ripple" disabled>
-                        <span class="material-symbols-rounded">done_all</span>
-                        <span id="patch-replace-all-label">Replace All</span>
+                </div>
+            </div>
+
+            <!-- Mobile Step 1: Compact Target Code Summary & Quick Load -->
+            <div class="mobile-target-card">
+                <div class="mobile-target-info">
+                    <span class="mobile-step-num">1</span>
+                    <div class="mobile-target-text">
+                        <div class="mobile-target-title" id="mobile-target-title">Target Code</div>
+                        <div class="mobile-target-sub" id="mobile-target-sub">No code loaded yet</div>
+                    </div>
+                </div>
+                <div class="mobile-target-actions">
+                    <button type="button" class="compact-pill-btn secondary m3-ripple" id="btn-mob-import" title="Import file">
+                        <span class="material-symbols-rounded">upload_file</span>
+                    </button>
+                    <button type="button" class="compact-pill-btn primary m3-ripple" id="btn-mob-paste-code">
+                        <span class="material-symbols-rounded">content_paste</span>
+                        <span>Paste</span>
+                    </button>
+                    <button type="button" class="compact-pill-btn m3-ripple" id="btn-mob-edit-code" title="View / edit code">
+                        <span class="material-symbols-rounded">edit</span>
                     </button>
                 </div>
             </div>
 
+            <!-- Step 2: AI Reply Input (Collapsible) -->
             <div class="patch-ai-input-wrap" id="patch-ai-input-wrap">
-                <div class="patch-subbar" id="patch-ai-collapse-toggle">
+                <div class="patch-subbar">
                     <span class="patch-subbar-left">
-                        <span class="material-symbols-rounded">smart_toy</span>
-                        <span>AI Find & Replace Reply</span>
+                        <span class="mobile-step-num mobile-only-inline">2</span>
+                        <span class="material-symbols-rounded desktop-only-inline" style="font-size:16px; color:var(--md-primary);">smart_toy</span>
+                        <span id="patch-ai-subbar-label">AI Find & Replace Reply</span>
                     </span>
-                    <button type="button" class="patch-collapse-pill" id="patch-ai-collapse-btn">
-                        <span class="material-symbols-rounded" id="patch-ai-collapse-icon">unfold_less</span>
-                        <span id="patch-ai-collapse-label">Hide</span>
-                    </button>
+                    <div class="patch-subbar-actions">
+                        <button type="button" class="compact-pill-btn secondary mobile-only-inline m3-ripple" id="btn-mob-from-tab" title="Load from active document tab">
+                            <span class="material-symbols-rounded">article</span>
+                            <span>Tab</span>
+                        </button>
+                        <button type="button" class="compact-pill-btn primary mobile-only-inline m3-ripple" id="btn-mob-paste-ai">
+                            <span class="material-symbols-rounded">content_paste</span>
+                            <span>Paste</span>
+                        </button>
+                        <button type="button" class="compact-pill-btn m3-ripple" id="patch-ai-collapse-btn">
+                            <span class="material-symbols-rounded" id="patch-ai-collapse-icon">unfold_less</span>
+                            <span id="patch-ai-collapse-label">Hide</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="patch-ai-input-body">
-                    <textarea id="patch-ai-input" placeholder="Paste the AI's reply containing Find / Replace with blocks here, or click 'From Tab'..."></textarea>
+                    <textarea id="patch-ai-input" placeholder="Paste the AI's reply containing Find / Replace with blocks here, or tap Tab..."></textarea>
                 </div>
             </div>
 
+            <!-- Tappable Filter Pills -->
             <div class="patch-summary-bar" id="patch-summary-bar">
                 <div class="patch-stat-pills" id="patch-stat-pills">
                     <span class="patch-stat-pill">0 detected</span>
                 </div>
             </div>
 
+            <!-- Scrollable Patch Cards -->
             <div id="patch-list">
                 <div class="patch-empty">
-                    <strong>No Find & Replace instructions yet</strong>
-                    Paste an AI's reply above (with <code>Find:</code> and <code>Replace with:</code> code blocks) or pull one from your active tab, then click <strong>Replace All</strong>.
+                    <strong>Ready to patch your code</strong>
+                    Load your <strong>Target Code</strong> above, then paste an AI's Find &amp; Replace reply to detect all changes.
+                </div>
+            </div>
+
+            <!-- Footer Bar (Desktop + Mobile Sticky Action Bar) -->
+            <div class="pane-footer">
+                <!-- Desktop Footer -->
+                <span class="patch-footer-info desktop-only-inline" id="patch-footer-summary">0 patches ready</span>
+                <button id="btn-patch-replace-all" class="header-btn paste-btn desktop-only-inline m3-ripple" disabled>
+                    <span class="material-symbols-rounded">done_all</span>
+                    <span id="patch-replace-all-label">Replace All</span>
+                </button>
+
+                <!-- Mobile Sticky Action Bar (Zero Clipping!) -->
+                <div class="mobile-patch-footer-bar mobile-only-inline">
+                    <button id="btn-mob-undo" class="header-btn clear-btn m3-ripple" title="Undo" disabled>
+                        <span class="material-symbols-rounded">undo</span>
+                    </button>
+                    <button id="btn-mob-copy" class="header-btn clear-btn m3-ripple" title="Copy patched code">
+                        <span class="material-symbols-rounded">content_copy</span>
+                        <span>Copy</span>
+                    </button>
+                    <button id="btn-mob-save" class="header-btn export-btn m3-ripple" title="Save patched file">
+                        <span class="material-symbols-rounded">download</span>
+                        <span>Save</span>
+                    </button>
+                    <button id="btn-mob-replace-all" class="header-btn paste-btn m3-ripple" disabled>
+                        <span class="material-symbols-rounded">done_all</span>
+                        <span id="mob-replace-all-label">Replace All</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -2212,7 +2526,6 @@
     <div id="m3-snackbar" role="status" aria-live="polite"></div>
 
     <script>
-        // Configure marked with KaTeX support
         if (typeof markedKatex !== 'undefined') {
             marked.use(markedKatex({
                 throwOnError: false,
@@ -2433,6 +2746,7 @@
                 btn.classList.toggle('active', btn.dataset.view === mode);
             });
 
+            document.body.classList.toggle('is-replace-mode', mode === 'replace');
             workspaceContainer.classList.toggle('patch-mode', mode === 'replace');
 
             [paneEditor, panePreview, panePatchCode, panePatchAi].forEach(p => {
@@ -2460,9 +2774,9 @@
                     panePatchCode.classList.add('mobile-slide-in-left');
                     panePatchAi.classList.add('mobile-slide-in-right');
                 }
+                applyMobilePatchSubView();
                 refreshPatcherUI();
             } else {
-                // split
                 panePatchCode.classList.add('hidden-pane');
                 panePatchAi.classList.add('hidden-pane');
             }
@@ -2483,6 +2797,7 @@
             if (isMobile && currentView === 'split') {
                 setViewMode(lastMobileView, false);
             } else {
+                applyMobilePatchSubView();
                 updateSwitcherPill();
             }
         });
@@ -3105,8 +3420,11 @@
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const content = event.target.result;
-                    if (dropTargetEl && dropTargetEl.closest('#pane-patch-ai')) {
+                    if (dropTargetEl && dropTargetEl.closest('#pane-patch-ai') && !dropTargetEl.closest('.mobile-target-card')) {
                         patchAiInput.value = content;
+                        if (window.innerWidth <= MOBILE_BREAKPOINT && parseFindReplacePairs(content).length > 0) {
+                            setAiInputCollapsed(true);
+                        }
                         savePatcherState();
                         refreshPatcherUI();
                         showSnackbar(`Loaded AI instructions from "${file.name}"`);
@@ -3236,16 +3554,37 @@
         const patchPasteAiLabel = document.getElementById('patch-paste-ai-label');
         const patchReplaceAllBtn = document.getElementById('btn-patch-replace-all');
         const patchReplaceAllLabel = document.getElementById('patch-replace-all-label');
+        const patchFooterSummary = document.getElementById('patch-footer-summary');
         const patchAiWrap = document.getElementById('patch-ai-input-wrap');
-        const patchAiCollapseToggle = document.getElementById('patch-ai-collapse-toggle');
+        const patchAiSubbarLabel = document.getElementById('patch-ai-subbar-label');
+        const patchAiCollapseBtn = document.getElementById('patch-ai-collapse-btn');
         const patchAiCollapseIcon = document.getElementById('patch-ai-collapse-icon');
         const patchAiCollapseLabel = document.getElementById('patch-ai-collapse-label');
         const patchStatPills = document.getElementById('patch-stat-pills');
         const patchListEl = document.getElementById('patch-list');
 
+        // Mobile Patcher Controls
+        const mobilePatchTabBtns = Array.from(document.querySelectorAll('.mobile-patch-tab-btn'));
+        const mobileSubBadgePatches = document.getElementById('mobile-sub-badge-patches');
+        const mobileSubBadgeCode = document.getElementById('mobile-sub-badge-code');
+        const mobileTargetTitle = document.getElementById('mobile-target-title');
+        const mobileTargetSub = document.getElementById('mobile-target-sub');
+        const mobImportBtn = document.getElementById('btn-mob-import');
+        const mobPasteCodeBtn = document.getElementById('btn-mob-paste-code');
+        const mobEditCodeBtn = document.getElementById('btn-mob-edit-code');
+        const mobFromTabBtn = document.getElementById('btn-mob-from-tab');
+        const mobPasteAiBtn = document.getElementById('btn-mob-paste-ai');
+        const mobUndoBtn = document.getElementById('btn-mob-undo');
+        const mobCopyBtn = document.getElementById('btn-mob-copy');
+        const mobSaveBtn = document.getElementById('btn-mob-save');
+        const mobReplaceAllBtn = document.getElementById('btn-mob-replace-all');
+        const mobReplaceAllLabel = document.getElementById('mob-replace-all-label');
+
         let patchFileName = '';
         let patchUndoStack = [];
         let patchAppliedCount = 0;
+        let mobilePatchSubView = 'patches'; // 'patches' | 'code'
+        let currentPatchFilter = 'all';     // 'all' | 'ready' | 'applied' | 'missing'
 
         try {
             const savedPatcher = localStorage.getItem(PATCH_STORAGE_KEY);
@@ -3256,6 +3595,42 @@
                 if (typeof parsedP.fileName === 'string') patchFileName = parsedP.fileName;
             }
         } catch (e) {}
+
+        function setAiInputCollapsed(collapsed) {
+            patchAiWrap.classList.toggle('collapsed', collapsed);
+            patchAiCollapseIcon.textContent = collapsed ? 'unfold_more' : 'unfold_less';
+            patchAiCollapseLabel.textContent = collapsed ? 'Show' : 'Hide';
+        }
+
+        function applyMobilePatchSubView() {
+            const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+            panePatchCode.classList.remove('mobile-patch-hidden');
+            panePatchAi.classList.remove('mobile-patch-hidden');
+
+            if (isMobile && currentView === 'replace') {
+                if (mobilePatchSubView === 'patches') {
+                    panePatchCode.classList.add('mobile-patch-hidden');
+                } else {
+                    panePatchAi.classList.add('mobile-patch-hidden');
+                }
+            }
+
+            mobilePatchTabBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.patchSub === mobilePatchSubView);
+            });
+        }
+
+        mobilePatchTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                mobilePatchSubView = btn.dataset.patchSub;
+                applyMobilePatchSubView();
+            });
+        });
+
+        mobEditCodeBtn.addEventListener('click', () => {
+            mobilePatchSubView = 'code';
+            applyMobilePatchSubView();
+        });
 
         function savePatcherState() {
             try {
@@ -3291,7 +3666,7 @@
             const pairs = [];
             let currentSection = '';
             let currentStep = '';
-            let pendingState = 'idle'; // 'idle' | 'expecting_find' | 'has_find' | 'expecting_replace'
+            let pendingState = 'idle';
             let currentFind = null;
             let currentLang = '';
 
@@ -3337,7 +3712,6 @@
                     return;
                 }
 
-                // Otherwise treat as descriptive step label if reasonably sized
                 if (clean.length >= 3 && clean.length <= 160) {
                     currentStep = clean;
                 }
@@ -3358,7 +3732,6 @@
                     } else if (tok.type === 'code') {
                         const codeBody = String(tok.text || '').replace(/\r\n/g, '\n');
 
-                        // Support <<<<<<< SEARCH ... ======= ... >>>>>>> REPLACE inside code blocks
                         if (pendingState === 'idle' && /^<{5,9}\s*SEARCH\b/m.test(codeBody)) {
                             const conflictRe = /^<{5,9}\s*SEARCH[^\n]*\n([\s\S]*?)\n={5,9}\n([\s\S]*?)\n>{5,9}\s*REPLACE/gm;
                             let cm;
@@ -3391,7 +3764,6 @@
                 walkTokens(marked.lexer(normalized));
             }
 
-            // Fallback: raw <<<<<<< SEARCH blocks outside fenced code
             if (!pairs.length && /^<{5,9}\s*SEARCH\b/m.test(normalized)) {
                 const conflictRe = /^<{5,9}\s*SEARCH[^\n]*\n([\s\S]*?)\n={5,9}\n([\s\S]*?)\n>{5,9}\s*REPLACE/gm;
                 let cm;
@@ -3444,7 +3816,7 @@
             return { status: 'missing', count: 0, line: null };
         }
 
-        function truncatePreview(str, maxLen = 420) {
+        function truncatePreview(str, maxLen = 400) {
             if (str.length <= maxLen) return str;
             return str.slice(0, maxLen) + `\n… (${str.length - maxLen} more chars)`;
         }
@@ -3454,15 +3826,31 @@
             const aiText = patchAiInput.value;
 
             const lineCount = code ? code.split('\n').length : 0;
+            const metaString = `${lineCount.toLocaleString()} line${lineCount === 1 ? '' : 's'} · ${code.length.toLocaleString()} chars` + (patchAppliedCount > 0 ? ` · ${patchAppliedCount} applied` : '');
             patchFileLabel.textContent = patchFileName || 'Unsaved snippet';
-            patchCodeMeta.textContent = `${lineCount.toLocaleString()} line${lineCount === 1 ? '' : 's'} · ${code.length.toLocaleString()} chars` + (patchAppliedCount > 0 ? ` · ${patchAppliedCount} applied` : '');
-            patchUndoBtn.disabled = patchUndoStack.length === 0;
+            patchCodeMeta.textContent = metaString;
+
+            // Update mobile Step 1 card & sub-tab badges
+            mobileTargetTitle.textContent = patchFileName ? `Target: ${patchFileName}` : 'Target Code';
+            mobileTargetSub.textContent = code ? metaString : 'No code loaded yet — Paste or Import';
+            mobileSubBadgeCode.textContent = code ? `${lineCount.toLocaleString()}L` : 'Empty';
+
+            const canUndo = patchUndoStack.length > 0;
+            patchUndoBtn.disabled = !canUndo;
+            mobUndoBtn.disabled = !canUndo;
 
             const pairs = parseFindReplacePairs(aiText);
+            mobileSubBadgePatches.textContent = String(pairs.length);
+            patchAiSubbarLabel.textContent = pairs.length > 0
+                ? `AI Reply (${pairs.length} patch${pairs.length === 1 ? '' : 'es'})`
+                : 'AI Find & Replace Reply';
 
             if (!aiText.trim()) {
                 patchReplaceAllBtn.disabled = true;
+                mobReplaceAllBtn.disabled = true;
                 patchReplaceAllLabel.textContent = 'Replace All';
+                mobReplaceAllLabel.textContent = 'Replace All';
+                patchFooterSummary.textContent = '0 patches detected';
                 patchStatPills.innerHTML = `<span class="patch-stat-pill">0 detected</span>`;
 
                 const activeTab = tabs.find(t => t.id === activeTabId);
@@ -3472,9 +3860,9 @@
                 const emptyDiv = document.createElement('div');
                 emptyDiv.className = 'patch-empty';
                 const strong = document.createElement('strong');
-                strong.textContent = 'No Find & Replace instructions yet';
+                strong.textContent = 'Ready to patch your code';
                 const desc = document.createElement('div');
-                desc.textContent = 'Paste an AI reply with Find and Replace with blocks above, or import from your active tab.';
+                desc.textContent = 'Paste an AI reply with Find & Replace blocks above, or load from your active tab.';
                 emptyDiv.appendChild(strong);
                 emptyDiv.appendChild(desc);
 
@@ -3483,13 +3871,14 @@
                     quickBtn.className = 'header-btn paste-btn m3-ripple';
                     quickBtn.appendChild(createIcon('article'));
                     const lbl = document.createElement('span');
-                    lbl.textContent = `Load from "${activeTab.title}" (${tabPairs.length} pair${tabPairs.length === 1 ? '' : 's'})`;
+                    lbl.textContent = `Load "${activeTab.title}" (${tabPairs.length} pair${tabPairs.length === 1 ? '' : 's'})`;
                     quickBtn.appendChild(lbl);
                     quickBtn.addEventListener('click', () => {
                         patchAiInput.value = activeTab.content;
+                        if (window.innerWidth <= MOBILE_BREAKPOINT) setAiInputCollapsed(true);
                         savePatcherState();
                         refreshPatcherUI();
-                        showSnackbar(`Loaded ${tabPairs.length} Find & Replace pair${tabPairs.length === 1 ? '' : 's'} from tab`);
+                        showSnackbar(`Loaded ${tabPairs.length} Find & Replace pair${tabPairs.length === 1 ? '' : 's'}`);
                     });
                     emptyDiv.appendChild(quickBtn);
                 }
@@ -3500,7 +3889,10 @@
 
             if (pairs.length === 0) {
                 patchReplaceAllBtn.disabled = true;
+                mobReplaceAllBtn.disabled = true;
                 patchReplaceAllLabel.textContent = 'Replace All';
+                mobReplaceAllLabel.textContent = 'Replace All';
+                patchFooterSummary.textContent = '0 valid pairs found';
                 patchStatPills.innerHTML = `<span class="patch-stat-pill warn">0 pairs detected</span>`;
                 patchListEl.innerHTML = `
                     <div class="patch-empty">
@@ -3522,23 +3914,46 @@
                 return { pair, ev };
             });
 
-            patchReplaceAllBtn.disabled = readyCount === 0 || !code;
-            patchReplaceAllLabel.textContent = readyCount > 0 ? `Replace All (${readyCount})` : 'Replace All';
+            const canReplaceAll = readyCount > 0 && Boolean(code);
+            patchReplaceAllBtn.disabled = !canReplaceAll;
+            mobReplaceAllBtn.disabled = !canReplaceAll;
 
+            const replaceLabel = readyCount > 0 ? `Replace All (${readyCount})` : 'Replace All';
+            patchReplaceAllLabel.textContent = replaceLabel;
+            mobReplaceAllLabel.textContent = replaceLabel;
+            patchFooterSummary.textContent = !code
+                ? 'Load target code to apply patches'
+                : `${readyCount} ready · ${appliedCount} applied · ${missingCount} not found`;
+
+            // Reset filter if current filter bucket is empty
+            if (currentPatchFilter === 'ready' && readyCount === 0) currentPatchFilter = 'all';
+            if (currentPatchFilter === 'applied' && appliedCount === 0) currentPatchFilter = 'all';
+            if (currentPatchFilter === 'missing' && missingCount === 0) currentPatchFilter = 'all';
+
+            // Tappable Filter Chips
             patchStatPills.innerHTML = '';
-            const addPill = (text, cls = '') => {
-                const sp = document.createElement('span');
-                sp.className = `patch-stat-pill ${cls}`;
-                sp.textContent = text;
-                patchStatPills.appendChild(sp);
+            const addFilterBtn = (filterKey, label) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `patch-filter-btn m3-ripple ${currentPatchFilter === filterKey ? 'active' : ''}`;
+                btn.dataset.filter = filterKey;
+                btn.textContent = label;
+                btn.addEventListener('click', () => {
+                    currentPatchFilter = filterKey;
+                    refreshPatcherUI();
+                });
+                patchStatPills.appendChild(btn);
             };
-            addPill(`${pairs.length} detected`);
-            if (readyCount > 0) addPill(`${readyCount} ready`, 'ready');
-            if (appliedCount > 0) addPill(`${appliedCount} applied`, 'applied');
-            if (missingCount > 0) addPill(`${missingCount} not found`, 'missing');
+
+            addFilterBtn('all', `All ${pairs.length}`);
+            if (readyCount > 0) addFilterBtn('ready', `Ready ${readyCount}`);
+            if (appliedCount > 0) addFilterBtn('applied', `Applied ${appliedCount}`);
+            if (missingCount > 0) addFilterBtn('missing', `Not Found ${missingCount}`);
+
+            const filtered = evaluated.filter(({ ev }) => currentPatchFilter === 'all' || ev.status === currentPatchFilter);
 
             patchListEl.innerHTML = '';
-            evaluated.forEach(({ pair, ev }) => {
+            filtered.forEach(({ pair, ev }) => {
                 const card = document.createElement('div');
                 card.className = `patch-card is-${ev.status}`;
 
@@ -3567,8 +3982,8 @@
                 if (ev.status === 'ready') {
                     statusPill.className = ev.count > 1 ? 'patch-stat-pill warn' : 'patch-stat-pill ready';
                     statusPill.textContent = ev.count > 1
-                        ? `×${ev.count} matches · Line ${ev.line}`
-                        : `Line ${ev.line}`;
+                        ? `×${ev.count} · L${ev.line}`
+                        : `L${ev.line}`;
                 } else if (ev.status === 'applied') {
                     statusPill.className = 'patch-stat-pill applied';
                     statusPill.textContent = 'Applied';
@@ -3611,7 +4026,7 @@
                 diffGrid.className = 'patch-diff-grid';
 
                 const findCol = document.createElement('div');
-                findCol.className = 'patch-snippet-col';
+                findCol.className = 'patch-snippet-col find-col';
                 const findLbl = document.createElement('div');
                 findLbl.className = 'patch-snippet-label find';
                 findLbl.innerHTML = `<span>Find</span><span>${pair.find.length} chars</span>`;
@@ -3622,7 +4037,7 @@
                 findCol.appendChild(findPre);
 
                 const repCol = document.createElement('div');
-                repCol.className = 'patch-snippet-col';
+                repCol.className = 'patch-snippet-col replace-col';
                 const repLbl = document.createElement('div');
                 repLbl.className = 'patch-snippet-label replace';
                 repLbl.innerHTML = `<span>Replace With</span><span>${pair.replace.length} chars</span>`;
@@ -3641,11 +4056,10 @@
             });
         }
 
-        // Replace All Execution
-        patchReplaceAllBtn.addEventListener('click', () => {
+        function runReplaceAll() {
             let working = patchCodeInput.value.replace(/\r\n/g, '\n');
             if (!working) {
-                showSnackbar('Paste your original code first');
+                showSnackbar('Load or paste your Target Code first');
                 return;
             }
             const pairs = parseFindReplacePairs(patchAiInput.value);
@@ -3686,9 +4100,11 @@
             } else {
                 showSnackbar(`Replaced all ${appliedSteps} patch${appliedSteps > 1 ? 'es' : ''} (${totalOccurrences} occurrence${totalOccurrences > 1 ? 's' : ''})!`);
             }
-        });
+        }
 
-        // Patcher Code Input & Controls
+        patchReplaceAllBtn.addEventListener('click', runReplaceAll);
+        mobReplaceAllBtn.addEventListener('click', runReplaceAll);
+
         let patchRenderTimer;
         const schedulePatchRefresh = () => {
             savePatcherState();
@@ -3699,7 +4115,12 @@
         patchCodeInput.addEventListener('input', schedulePatchRefresh);
         patchAiInput.addEventListener('input', schedulePatchRefresh);
 
-        patchImportBtn.addEventListener('click', () => patchFileInput.click());
+        function triggerPatchImport() {
+            patchFileInput.click();
+        }
+        patchImportBtn.addEventListener('click', triggerPatchImport);
+        mobImportBtn.addEventListener('click', triggerPatchImport);
+
         patchFileInput.addEventListener('change', (e) => {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
@@ -3718,14 +4139,16 @@
             patchFileInput.value = '';
         });
 
-        patchUndoBtn.addEventListener('click', () => {
+        function performPatchUndo() {
             if (!patchUndoStack.length) return;
             patchCodeInput.value = patchUndoStack.pop();
             patchAppliedCount = Math.max(0, patchAppliedCount - 1);
             savePatcherState();
             refreshPatcherUI();
             showSnackbar('Reverted last change');
-        });
+        }
+        patchUndoBtn.addEventListener('click', performPatchUndo);
+        mobUndoBtn.addEventListener('click', performPatchUndo);
 
         patchClearCodeBtn.addEventListener('click', () => {
             if (!patchCodeInput.value) return;
@@ -3740,7 +4163,7 @@
         });
 
         let patchPasteCodeTimer;
-        patchPasteCodeBtn.addEventListener('click', async () => {
+        async function pasteTargetCode() {
             try {
                 const text = await navigator.clipboard.readText();
                 patchUndoStack.push(patchCodeInput.value);
@@ -3752,7 +4175,7 @@
                 clearTimeout(patchPasteCodeTimer);
                 patchPasteCodeIcon.textContent = 'check';
                 patchPasteCodeLabel.textContent = 'Pasted!';
-                showSnackbar('Original code pasted');
+                showSnackbar('Target code pasted');
                 patchPasteCodeTimer = setTimeout(() => {
                     patchPasteCodeIcon.textContent = 'content_paste';
                     patchPasteCodeLabel.textContent = 'Paste';
@@ -3760,10 +4183,12 @@
             } catch (err) {
                 showSnackbar('Allow clipboard access or paste directly');
             }
-        });
+        }
+        patchPasteCodeBtn.addEventListener('click', pasteTargetCode);
+        mobPasteCodeBtn.addEventListener('click', pasteTargetCode);
 
         let patchCopyTimer;
-        patchCopyCodeBtn.addEventListener('click', () => {
+        function copyPatchedCode() {
             if (!patchCodeInput.value) {
                 showSnackbar('Nothing to copy');
                 return;
@@ -3780,9 +4205,11 @@
             }).catch(() => {
                 showSnackbar('Unable to access clipboard');
             });
-        });
+        }
+        patchCopyCodeBtn.addEventListener('click', copyPatchedCode);
+        mobCopyBtn.addEventListener('click', copyPatchedCode);
 
-        patchDownloadBtn.addEventListener('click', () => {
+        function savePatchedCode() {
             if (!patchCodeInput.value) {
                 showSnackbar('Nothing to save');
                 return;
@@ -3794,9 +4221,11 @@
             a.click();
             URL.revokeObjectURL(a.href);
             showSnackbar(`Saved "${a.download}"`);
-        });
+        }
+        patchDownloadBtn.addEventListener('click', savePatchedCode);
+        mobSaveBtn.addEventListener('click', savePatchedCode);
 
-        patchFromTabBtn.addEventListener('click', () => {
+        function loadAiFromActiveTab() {
             const activeTab = tabs.find(t => t.id === activeTabId);
             const text = activeTab ? inputArea.value : '';
             if (!text.trim()) {
@@ -3804,31 +4233,40 @@
                 return;
             }
             patchAiInput.value = text;
+            const count = parseFindReplacePairs(text).length;
+            if (window.innerWidth <= MOBILE_BREAKPOINT && count > 0) {
+                setAiInputCollapsed(true);
+            }
             savePatcherState();
             refreshPatcherUI();
-            const count = parseFindReplacePairs(text).length;
             showSnackbar(`Loaded "${activeTab.title}" (${count} pair${count === 1 ? '' : 's'} detected)`);
-        });
+        }
+        patchFromTabBtn.addEventListener('click', loadAiFromActiveTab);
+        mobFromTabBtn.addEventListener('click', loadAiFromActiveTab);
 
         patchClearAiBtn.addEventListener('click', () => {
             if (!patchAiInput.value) return;
             patchAiInput.value = '';
+            setAiInputCollapsed(false);
             savePatcherState();
             refreshPatcherUI();
             showSnackbar('AI instructions cleared');
         });
 
         let patchPasteAiTimer;
-        patchPasteAiBtn.addEventListener('click', async () => {
+        async function pasteAiReply() {
             try {
                 const text = await navigator.clipboard.readText();
                 patchAiInput.value = text;
+                const count = parseFindReplacePairs(text).length;
+                if (window.innerWidth <= MOBILE_BREAKPOINT && count > 0) {
+                    setAiInputCollapsed(true);
+                }
                 savePatcherState();
                 refreshPatcherUI();
                 clearTimeout(patchPasteAiTimer);
                 patchPasteAiIcon.textContent = 'check';
                 patchPasteAiLabel.textContent = 'Pasted!';
-                const count = parseFindReplacePairs(text).length;
                 showSnackbar(`Pasted AI reply (${count} pair${count === 1 ? '' : 's'} detected)`);
                 patchPasteAiTimer = setTimeout(() => {
                     patchPasteAiIcon.textContent = 'content_paste';
@@ -3837,12 +4275,13 @@
             } catch (err) {
                 showSnackbar('Allow clipboard access or paste directly');
             }
-        });
+        }
+        patchPasteAiBtn.addEventListener('click', pasteAiReply);
+        mobPasteAiBtn.addEventListener('click', pasteAiReply);
 
-        patchAiCollapseToggle.addEventListener('click', () => {
-            const isCollapsed = patchAiWrap.classList.toggle('collapsed');
-            patchAiCollapseIcon.textContent = isCollapsed ? 'unfold_more' : 'unfold_less';
-            patchAiCollapseLabel.textContent = isCollapsed ? 'Show' : 'Hide';
+        patchAiCollapseBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setAiInputCollapsed(!patchAiWrap.classList.contains('collapsed'));
         });
 
         // Initialize workspace
