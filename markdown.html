@@ -3033,6 +3033,187 @@
                 .trimEnd();
         }
 
+        function isLikelyFilename(candidate) {
+            if (!candidate || candidate.length > 260) return false;
+            if (/[\r\n<>|?*]/.test(candidate)) return false;
+            if (/:\/\//.test(candidate)) return false;
+
+            const normalized = candidate.replace(/\\/g, '/').trim();
+            if (!normalized || normalized.endsWith('/')) return false;
+
+            const baseName = normalized.split('/').pop();
+            if (!baseName || baseName === '.' || baseName === '..') return false;
+
+            const spaceCount = (normalized.match(/\s/g) || []).length;
+            if (spaceCount > 3) return false;
+
+            if (/\.[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]{0,11}$/.test(baseName)) return true;
+
+            if (/^(?:Dockerfile|Makefile|Jenkinsfile|Procfile|Gemfile|Rakefile|README|LICENSE|\.[a-zA-Z0-9_-]+)$/i.test(baseName)) {
+                return true;
+            }
+            return false;
+        }
+
+        function extractFilenameFromBeforeText(beforeText) {
+            if (!beforeText) return '';
+            const lines = beforeText.split(/\r?\n/);
+            let lastLine = '';
+            for (let i = lines.length - 1; i >= 0; i--) {
+                const trimmed = lines[i].trim();
+                if (trimmed) {
+                    lastLine = trimmed;
+                    break;
+                }
+            }
+            if (!lastLine) return '';
+
+            let cleaned = lastLine
+                .replace(/^(?:>\s*)+/, '')
+                .replace(/^#{1,6}\s+/, '')
+                .replace(/^(?:[-*+]|\d+[.)])\s+/, '')
+                .replace(/^#{1,6}\s+/, '')
+                .replace(/:\s*$/, '')
+                .trim();
+
+            for (let i = 0; i < 3; i++) {
+                if ((cleaned.startsWith('**') && cleaned.endsWith('**') && cleaned.length > 4) ||
+                    (cleaned.startsWith('__') && cleaned.endsWith('__') && cleaned.length > 4)) {
+                    cleaned = cleaned.slice(2, -2).trim();
+                } else if ((cleaned.startsWith('*') && cleaned.endsWith('*') && cleaned.length > 2) ||
+                           (cleaned.startsWith('_') && cleaned.endsWith('_') && cleaned.length > 2)) {
+                    cleaned = cleaned.slice(1, -1).trim();
+                }
+            }
+
+            cleaned = cleaned
+                .replace(/^(?:\*\*|__)?(?:file(?:name|path)?|path)\s*[:=]\s*(?:\*\*|__)?\s*/i, '')
+                .replace(/^(?:in|for|create|add|update|edit|modify)\s+(?=`)/i, '')
+                .replace(/:\s*$/, '')
+                .trim();
+
+            const backtickMatch = cleaned.match(/^(?:\*\*|__)?`([^`]+)`(?:\*\*|__)?$/);
+            if (backtickMatch) {
+                const inner = backtickMatch[1].trim();
+                return isLikelyFilename(inner) ? inner : '';
+            }
+
+            if (!/\s/.test(cleaned) && isLikelyFilename(cleaned)) {
+                return cleaned;
+            }
+
+            return '';
+        }
+
+        function parseFenceInfo(rawInfo) {
+            const trimmed = (rawInfo || '').trim();
+            if (!trimmed) return { language: 'plaintext', fileName: '' };
+
+            const colonIdx = trimmed.indexOf(':');
+            if (colonIdx > 0 && !/\s/.test(trimmed.slice(0, colonIdx))) {
+                const langPart = trimmed.slice(0, colonIdx).trim();
+                const filePart = trimmed.slice(colonIdx + 1).trim();
+                if (isLikelyFilename(filePart)) {
+                    return { language: langPart || getLanguageFromFilename(filePart), fileName: filePart };
+                }
+            }
+
+            const attrMatch = trimmed.match(/(?:title|file(?:name|path)?|path)\s*=\s*["']([^"']+)["']/i);
+            const firstToken = trimmed.split(/\s+/)[0];
+            if (attrMatch && isLikelyFilename(attrMatch[1].trim())) {
+                return { language: firstToken || 'plaintext', fileName: attrMatch[1].trim() };
+            }
+
+            if (!/\s/.test(trimmed) && (trimmed.includes('/') || trimmed.includes('.')) && isLikelyFilename(trimmed)) {
+                return { language: getLanguageFromFilename(trimmed), fileName: trimmed };
+            }
+
+            const parts = trimmed.split(/\s+/);
+            if (parts.length === 2 && isLikelyFilename(parts[1])) {
+                return { language: parts[0], fileName: parts[1] };
+            }
+
+            return { language: firstToken || 'plaintext', fileName: '' };
+        }
+
+        function extractFilenameFromCodeFirstLine(codeContent) {
+            if (!codeContent) return '';
+            const firstLine = codeContent.split(/\r?\n/, 1)[0].trim();
+            const explicitMatch = firstLine.match(/^(?:\/\/+|#|\/\*+|<!--)\s*(?:file(?:name|path)?|path)\s*:\s*([^\s*<>"]+?)\s*(?:\*\/|-->)?$/i);
+            if (explicitMatch && isLikelyFilename(explicitMatch[1])) {
+                return explicitMatch[1];
+            }
+            const pathCommentMatch = firstLine.match(/^(?:\/\/+|#|\/\*+|<!--)\s*([^\s*<>"]+\/[^\s*<>"]+)\s*(?:\*\/|-->)?$/);
+            if (pathCommentMatch && isLikelyFilename(pathCommentMatch[1])) {
+                return pathCommentMatch[1];
+            }
+            return '';
+        }
+
+        function resolveCodeBlock(match, beforeText) {
+            let language = 'plaintext';
+            let fileName = '';
+            let codeContent = '';
+
+            if (match[1] !== undefined) {
+                const fenceInfo = parseFenceInfo(match[2]);
+                language = fenceInfo.language;
+                codeContent = match[3] || '';
+
+                const startRegex = /(?:^|\n)[ \t]*(?:\/\/+|#|\/\*+|<!--)?[ \t]*-{2,}\s*START OF FILE\s+(.*?)\s*-{2,}[ \t]*(?:\*\/|-->)?[ \t]*(?:\r?\n|$)/i;
+                const startMatch = codeContent.match(startRegex);
+                if (startMatch) {
+                    fileName = startMatch[1].trim();
+                    codeContent = codeContent.replace(startRegex, '');
+                }
+                codeContent = cleanCodeBlockContent(codeContent);
+
+                if (!fileName) fileName = fenceInfo.fileName;
+                if (!fileName) fileName = extractFilenameFromBeforeText(beforeText);
+                if (!fileName) fileName = extractFilenameFromCodeFirstLine(codeContent);
+                if (fileName && language === 'plaintext') {
+                    language = getLanguageFromFilename(fileName);
+                }
+            } else if (match[4] !== undefined) {
+                fileName = match[4].trim();
+                codeContent = match[5] || '';
+                language = getLanguageFromFilename(fileName);
+
+                const cleanCodeMatch = codeContent.match(/^\s*```[^\n]*\n([\s\S]*?)\n```\s*$/);
+                if (cleanCodeMatch) {
+                    codeContent = cleanCodeMatch[1];
+                }
+                codeContent = cleanCodeBlockContent(codeContent);
+            }
+
+            return { language, fileName, codeContent };
+        }
+
+        function sanitizeZipPath(rawPath) {
+            return String(rawPath || '')
+                .trim()
+                .replace(/\\/g, '/')
+                .replace(/^\/+/, '')
+                .split('/')
+                .filter(seg => seg && seg !== '.' && seg !== '..')
+                .join('/');
+        }
+
+        function getUniqueZipPath(zip, path) {
+            if (!zip.files[path]) return path;
+            const lastSlash = path.lastIndexOf('/');
+            const dir = lastSlash !== -1 ? path.slice(0, lastSlash + 1) : '';
+            const base = lastSlash !== -1 ? path.slice(lastSlash + 1) : path;
+            const dotIdx = base.lastIndexOf('.');
+            const stem = dotIdx > 0 ? base.slice(0, dotIdx) : base;
+            const ext = dotIdx > 0 ? base.slice(dotIdx) : '';
+            let counter = 2;
+            while (zip.files[`${dir}${stem}_${counter}${ext}`]) {
+                counter++;
+            }
+            return `${dir}${stem}_${counter}${ext}`;
+        }
+
         function renderMarkdown(text, triggerTransition = false) {
             const prevScroll = outputArea.scrollTop;
             const isAtBottom = Math.abs(inputArea.scrollHeight - inputArea.scrollTop - inputArea.clientHeight) < 15;
@@ -3073,32 +3254,7 @@
                     outputArea.appendChild(textNode);
                 }
 
-                let language = 'plaintext';
-                let fileName = '';
-                let codeContent = '';
-
-                if (match[1] !== undefined) {
-                    language = (match[2] || '').trim() || 'plaintext';
-                    codeContent = match[3] || '';
-                    
-                    const startRegex = /(?:^|\n)[ \t]*(?:\/\/+|#|\/\*+|<!--)?[ \t]*-{2,}\s*START OF FILE\s+(.*?)\s*-{2,}[ \t]*(?:\*\/|-->)?[ \t]*(?:\r?\n|$)/i;
-                    const startMatch = codeContent.match(startRegex);
-                    if (startMatch) {
-                        fileName = startMatch[1].trim();
-                        codeContent = codeContent.replace(startRegex, '');
-                    }
-                    codeContent = cleanCodeBlockContent(codeContent);
-                } else if (match[4] !== undefined) {
-                    fileName = match[4].trim();
-                    codeContent = match[5] || '';
-                    language = getLanguageFromFilename(fileName);
-
-                    const cleanCodeMatch = codeContent.match(/^\s*```[^\n]*\n([\s\S]*?)\n```\s*$/);
-                    if (cleanCodeMatch) {
-                        codeContent = cleanCodeMatch[1];
-                    }
-                    codeContent = cleanCodeBlockContent(codeContent);
-                }
+                let { language, fileName, codeContent } = resolveCodeBlock(match, beforeText);
 
                 if (!codeContent.trim() && !fileName.toLowerCase().includes('.')) {
                     if (!codeContent.trim()) {
@@ -3334,34 +3490,21 @@
             const zip = new JSZip();
             let extractedCount = 0;
             let match;
+            let lastIndex = 0;
             tokenRegex.lastIndex = 0;
+            const markerCleanupRegex = /(?:\r?\n|^)[ \t]*(?:\/\/+|#|\/\*+|<!--)?[ \t]*-{2,}\s*(?:START OF FILE|END OF FILE).*?(?:\r?\n|$)/gim;
 
             while ((match = tokenRegex.exec(text)) !== null) {
-                let fileName = '';
-                let codeContent = '';
-
-                if (match[1] !== undefined) {
-                    codeContent = match[3] || '';
-                    const startRegex = /(?:^|\n)[ \t]*(?:\/\/+|#|\/\*+|<!--)?[ \t]*-{2,}\s*START OF FILE\s+(.*?)\s*-{2,}[ \t]*(?:\*\/|-->)?[ \t]*(?:\r?\n|$)/i;
-                    const startMatch = codeContent.match(startRegex);
-                    if (startMatch) {
-                        fileName = startMatch[1].trim();
-                        codeContent = codeContent.replace(startRegex, '');
-                    }
-                    codeContent = cleanCodeBlockContent(codeContent);
-                } else if (match[4] !== undefined) {
-                    fileName = match[4].trim();
-                    codeContent = match[5] || '';
-                    const cleanCodeMatch = codeContent.match(/^\s*```[^\n]*\n([\s\S]*?)\n```\s*$/);
-                    if (cleanCodeMatch) {
-                        codeContent = cleanCodeMatch[1];
-                    }
-                    codeContent = cleanCodeBlockContent(codeContent);
-                }
+                const beforeText = text.substring(lastIndex, match.index).replace(markerCleanupRegex, '\n');
+                const { fileName, codeContent } = resolveCodeBlock(match, beforeText);
+                lastIndex = match.index + match[0].length;
 
                 if (fileName && codeContent.trim()) {
-                    zip.file(fileName, codeContent);
-                    extractedCount++;
+                    const safePath = sanitizeZipPath(fileName);
+                    if (safePath) {
+                        zip.file(getUniqueZipPath(zip, safePath), codeContent);
+                        extractedCount++;
+                    }
                 }
             }
 
