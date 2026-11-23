@@ -1,0 +1,3180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Melaka School Transfer Explorer — Material Design 3 Expressive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700&family=Roboto+Flex:opsz,wdth,wght@8..144,75..125,400..900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       MATERIAL DESIGN 3 EXPRESSIVE (MD3E) DESIGN TOKENS
+       Dynamic Color + Spatial/Effects Spring Physics + Emphasized Shape & Type
+       ========================================================================== */
+    :root {
+      /* Dynamic Color System — overwritten live by JS HCT-inspired engine */
+      --md-sys-color-primary: #0f5faf;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-primary-container: #d4e3ff;
+      --md-sys-color-on-primary-container: #001c3a;
+
+      --md-sys-color-secondary: #535f70;
+      --md-sys-color-on-secondary: #ffffff;
+      --md-sys-color-secondary-container: #d7e3f8;
+      --md-sys-color-on-secondary-container: #101c2b;
+
+      --md-sys-color-tertiary: #6c5677;
+      --md-sys-color-on-tertiary: #ffffff;
+      --md-sys-color-tertiary-container: #f4d9ff;
+      --md-sys-color-on-tertiary-container: #261431;
+
+      --md-sys-color-background: #f8f9ff;
+      --md-sys-color-on-background: #181c22;
+      --md-sys-color-surface: #f8f9ff;
+      --md-sys-color-on-surface: #181c22;
+      --md-sys-color-on-surface-variant: #434750;
+
+      --md-sys-color-surface-container-lowest: #ffffff;
+      --md-sys-color-surface-container-low: #f2f3fa;
+      --md-sys-color-surface-container: #eceef5;
+      --md-sys-color-surface-container-high: #e6e8ef;
+      --md-sys-color-surface-container-highest: #e0e2ea;
+
+      --md-sys-color-outline: #737781;
+      --md-sys-color-outline-variant: #c3c6d1;
+      --md-sys-color-inverse-surface: #2d3138;
+      --md-sys-color-inverse-on-surface: #eff0f8;
+
+      --md-sys-color-stay-bg: #d1fae5;
+      --md-sys-color-stay-fg: #065f46;
+
+      /* MD3E Expanded Shape Scale */
+      --md-shape-xs: 8px;
+      --md-shape-sm: 12px;
+      --md-shape-md: 18px;
+      --md-shape-lg: 24px;
+      --md-shape-xl: 32px;
+      --md-shape-2xl: 40px;
+      --md-shape-full: 9999px;
+
+      /* MD3E Motion Physics: Spatial Springs (overshoot) vs Effects (no overshoot) */
+      --md-ease-spatial-fallback: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --md-spring-spatial-fast: linear(
+        0, 0.012, 0.046 2.2%, 0.175, 0.348 7.1%, 0.805 13.8%, 0.996 17.5%,
+        1.076, 1.116 23.2%, 1.112 26.8%, 1.045 36.2%, 1.003 44.5%,
+        0.991 53.5%, 0.999 76%, 1
+      );
+      --md-spring-spatial-default: linear(
+        0, 0.008, 0.032 2.4%, 0.125, 0.258 7.5%, 0.68 14.5%, 0.91 19%,
+        1.035 23.5%, 1.088 27.5%, 1.091 31.2%, 1.048 40.5%, 1.007 50.5%,
+        0.994 60%, 1.001 82%, 1
+      );
+      --md-spring-spatial-bouncy: linear(
+        0, 0.014, 0.056 2.1%, 0.21 6.2%, 0.78 13.1%, 1.035 17.4%,
+        1.148 21.8%, 1.158 24.8%, 1.088 31.5%, 0.992 40.2%, 0.978 46%,
+        1.008 58%, 0.999 78%, 1
+      );
+      --md-spring-effects: cubic-bezier(0.2, 0, 0, 1);
+
+      --md-dur-spatial-fast: 380ms;
+      --md-dur-spatial-default: 520ms;
+      --md-dur-spatial-bouncy: 620ms;
+      --md-dur-effects: 220ms;
+
+      --md-font-sans: "Roboto Flex", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--md-font-sans);
+      background-color: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-background);
+      line-height: 1.5;
+      overflow-x: hidden;
+      transition:
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    /* Ambient expressive mesh glow in background */
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ambient-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(88px);
+      opacity: 0.34;
+      transition:
+        background-color 600ms var(--md-spring-effects),
+        transform 1200ms var(--md-spring-spatial-default);
+    }
+
+    .ambient-blob--1 {
+      width: min(62vw, 680px);
+      height: min(62vw, 680px);
+      top: -18vw;
+      right: -12vw;
+      background-color: var(--md-sys-color-primary-container);
+    }
+
+    .ambient-blob--2 {
+      width: min(54vw, 560px);
+      height: min(54vw, 560px);
+      bottom: -14vw;
+      left: -14vw;
+      background-color: var(--md-sys-color-tertiary-container);
+    }
+
+    [data-theme="dark"] .ambient-blob {
+      opacity: 0.22;
+    }
+
+    /* Focus rings */
+    :focus-visible {
+      outline: 3px solid var(--md-sys-color-primary);
+      outline-offset: 3px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    /* ==========================================================================
+       FLOATING EXPRESSIVE TOP APP BAR
+       ========================================================================== */
+    .top-bar-wrap {
+      position: sticky;
+      top: 12px;
+      z-index: 40;
+      padding: 0 16px;
+      pointer-events: none;
+    }
+
+    .top-bar {
+      pointer-events: auto;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      background: color-mix(in srgb, var(--md-sys-color-surface-container-low) 84%, transparent);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+      border-radius: var(--md-shape-full);
+      box-shadow: 0 8px 28px color-mix(in srgb, var(--md-sys-color-primary) 10%, rgba(0, 0, 0, 0.08));
+      transition:
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        border-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-radius: 14px;
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .brand:hover .brand-badge {
+      transform: rotate(12deg) scale(1.06);
+      border-radius: 50%;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 0.95rem;
+      font-variation-settings: "wght" 750, "wdth" 105;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-subtitle {
+      font-size: 0.72rem;
+      color: var(--md-sys-color-on-surface-variant);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* MD3E Connected Button Group */
+    .connected-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 4px;
+      background: var(--md-sys-color-surface-container-high);
+      border-radius: var(--md-shape-full);
+      transition: background-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .connected-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0 16px;
+      font-size: 0.875rem;
+      font-variation-settings: "wght" 620;
+      color: var(--md-sys-color-on-surface-variant);
+      background: transparent;
+      border-radius: 10px;
+      transition:
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .connected-btn:first-child {
+      border-top-left-radius: var(--md-shape-full);
+      border-bottom-left-radius: var(--md-shape-full);
+    }
+
+    .connected-btn:last-child {
+      border-top-right-radius: var(--md-shape-full);
+      border-bottom-right-radius: var(--md-shape-full);
+    }
+
+    .connected-btn:active {
+      transform: scale(0.95);
+    }
+
+    .connected-btn.is-active {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-radius: var(--md-shape-full);
+      font-variation-settings: "wght" 720;
+    }
+
+    .count-pill {
+      display: inline-grid;
+      place-items: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: var(--md-shape-full);
+      font-size: 0.75rem;
+      font-variation-settings: "wght" 750;
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy);
+    }
+
+    .connected-btn.is-active .count-pill {
+      background: var(--md-sys-color-on-primary);
+      color: var(--md-sys-color-primary);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .icon-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface);
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 620;
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .icon-pill-btn:hover {
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      transform: translateY(-1px);
+    }
+
+    .icon-pill-btn:active {
+      transform: scale(0.93);
+      border-radius: 14px;
+    }
+
+    .theme-swatch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--md-sys-color-primary);
+      box-shadow: 0 0 0 2px var(--md-sys-color-surface);
+    }
+
+    /* Theme Studio Popover */
+    .theme-popover {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: min(320px, calc(100vw - 32px));
+      padding: 18px;
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-shape-xl);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.16);
+      transform-origin: top right;
+      opacity: 0;
+      transform: scale(0.88) translateY(-8px);
+      pointer-events: none;
+      transition:
+        opacity var(--md-dur-effects) var(--md-spring-effects),
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+      z-index: 60;
+    }
+
+    .theme-popover.is-open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    .popover-title {
+      margin: 0 0 4px;
+      font-size: 0.95rem;
+      font-variation-settings: "wght" 760;
+    }
+
+    .popover-desc {
+      margin: 0 0 14px;
+      font-size: 0.78rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      background: var(--md-sys-color-surface-container);
+      border-radius: var(--md-shape-md);
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 600;
+    }
+
+    /* MD3E Switch */
+    .md3-switch {
+      position: relative;
+      width: 52px;
+      height: 32px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-surface-container-highest);
+      border: 2px solid var(--md-sys-color-outline);
+      transition:
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        border-color var(--md-dur-effects) var(--md-spring-effects);
+      flex-shrink: 0;
+    }
+
+    .md3-switch::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--md-sys-color-outline);
+      transform: translateY(-50%) scale(1);
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        width var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        height var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    .md3-switch[aria-checked="true"] {
+      background: var(--md-sys-color-primary);
+      border-color: var(--md-sys-color-primary);
+    }
+
+    .md3-switch[aria-checked="true"]::after {
+      width: 22px;
+      height: 22px;
+      background: var(--md-sys-color-on-primary);
+      transform: translate(20px, -50%) scale(1);
+    }
+
+    .seed-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .seed-btn {
+      aspect-ratio: 1;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      display: grid;
+      place-items: center;
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    .seed-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .seed-btn.is-active {
+      border-radius: 50%;
+      border-color: var(--md-sys-color-on-surface);
+      box-shadow: 0 0 0 2px var(--md-sys-color-surface) inset;
+    }
+
+    .custom-color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .custom-color-input {
+      width: 44px;
+      height: 32px;
+      padding: 0;
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       MAIN LAYOUT & HERO WELCOME SECTION
+       ========================================================================== */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 16px calc(118px + var(--safe-bottom));
+    }
+
+    .hero {
+      padding: clamp(20px, 4vw, 40px) 4px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero-eyebrow {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-size: 0.8rem;
+      font-variation-settings: "wght" 650;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-welcome {
+      margin: 0;
+      font-size: clamp(2.8rem, 7.5vw, 5.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.035em;
+      font-variation-settings: "wght" 860, "wdth" 112, "opsz" 144;
+      color: var(--md-sys-color-primary);
+      transition: color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .hero-question {
+      margin: 0;
+      font-size: clamp(1.38rem, 3.2vw, 2.35rem);
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      font-variation-settings: "wght" 680, "wdth" 102;
+      color: var(--md-sys-color-on-background);
+      max-width: 24ch;
+    }
+
+    .hero-helper {
+      margin: 2px 0 0;
+      font-size: 0.95rem;
+      color: var(--md-sys-color-on-surface-variant);
+      max-width: 66ch;
+    }
+
+    /* ==========================================================================
+       CORE 5 SCHOOLS ROW + DISCOVERY GRID
+       ========================================================================== */
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 12px 0 16px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+      font-variation-settings: "wght" 760, "wdth" 105;
+      letter-spacing: -0.015em;
+    }
+
+    .section-sub {
+      margin: 2px 0 0;
+      font-size: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .core-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+
+    /* On mobile, make the 5th card (SMJK Katholik Stay) span full width for instant legibility */
+    @media (max-width: 639px) {
+      .core-grid .school-card[data-stay="true"] {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (min-width: 640px) {
+      .core-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+    }
+
+    @media (min-width: 1080px) {
+      .core-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 16px;
+      }
+    }
+
+    .more-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    @media (min-width: 560px) {
+      .more-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 960px) {
+      .more-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1180px) {
+      .more-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+    }
+
+    /* School Card — MD3 Expressive Containment + Shape Morphing */
+    .school-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px 14px 16px;
+      background: var(--md-sys-color-surface-container-low);
+      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+      border-radius: var(--md-shape-xl);
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        border-color var(--md-dur-effects) var(--md-spring-effects),
+        box-shadow var(--md-dur-effects) var(--md-spring-effects);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .school-card:hover {
+      transform: translateY(-5px);
+      background: var(--md-sys-color-surface-container-lowest);
+      border-color: var(--school-accent, var(--md-sys-color-primary));
+      border-radius: var(--md-shape-2xl);
+      box-shadow: 0 14px 32px color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 16%, rgba(0,0,0,0.06));
+    }
+
+    .school-card:active {
+      transform: scale(0.97);
+    }
+
+    .school-card.is-selected-theme {
+      background: var(--md-sys-color-surface-container-lowest);
+      border-color: var(--md-sys-color-primary);
+      box-shadow: 0 12px 30px color-mix(in srgb, var(--md-sys-color-primary) 20%, rgba(0,0,0,0.05));
+    }
+
+    .school-card[data-stay="true"] {
+      background: color-mix(in srgb, var(--md-sys-color-primary-container) 34%, var(--md-sys-color-surface-container-lowest));
+      border-color: color-mix(in srgb, var(--md-sys-color-primary) 50%, transparent);
+    }
+
+    .card-top-badges {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 12px;
+      min-height: 26px;
+    }
+
+    .badge-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: var(--md-shape-full);
+      font-size: 0.7rem;
+      font-variation-settings: "wght" 700;
+      letter-spacing: 0.02em;
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .badge-chip--stay {
+      background: var(--md-sys-color-stay-bg);
+      color: var(--md-sys-color-stay-fg);
+      box-shadow: 0 2px 10px rgba(6, 95, 70, 0.16);
+      font-variation-settings: "wght" 820;
+      text-transform: uppercase;
+    }
+
+    .badge-chip--stay-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: stayPulse 2.2s infinite ease-in-out;
+    }
+
+    @keyframes stayPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.45); opacity: 0.6; }
+    }
+
+    /* MD3E Shape Container around each school's crest */
+    .emblem-stage {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      display: grid;
+      place-items: center;
+      margin: 2px auto 14px;
+      transition: transform var(--md-dur-spatial-bouncy) var(--md-spring-spatial-bouncy);
+    }
+
+    .emblem-shape-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      color: color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 14%, var(--md-sys-color-surface-container-highest));
+      transition:
+        transform var(--md-dur-spatial-bouncy) var(--md-spring-spatial-bouncy),
+        color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .school-card:hover .emblem-stage {
+      transform: scale(1.07);
+    }
+
+    .school-card:hover .emblem-shape-bg {
+      transform: rotate(18deg) scale(1.04);
+      color: color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 22%, var(--md-sys-color-surface-container-lowest));
+    }
+
+    .emblem-crest {
+      position: relative;
+      z-index: 1;
+      width: 72px;
+      height: 72px;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.12));
+      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    .school-card:hover .emblem-crest {
+      transform: translateY(-2px);
+    }
+
+    .school-name {
+      margin: 0 0 4px;
+      font-size: 1rem;
+      line-height: 1.25;
+      font-variation-settings: "wght" 760, "wdth" 102;
+      color: var(--md-sys-color-on-surface);
+      transition: font-variation-settings var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .school-card:hover .school-name {
+      font-variation-settings: "wght" 820, "wdth" 105;
+    }
+
+    .school-native {
+      margin: 0 0 8px;
+      font-size: 0.76rem;
+      color: var(--md-sys-color-on-surface-variant);
+      min-height: 1.2em;
+    }
+
+    .school-meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .meta-mini {
+      padding: 3px 9px;
+      border-radius: var(--md-shape-full);
+      font-size: 0.71rem;
+      font-variation-settings: "wght" 600;
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    .card-actions {
+      margin-top: auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-btn-detail {
+      flex: 1;
+      min-height: 40px;
+      padding: 0 12px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-size: 0.8rem;
+      font-variation-settings: "wght" 680;
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .card-btn-detail:hover {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+
+    .card-btn-compare {
+      min-height: 40px;
+      min-width: 40px;
+      padding: 0 12px;
+      border-radius: var(--md-shape-full);
+      border: 1.5px solid var(--md-sys-color-outline-variant);
+      background: transparent;
+      color: var(--md-sys-color-on-surface);
+      font-size: 0.78rem;
+      font-variation-settings: "wght" 680;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        color var(--md-dur-effects) var(--md-spring-effects),
+        border-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .card-btn-compare:active {
+      transform: scale(0.92);
+    }
+
+    .card-btn-compare.is-queued {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
+      border-radius: 14px;
+    }
+
+    /* ==========================================================================
+       FILTER BAR & SEARCH FOR MORE SCHOOLS
+       ========================================================================== */
+    .filter-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 14px;
+      background: var(--md-sys-color-surface-container-low);
+      border-radius: var(--md-shape-xl);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
+    }
+
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: var(--md-shape-sm);
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 620;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition:
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
+        background-color var(--md-dur-effects) var(--md-spring-effects),
+        color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .filter-chip:hover {
+      transform: translateY(-1px);
+    }
+
+    .filter-chip.is-active {
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      font-variation-settings: "wght" 760;
+    }
+
+    .search-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1.5px solid var(--md-sys-color-outline-variant);
+      flex: 1 1 240px;
+      max-width: 360px;
+      transition: border-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .search-pill:focus-within {
+      border-color: var(--md-sys-color-primary);
+    }
+
+    .search-pill input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.88rem;
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       SIDE-BY-SIDE COMPARISON ARENA
+       ========================================================================== */
+    .compare-section {
+      margin-top: 44px;
+      padding: clamp(18px, 3vw, 28px);
+      background: var(--md-sys-color-surface-container-low);
+      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+      border-radius: var(--md-shape-2xl);
+      transition: background-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .compare-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .compare-slot-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .slot-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 5px 10px 5px 8px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1.5px solid color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 45%, transparent);
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 680;
+      animation: chipPop var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy);
+    }
+
+    @keyframes chipPop {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .slot-remove {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 0.9rem;
+    }
+
+    .slot-remove:hover {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+    }
+
+    .compare-add-select {
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      border: none;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 680;
+      cursor: pointer;
+    }
+
+    /* Mobile Head-to-Head Toggle (visible < 768px) */
+    .mobile-compare-controls {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: var(--md-sys-color-surface-container);
+      border-radius: var(--md-shape-lg);
+    }
+
+    .mobile-pair-pickers {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mobile-pair-pickers select {
+      width: 100%;
+      min-height: 40px;
+      padding: 0 10px;
+      border-radius: var(--md-shape-md);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-variation-settings: "wght" 650;
+    }
+
+    @media (max-width: 767px) {
+      .mobile-compare-controls {
+        display: flex;
+      }
+    }
+
+    /* Comparison Table Wrapper */
+    .compare-scroll {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: var(--md-shape-xl);
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 640px;
+    }
+
+    .compare-table.is-mobile-duo {
+      min-width: 100%;
+      table-layout: fixed;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      padding: 14px 16px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 42%, transparent);
+      font-size: 0.86rem;
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .compare-label-col {
+      width: 210px;
+      font-variation-settings: "wght" 700;
+      color: var(--md-sys-color-on-surface-variant);
+      background: var(--md-sys-color-surface-container-low);
+      position: sticky;
+      left: 0;
+      z-index: 2;
+    }
+
+    .compare-table.is-mobile-duo .compare-label-col {
+      position: static;
+      width: 100%;
+      display: block;
+      padding: 8px 12px 4px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: none;
+    }
+
+    @media (max-width: 767px) {
+      .compare-table.is-mobile-duo thead {
+        display: table-header-group;
+      }
+      .compare-table.is-mobile-duo thead th.compare-label-col {
+        display: none;
+      }
+      .compare-table.is-mobile-duo tbody tr.metric-row {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .compare-table.is-mobile-duo tbody tr.metric-row > th.compare-label-col {
+        flex: 1 0 100%;
+      }
+      .compare-table.is-mobile-duo tbody tr.metric-row > td {
+        flex: 1 1 50%;
+        width: 50%;
+        padding: 10px 12px 14px;
+      }
+      .compare-table.is-mobile-duo tbody tr.group-row > td {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    .compare-school-head {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .compare-school-head-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .group-row td {
+      background: color-mix(in srgb, var(--md-sys-color-primary-container) 34%, var(--md-sys-color-surface-container));
+      color: var(--md-sys-color-on-primary-container);
+      font-variation-settings: "wght" 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+    }
+
+    /* MD3E Expressive Wavy / Segmented Meter */
+    .meter-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .meter-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-variation-settings: "wght" 700;
+    }
+
+    .wavy-track {
+      position: relative;
+      height: 12px;
+      width: 100%;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-surface-container-high);
+      overflow: hidden;
+    }
+
+    .wavy-fill {
+      height: 100%;
+      border-radius: var(--md-shape-full);
+      background: linear-gradient(
+        90deg,
+        var(--school-accent, var(--md-sys-color-primary)),
+        color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 68%, var(--md-sys-color-tertiary))
+      );
+      transition: width var(--md-dur-spatial-default) var(--md-spring-spatial-default);
+    }
+
+    .cca-badge-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .cca-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: var(--md-shape-full);
+      font-size: 0.73rem;
+      font-variation-settings: "wght" 600;
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+    }
+
+    .cca-pill.is-signature {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+      font-variation-settings: "wght" 750;
+    }
+
+    .check-yes {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--md-sys-color-stay-fg);
+      background: var(--md-sys-color-stay-bg);
+      padding: 3px 10px;
+      border-radius: var(--md-shape-full);
+      font-size: 0.75rem;
+      font-variation-settings: "wght" 720;
+    }
+
+    .check-no {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: 0.75rem;
+    }
+
+    /* Decision Helper Card */
+    .decision-helper {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: var(--md-shape-xl);
+      background: color-mix(in srgb, var(--md-sys-color-tertiary-container) 35%, var(--md-sys-color-surface-container-lowest));
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-tertiary) 30%, transparent);
+    }
+
+    .decision-helper h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      font-variation-settings: "wght" 780;
+    }
+
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .decision-card {
+      padding: 12px 14px;
+      border-radius: var(--md-shape-lg);
+      background: var(--md-sys-color-surface-container-lowest);
+      font-size: 0.82rem;
+    }
+
+    /* ==========================================================================
+       FLOATING BOTTOM DOCK & MOBILE NAVIGATION
+       ========================================================================== */
+    .floating-dock {
+      position: fixed;
+      left: 50%;
+      bottom: calc(16px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(0);
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: calc(100vw - 24px);
+      padding: 8px 10px 8px 14px;
+      border-radius: var(--md-shape-full);
+      background: color-mix(in srgb, var(--md-sys-color-inverse-surface) 92%, transparent);
+      color: var(--md-sys-color-inverse-on-surface);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        opacity var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .floating-dock.is-hidden {
+      transform: translateX(-50%) translateY(120px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .dock-avatars {
+      display: flex;
+      align-items: center;
+    }
+
+    .dock-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      padding: 3px;
+      margin-left: -6px;
+      box-shadow: 0 0 0 2px var(--md-sys-color-inverse-surface);
+      display: grid;
+      place-items: center;
+    }
+
+    .dock-avatar:first-child {
+      margin-left: 0;
+    }
+
+    .dock-label {
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 650;
+      white-space: nowrap;
+    }
+
+    .dock-cta {
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      font-size: 0.82rem;
+      font-variation-settings: "wght" 760;
+      white-space: nowrap;
+      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    .dock-cta:active {
+      transform: scale(0.94);
+    }
+
+    /* ==========================================================================
+       EXPRESSIVE SCHOOL DETAIL SHEET (MODAL DIALOG / MOBILE BOTTOM SHEET)
+       ========================================================================== */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(12, 16, 24, 0.48);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .sheet-backdrop.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-sheet {
+      width: min(760px, 100%);
+      max-height: min(88dvh, 860px);
+      overflow-y: auto;
+      background: var(--md-sys-color-surface-container-lowest);
+      color: var(--md-sys-color-on-surface);
+      border-radius: var(--md-shape-2xl);
+      padding: 24px 26px 28px;
+      box-shadow: 0 28px 72px rgba(0, 0, 0, 0.28);
+      transform: scale(0.9) translateY(24px);
+      transition:
+        transform var(--md-dur-spatial-default) var(--md-spring-spatial-bouncy),
+        background-color var(--md-dur-effects) var(--md-spring-effects);
+    }
+
+    .sheet-backdrop.is-open .detail-sheet {
+      transform: scale(1) translateY(0);
+    }
+
+    .sheet-drag-pill {
+      display: none;
+      width: 40px;
+      height: 5px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-outline-variant);
+      margin: 0 auto 14px;
+    }
+
+    @media (max-width: 767px) {
+      .sheet-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .detail-sheet {
+        width: 100%;
+        max-height: 91dvh;
+        border-radius: 32px 32px 0 0;
+        padding: 12px 18px calc(24px + var(--safe-bottom));
+        transform: translateY(100%);
+      }
+      .sheet-drag-pill {
+        display: block;
+      }
+    }
+
+    .sheet-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .sheet-crest-box {
+      width: 88px;
+      height: 88px;
+      flex-shrink: 0;
+      border-radius: 26px;
+      display: grid;
+      place-items: center;
+      background: color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 14%, var(--md-sys-color-surface-container));
+      padding: 10px;
+    }
+
+    .sheet-title-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sheet-title {
+      margin: 4px 0 2px;
+      font-size: clamp(1.3rem, 3vw, 1.75rem);
+      line-height: 1.18;
+      font-variation-settings: "wght" 820, "wdth" 105;
+    }
+
+    .sheet-motto {
+      margin: 4px 0 0;
+      font-size: 0.88rem;
+      font-style: italic;
+      color: var(--md-sys-color-primary);
+      font-variation-settings: "wght" 640;
+    }
+
+    .sheet-close {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--md-sys-color-surface-container-high);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    .sheet-close:hover {
+      background: var(--md-sys-color-secondary-container);
+      transform: rotate(90deg);
+    }
+
+    .sheet-fact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .fact-tile {
+      padding: 12px 14px;
+      border-radius: var(--md-shape-lg);
+      background: var(--md-sys-color-surface-container-low);
+    }
+
+    .fact-label {
+      font-size: 0.71rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--md-sys-color-on-surface-variant);
+      font-variation-settings: "wght" 700;
+    }
+
+    .fact-value {
+      margin-top: 3px;
+      font-size: 0.9rem;
+      font-variation-settings: "wght" 680;
+    }
+
+    .sheet-section {
+      margin-top: 16px;
+    }
+
+    .sheet-section h4 {
+      margin: 0 0 8px;
+      font-size: 0.9rem;
+      font-variation-settings: "wght" 760;
+      color: var(--md-sys-color-primary);
+    }
+
+    .sheet-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+    }
+
+    .btn-primary-expressive {
+      flex: 1 1 200px;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      font-size: 0.92rem;
+      font-variation-settings: "wght" 740;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition:
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
+        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    .btn-primary-expressive:hover {
+      transform: translateY(-2px);
+      border-radius: 18px;
+    }
+
+    .btn-tonal-expressive {
+      flex: 1 1 160px;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      font-size: 0.9rem;
+      font-variation-settings: "wght" 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+    }
+
+    /* Transfer Confirmation Toast */
+    .toast {
+      position: fixed;
+      top: 84px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-18px) scale(0.94);
+      z-index: 95;
+      padding: 12px 20px;
+      border-radius: var(--md-shape-full);
+      background: var(--md-sys-color-inverse-surface);
+      color: var(--md-sys-color-inverse-on-surface);
+      font-size: 0.86rem;
+      font-variation-settings: "wght" 650;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity var(--md-dur-effects) var(--md-spring-effects),
+        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy);
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    .footnote {
+      margin-top: 32px;
+      padding: 14px 18px;
+      border-radius: var(--md-shape-lg);
+      background: var(--md-sys-color-surface-container);
+      font-size: 0.78rem;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+
+    /* Responsive adjustments for compact viewports */
+    @media (max-width: 639px) {
+      .top-bar {
+        padding: 8px 10px;
+      }
+      .brand-subtitle {
+        display: none;
+      }
+      .connected-group {
+        display: none;
+      }
+      .icon-pill-label {
+        display: none;
+      }
+      .dock-label {
+        display: none;
+      }
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="ambient-blob ambient-blob--1"></div>
+    <div class="ambient-blob ambient-blob--2"></div>
+  </div>
+
+  <!-- FLOATING TOP BAR -->
+  <div class="top-bar-wrap">
+    <header class="top-bar">
+      <div class="brand">
+        <div class="brand-badge" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L14.8 7.5L21 8.4L16.5 12.8L17.6 19L12 16L6.4 19L7.5 12.8L3 8.4L9.2 7.5L12 2Z" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Melaka Transfer Guide</span>
+          <span class="brand-subtitle" id="activeThemeLabel">Dynamic Theme: SMJK Katholik (Stay)</span>
+        </div>
+      </div>
+
+      <nav class="connected-group" aria-label="Primary view navigation">
+        <button class="connected-btn is-active" data-nav="explore" id="navExplore">
+          Explore
+        </button>
+        <button class="connected-btn" data-nav="compare" id="navCompare">
+          Compare <span class="count-pill" id="navCompareCount">3</span>
+        </button>
+      </nav>
+
+      <div class="top-actions">
+        <button class="icon-pill-btn" id="themeStudioBtn" aria-expanded="false" aria-controls="themePopover" title="Dynamic Color Studio">
+          <span class="theme-swatch-dot" aria-hidden="true"></span>
+          <span class="icon-pill-label">Colors</span>
+        </button>
+        <button class="icon-pill-btn" id="darkModeBtn" aria-label="Toggle dark mode" title="Toggle Dark / Light Mode">
+          <svg id="darkModeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+
+        <!-- Dynamic Color Studio Popover -->
+        <div class="theme-popover" id="themePopover" role="dialog" aria-label="Dynamic Color Studio">
+          <h3 class="popover-title">MD3E Dynamic Color</h3>
+          <p class="popover-desc">Automatically adapts the interface palette to the school you inspect, or choose a custom seed color.</p>
+
+          <label class="toggle-row" for="autoThemeSwitch">
+            <span>Auto-match school crest</span>
+            <button type="button" class="md3-switch" id="autoThemeSwitch" role="switch" aria-checked="true"></button>
+          </label>
+
+          <div class="seed-grid" role="group" aria-label="Preset Dynamic Color Seeds">
+            <button class="seed-btn is-active" data-seed="#0f5faf" data-label="Katholik Azure" style="background:#0f5faf" title="Katholik Azure"></button>
+            <button class="seed-btn" data-seed="#1b56b5" data-label="St. David Cobalt" style="background:#1b56b5" title="St. David Cobalt"></button>
+            <button class="seed-btn" data-seed="#b3261e" data-label="Tinggi Cina Crimson" style="background:#b3261e" title="Tinggi Cina Crimson"></button>
+            <button class="seed-btn" data-seed="#8e1d39" data-label="Bukit Baru Maroon" style="background:#8e1d39" title="Bukit Baru Maroon"></button>
+            <button class="seed-btn" data-seed="#0e6b5e" data-label="Jonker Jade" style="background:#0e6b5e" title="Jonker Jade"></button>
+          </div>
+
+          <div class="custom-color-row">
+            <span>Custom wallpaper seed</span>
+            <input type="color" class="custom-color-input" id="customSeedPicker" value="#0f5faf" aria-label="Custom dynamic seed color" />
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="container" id="exploreAnchor">
+    <!-- OPENING HERO -->
+    <section class="hero" aria-labelledby="heroWelcomeHeading">
+      <div class="hero-eyebrow">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>
+        </svg>
+        <span>PPD Melaka Tengah • Secondary School Explorer</span>
+      </div>
+      <h1 class="hero-welcome" id="heroWelcomeHeading">Welcome!</h1>
+      <p class="hero-question">Which school do you wanna transfer to?</p>
+      <p class="hero-helper">
+        Tap any school emblem below for a brief profile and dynamic theme preview, or queue schools to compare academics, streams, and extracurriculars side by side.
+      </p>
+    </section>
+
+    <!-- CORE 5 REQUESTED SCHOOLS IN EXACT SEQUENCE -->
+    <section aria-labelledby="coreHeading">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="coreHeading">Your Primary Choices</h2>
+          <p class="section-sub">St. David, Tinggi Cina, Bukit Baru, Gajah Berang, or stay at SMJK Katholik Melaka</p>
+        </div>
+      </div>
+      <div class="core-grid" id="coreGrid"></div>
+    </section>
+
+    <!-- MORE MELAKA SCHOOLS + FILTERS -->
+    <section aria-labelledby="moreHeading">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="moreHeading">Explore More Melaka Schools</h2>
+          <p class="section-sub">Filter all 10 secondary schools by stream, student profile, or Form 6 availability</p>
+        </div>
+      </div>
+
+      <div class="filter-toolbar">
+        <div class="filter-chips" id="filterChips" role="group" aria-label="Filter schools">
+          <button class="filter-chip is-active" data-filter="all">All (10)</button>
+          <button class="filter-chip" data-filter="more">Additional 5</button>
+          <button class="filter-chip" data-filter="coed">Co-Ed</button>
+          <button class="filter-chip" data-filter="boys">Boys</button>
+          <button class="filter-chip" data-filter="girls">Girls</button>
+          <button class="filter-chip" data-filter="smjk">SMJK</button>
+          <button class="filter-chip" data-filter="smk">SMK</button>
+          <button class="filter-chip" data-filter="form6">Has Form 6</button>
+        </div>
+
+        <label class="search-pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input type="search" id="schoolSearchInput" placeholder="Search school, road, or club..." aria-label="Search schools" />
+        </label>
+      </div>
+
+      <div class="more-grid" id="moreGrid"></div>
+    </section>
+
+    <!-- SIDE-BY-SIDE COMPARISON ARENA -->
+    <section class="compare-section" id="compareAnchor" aria-labelledby="compareHeading">
+      <div class="compare-header">
+        <div>
+          <h2 class="section-title" id="compareHeading">Side-by-Side Comparison</h2>
+          <p class="section-sub">Compare academic streams, documented performance highlights, and extracurricular availability</p>
+        </div>
+        <div class="connected-group" role="group" aria-label="Comparison focus">
+          <button class="connected-btn is-active" data-ctab="all">All Highlights</button>
+          <button class="connected-btn" data-ctab="academic">Academics</button>
+          <button class="connected-btn" data-ctab="cca">Extracurriculars</button>
+        </div>
+      </div>
+
+      <div class="compare-slot-bar" id="compareSlotBar"></div>
+
+      <!-- Mobile-first Head-to-Head Switcher -->
+      <div class="mobile-compare-controls" id="mobileCompareControls">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <span style="font-size:0.78rem; font-variation-settings:'wght' 720;">Mobile Split View (2 Schools)</span>
+          <button type="button" class="filter-chip" id="mobileModeToggle" style="min-height:32px; padding:0 10px; font-size:0.74rem;">Show Full Table</button>
+        </div>
+        <div class="mobile-pair-pickers" id="mobilePairPickers">
+          <select id="mobileSelectA" aria-label="First school to compare"></select>
+          <span style="font-size:0.75rem; font-variation-settings:'wght' 760; color:var(--md-sys-color-primary);">VS</span>
+          <select id="mobileSelectB" aria-label="Second school to compare"></select>
+        </div>
+      </div>
+
+      <div class="compare-scroll" id="compareTableContainer"></div>
+
+      <div class="decision-helper" id="decisionHelper"></div>
+    </section>
+
+    <aside class="footnote">
+      <strong>Note on Melaka School Data:</strong> Addresses, school codes, founding years, mottos, streams, and documented achievements (such as SMJK Katholik's 2023 86.39% SPM pass rate &amp; 1971 Wind Band, SMK Tinggi St. David's DIY Made Simple 2024 Champion &amp; state innovation entries, SMJK Tinggi Cina's Pure Science/Accounting/Chinese Literature &amp; ASEAN Data Science/IoT activities, and MHS's Cluster School status) reflect publicly documented records. Curriculum breadth bars visually summarize verified course &amp; activity diversity rather than confidential MOE school rankings. Actual transfer approval depends on PPD Melaka Tengah capacity and eligibility rules.
+    </aside>
+  </main>
+
+  <!-- FLOATING COMPARISON DOCK -->
+  <div class="floating-dock" id="floatingDock" role="region" aria-label="Comparison quick dock">
+    <div class="dock-avatars" id="dockAvatars"></div>
+    <span class="dock-label" id="dockLabel">3 schools selected</span>
+    <button class="dock-cta" id="dockJumpBtn">Compare Side-by-Side</button>
+  </div>
+
+  <!-- EXPRESSIVE SCHOOL DETAIL MODAL / MOBILE BOTTOM SHEET -->
+  <div class="sheet-backdrop" id="detailBackdrop" role="dialog" aria-modal="true" aria-labelledby="sheetSchoolName">
+    <article class="detail-sheet" id="detailSheet">
+      <div class="sheet-drag-pill" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <div class="sheet-crest-box" id="sheetCrestBox"></div>
+        <div class="sheet-title-wrap">
+          <div id="sheetTopBadges" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:4px;"></div>
+          <h2 class="sheet-title" id="sheetSchoolName"></h2>
+          <div id="sheetNativeName" style="font-size:0.86rem; color:var(--md-sys-color-on-surface-variant);"></div>
+          <p class="sheet-motto" id="sheetMotto"></p>
+        </div>
+        <button class="sheet-close" id="sheetCloseBtn" aria-label="Close school profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <p id="sheetDescription" style="margin:0 0 12px; font-size:0.95rem; line-height:1.6;"></p>
+
+      <div class="sheet-fact-grid" id="sheetFactGrid"></div>
+
+      <div class="sheet-section">
+        <h4>Academic Pathways &amp; Documented Highlights</h4>
+        <p id="sheetAcademicText" style="margin:0; font-size:0.88rem; color:var(--md-sys-color-on-surface-variant);"></p>
+      </div>
+
+      <div class="sheet-section">
+        <h4>Extracurriculars &amp; Student Life</h4>
+        <div class="cca-badge-list" id="sheetCcaList"></div>
+      </div>
+
+      <div class="sheet-footer">
+        <button class="btn-tonal-expressive" id="sheetCompareToggleBtn"></button>
+        <button class="btn-primary-expressive" id="sheetChooseBtn"></button>
+      </div>
+    </article>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* ========================================================================
+       1. MD3E DYNAMIC COLOR ENGINE (HCT-INSPIRED TONAL PALETTES)
+       ======================================================================== */
+    function hexToRgb(hex) {
+      const clean = hex.replace('#', '');
+      const full = clean.length === 3
+        ? clean.split('').map(c => c + c).join('')
+        : clean;
+      const num = parseInt(full, 16);
+      return {
+        r: (num >> 16) & 255,
+        g: (num >> 8) & 255,
+        b: num & 255
+      };
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h = 0, s = 0, l = (max + min) / 2;
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h *= 60;
+      }
+      return { h, s: s * 100, l: l * 100 };
+    }
+
+    function hslToHex(h, s, l) {
+      h = ((h % 360) + 360) % 360;
+      s = Math.max(0, Math.min(100, s)) / 100;
+      l = Math.max(0, Math.min(100, l)) / 100;
+      const a = s * Math.min(l, 1 - l);
+      const f = n => {
+        const k = (n + h / 30) % 12;
+        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        return Math.round(255 * color).toString(16).padStart(2, '0');
+      };
+      return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    function relativeLuminance(hex) {
+      const { r, g, b } = hexToRgb(hex);
+      const lin = [r, g, b].map(v => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+    }
+
+    function applyDynamicTheme(seedHex, darkMode, labelText) {
+      const { r, g, b } = hexToRgb(seedHex);
+      const { h, s } = rgbToHsl(r, g, b);
+      const pSat = Math.max(48, Math.min(86, s || 64));
+      const sSat = Math.max(18, Math.min(34, pSat * 0.42));
+      const tHue = (h + 52) % 360;
+      const tSat = Math.max(36, Math.min(72, pSat * 0.78));
+      const nSat = 8;
+
+      const root = document.documentElement;
+      root.dataset.theme = darkMode ? 'dark' : 'light';
+
+      let tokens;
+      if (!darkMode) {
+        const primary = hslToHex(h, pSat, 40);
+        const onPrimary = relativeLuminance(primary) > 0.36 ? hslToHex(h, pSat, 12) : '#ffffff';
+        tokens = {
+          '--md-sys-color-primary': primary,
+          '--md-sys-color-on-primary': onPrimary,
+          '--md-sys-color-primary-container': hslToHex(h, Math.min(92, pSat + 10), 89),
+          '--md-sys-color-on-primary-container': hslToHex(h, pSat, 15),
+
+          '--md-sys-color-secondary': hslToHex(h, sSat, 41),
+          '--md-sys-color-on-secondary': '#ffffff',
+          '--md-sys-color-secondary-container': hslToHex(h, sSat + 10, 89),
+          '--md-sys-color-on-secondary-container': hslToHex(h, sSat, 15),
+
+          '--md-sys-color-tertiary': hslToHex(tHue, tSat, 42),
+          '--md-sys-color-on-tertiary': '#ffffff',
+          '--md-sys-color-tertiary-container': hslToHex(tHue, Math.min(90, tSat + 12), 90),
+          '--md-sys-color-on-tertiary-container': hslToHex(tHue, tSat, 16),
+
+          '--md-sys-color-background': hslToHex(h, nSat + 8, 98),
+          '--md-sys-color-on-background': hslToHex(h, nSat + 6, 12),
+          '--md-sys-color-surface': hslToHex(h, nSat + 8, 98),
+          '--md-sys-color-on-surface': hslToHex(h, nSat + 6, 12),
+          '--md-sys-color-on-surface-variant': hslToHex(h, nSat + 4, 31),
+
+          '--md-sys-color-surface-container-lowest': '#ffffff',
+          '--md-sys-color-surface-container-low': hslToHex(h, nSat + 10, 96),
+          '--md-sys-color-surface-container': hslToHex(h, nSat + 10, 93.5),
+          '--md-sys-color-surface-container-high': hslToHex(h, nSat + 10, 91),
+          '--md-sys-color-surface-container-highest': hslToHex(h, nSat + 10, 88.5),
+
+          '--md-sys-color-outline': hslToHex(h, nSat, 47),
+          '--md-sys-color-outline-variant': hslToHex(h, nSat + 6, 78),
+          '--md-sys-color-inverse-surface': hslToHex(h, nSat + 4, 19),
+          '--md-sys-color-inverse-on-surface': hslToHex(h, nSat + 6, 95),
+          '--md-sys-color-stay-bg': '#d1fae5',
+          '--md-sys-color-stay-fg': '#065f46'
+        };
+      } else {
+        const primary = hslToHex(h, Math.min(90, pSat + 8), 76);
+        tokens = {
+          '--md-sys-color-primary': primary,
+          '--md-sys-color-on-primary': hslToHex(h, pSat, 14),
+          '--md-sys-color-primary-container': hslToHex(h, pSat, 28),
+          '--md-sys-color-on-primary-container': hslToHex(h, Math.min(92, pSat + 10), 91),
+
+          '--md-sys-color-secondary': hslToHex(h, sSat + 8, 76),
+          '--md-sys-color-on-secondary': hslToHex(h, sSat, 16),
+          '--md-sys-color-secondary-container': hslToHex(h, sSat, 28),
+          '--md-sys-color-on-secondary-container': hslToHex(h, sSat + 10, 90),
+
+          '--md-sys-color-tertiary': hslToHex(tHue, Math.min(86, tSat + 8), 78),
+          '--md-sys-color-on-tertiary': hslToHex(tHue, tSat, 16),
+          '--md-sys-color-tertiary-container': hslToHex(tHue, tSat, 29),
+          '--md-sys-color-on-tertiary-container': hslToHex(tHue, tSat + 10, 91),
+
+          '--md-sys-color-background': hslToHex(h, nSat + 6, 8),
+          '--md-sys-color-on-background': hslToHex(h, nSat, 91),
+          '--md-sys-color-surface': hslToHex(h, nSat + 6, 8),
+          '--md-sys-color-on-surface': hslToHex(h, nSat, 91),
+          '--md-sys-color-on-surface-variant': hslToHex(h, nSat + 4, 77),
+
+          '--md-sys-color-surface-container-lowest': hslToHex(h, nSat + 6, 5.5),
+          '--md-sys-color-surface-container-low': hslToHex(h, nSat + 6, 11),
+          '--md-sys-color-surface-container': hslToHex(h, nSat + 6, 13.5),
+          '--md-sys-color-surface-container-high': hslToHex(h, nSat + 6, 17),
+          '--md-sys-color-surface-container-highest': hslToHex(h, nSat + 6, 21),
+
+          '--md-sys-color-outline': hslToHex(h, nSat, 58),
+          '--md-sys-color-outline-variant': hslToHex(h, nSat + 4, 29),
+          '--md-sys-color-inverse-surface': hslToHex(h, nSat + 4, 91),
+          '--md-sys-color-inverse-on-surface': hslToHex(h, nSat + 4, 18),
+          '--md-sys-color-stay-bg': '#064e3b',
+          '--md-sys-color-stay-fg': '#a7f3d0'
+        };
+      }
+
+      Object.entries(tokens).forEach(([k, v]) => root.style.setProperty(k, v));
+      const labelEl = document.getElementById('activeThemeLabel');
+      if (labelEl && labelText) {
+        labelEl.textContent = `Dynamic Theme: ${labelText}`;
+      }
+    }
+
+    /* ========================================================================
+       2. MD3E EXPRESSIVE GEOMETRIC BACKDROP SHAPES & HERALDIC SVG SCHOOL CRESTS
+       ======================================================================== */
+    const SHAPE_PATHS = {
+      sunny: 'M60 4 L71 14 L86 10 L91 25 L106 27 L104 42 L116 52 L108 66 L114 80 L101 89 L101 104 L86 107 L78 119 L64 114 L52 120 L40 111 L26 113 L21 98 L7 94 L10 79 L2 67 L11 54 L6 39 L19 31 L20 16 L35 15 L44 3 L56 9 Z',
+      cookie7: 'M60 5 C70 5 77 14 86 17 C95 20 106 20 110 29 C114 38 109 49 112 58 C115 67 119 77 113 85 C107 93 96 94 88 100 C80 106 74 116 64 116 C54 116 46 107 37 103 C28 99 17 98 13 89 C9 80 15 69 12 60 C9 51 5 41 11 33 C17 25 28 24 36 18 C44 12 50 5 60 5 Z',
+      clover4: 'M60 6 C78 6 88 18 86 34 C102 32 114 42 114 60 C114 78 102 88 86 86 C88 102 78 114 60 114 C42 114 32 102 34 86 C18 88 6 78 6 60 C6 42 18 32 34 34 C32 18 42 6 60 6 Z',
+      arch: 'M24 12 H96 C106 12 112 18 112 28 V68 C112 96 88 114 60 114 C32 114 8 96 8 68 V28 C8 18 14 12 24 12 Z',
+      cookie9: 'M60 4 L72 12 L86 9 L93 21 L107 24 L108 38 L118 48 L112 61 L117 75 L106 84 L105 98 L91 102 L84 114 L70 112 L60 120 L50 112 L36 114 L29 102 L15 98 L14 84 L3 75 L8 61 L2 48 L12 38 L13 24 L27 21 L34 9 L48 12 Z'
+    };
+
+    function getSchoolCrestSVG(id) {
+      switch (id) {
+        case 'stdavid':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M16 12 H84 V52 C84 74 66 88 50 94 C34 88 16 74 16 52 Z" fill="#1B56B5" stroke="#F4B400" stroke-width="4"/>
+            <path d="M22 18 H50 V52 H22 Z" fill="#C62828"/>
+            <path d="M50 52 H78 V54 C78 70 64 81 50 86 Z" fill="#123C82"/>
+            <rect x="46" y="16" width="8" height="68" fill="#F4B400"/>
+            <rect x="20" y="45" width="60" height="8" fill="#F4B400"/>
+            <circle cx="50" cy="49" r="13" fill="#FFFFFF" stroke="#1B56B5" stroke-width="3"/>
+            <path d="M42 46 Q50 43 58 46 V55 Q50 52 42 55 Z" fill="#1B56B5"/>
+            <path d="M20 75 Q50 84 80 75 L84 84 Q50 93 16 84 Z" fill="#F4B400"/>
+            <text x="50" y="83" text-anchor="middle" font-size="6.8" font-weight="800" fill="#111827">TRUTH &amp; HONOUR</text>
+          </svg>`;
+
+        case 'tinggicina':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" fill="#B3261E" stroke="#F59E0B" stroke-width="4.5"/>
+            <circle cx="50" cy="50" r="34" fill="#8E1A14" stroke="#FDE68A" stroke-width="1.5"/>
+            <polygon points="50,18 54,28 65,28 56,34 59,44 50,38 41,44 44,34 35,28 46,28" fill="#FBBF24"/>
+            <path d="M28 52 Q50 45 72 52 V70 Q50 63 28 70 Z" fill="#FFFFFF"/>
+            <line x1="50" y1="49" x2="50" y2="66" stroke="#B3261E" stroke-width="2.5"/>
+            <text x="50" y="84" text-anchor="middle" font-size="11" font-weight="800" fill="#FDE68A">华中 STCM</text>
+          </svg>`;
+
+        case 'bukitbaru':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M18 14 H82 V50 C82 72 66 86 50 93 C34 86 18 72 18 50 Z" fill="#8E1D39" stroke="#FBC02D" stroke-width="4"/>
+            <path d="M24 20 H76 V42 H24 Z" fill="#E65100"/>
+            <path d="M50 22 L59 38 H41 Z" fill="#FBC02D"/>
+            <path d="M30 56 Q50 48 70 56 V71 Q50 64 30 71 Z" fill="#FFFFFF"/>
+            <path d="M26 72 C32 82 41 87 50 89 C59 87 68 82 74 72" fill="none" stroke="#4ADE80" stroke-width="4" stroke-linecap="round"/>
+            <text x="50" y="49" text-anchor="middle" font-size="10.5" font-weight="800" fill="#FFFFFF">SMKBB</text>
+          </svg>`;
+
+        case 'gajahberang':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M16 14 H84 V51 C84 74 66 88 50 94 C34 88 16 74 16 51 Z" fill="#7B1E32" stroke="#F5B400" stroke-width="4"/>
+            <!-- Twin Elephant Tusks honoring Jalan Gajah Berang -->
+            <path d="M31 66 C22 50 25 30 37 22 C33 34 34 50 41 60 Z" fill="#FFFFFF"/>
+            <path d="M69 66 C78 50 75 30 63 22 C67 34 66 50 59 60 Z" fill="#FFFFFF"/>
+            <path d="M40 36 Q50 32 60 36 V54 Q50 50 40 54 Z" fill="#F5B400"/>
+            <path d="M50 20 L54 30 H46 Z" fill="#FDE68A"/>
+            <path d="M19 73 Q50 84 81 73 L84 82 Q50 93 16 82 Z" fill="#F5B400"/>
+            <text x="50" y="81" text-anchor="middle" font-size="6.4" font-weight="800" fill="#450A14">LABOR OMNIA VINCIT</text>
+          </svg>`;
+
+        case 'katholik':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M17 12 H83 V52 C83 74 66 87 50 94 C34 87 17 74 17 52 Z" fill="#0F5FAF" stroke="#FBC02D" stroke-width="4"/>
+            <path d="M22 17 H50 V48 H22 Z" fill="#00ACC1"/>
+            <path d="M50 17 H78 V48 H50 Z" fill="#D32F2F"/>
+            <circle cx="50" cy="48" r="14" fill="#FFFFFF" stroke="#0F5FAF" stroke-width="2.5"/>
+            <rect x="48" y="37" width="4" height="22" fill="#0F5FAF"/>
+            <rect x="39" y="46" width="22" height="4" fill="#0F5FAF"/>
+            <path d="M32 67 Q50 61 68 67 V78 Q50 72 32 78 Z" fill="#FBC02D"/>
+            <text x="50" y="33" text-anchor="middle" font-size="10.5" font-weight="800" fill="#FFFFFF">公教 CHS</text>
+          </svg>`;
+
+        case 'mhs':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M18 14 H82 V52 C82 74 66 87 50 93 C34 87 18 74 18 52 Z" fill="#6E3068" stroke="#F59E0B" stroke-width="4"/>
+            <path d="M50 16 H80 V52 C80 71 66 84 50 90 Z" fill="#1E6B43"/>
+            <!-- Stylized A Famosa Gateway -->
+            <path d="M34 66 V40 L50 28 L66 40 V66 H56 V50 C56 46 44 46 44 50 V66 Z" fill="#FFFFFF"/>
+            <text x="50" y="81" text-anchor="middle" font-size="10" font-weight="800" fill="#FDE68A">MHS 1826</text>
+          </svg>`;
+
+        case 'yokbin':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <circle cx="50" cy="50" r="41" fill="#0E6B5E" stroke="#F59E0B" stroke-width="4"/>
+            <path d="M30 56 Q50 48 70 56 V70 Q50 62 30 70 Z" fill="#FFFFFF"/>
+            <path d="M50 20 L58 40 H42 Z" fill="#FBBF24"/>
+            <circle cx="50" cy="39" r="5" fill="#FFFFFF"/>
+            <text x="50" y="84" text-anchor="middle" font-size="11.5" font-weight="800" fill="#FDE68A">育民 YB</text>
+          </svg>`;
+
+        case 'stfrancis':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M18 14 H82 V52 C82 74 66 87 50 93 C34 87 18 74 18 52 Z" fill="#1C6B3B" stroke="#FFFFFF" stroke-width="4"/>
+            <!-- Lasallian Star -->
+            <polygon points="50,22 54,34 66,34 56,41 60,53 50,46 40,53 44,41 34,34 46,34" fill="#FFFFFF"/>
+            <path d="M26 62 L50 74 L74 62" fill="none" stroke="#FBBF24" stroke-width="5" stroke-linecap="round"/>
+            <text x="50" y="86" text-anchor="middle" font-size="9" font-weight="800" fill="#FFFFFF">SFI 1880</text>
+          </svg>`;
+
+        case 'acs':
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M18 14 H82 V52 C82 74 66 87 50 93 C34 87 18 74 18 52 Z" fill="#1E3A8A" stroke="#F59E0B" stroke-width="4"/>
+            <path d="M22 18 H78 V38 H22 Z" fill="#B91C1C"/>
+            <rect x="46" y="42" width="8" height="28" rx="2" fill="#FBBF24"/>
+            <path d="M50 22 C56 30 56 38 50 42 C44 38 44 30 50 22 Z" fill="#FDE68A"/>
+            <text x="50" y="83" text-anchor="middle" font-size="11" font-weight="800" fill="#FFFFFF">ACS 1910</text>
+          </svg>`;
+
+        case 'notredame':
+        default:
+          return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+            <path d="M18 14 H82 V52 C82 74 66 87 50 93 C34 87 18 74 18 52 Z" fill="#9C2760" stroke="#F8BBD0" stroke-width="4"/>
+            <path d="M22 18 H78 V46 H22 Z" fill="#1D3557"/>
+            <path d="M50 23 C54 31 58 34 50 44 C42 34 46 31 50 23 Z" fill="#FFFFFF"/>
+            <path d="M32 58 Q50 52 68 58 V72 Q50 66 32 72 Z" fill="#FFFFFF"/>
+            <text x="50" y="84" text-anchor="middle" font-size="10.5" font-weight="800" fill="#FCE7F3">圣母 NDC</text>
+          </svg>`;
+      }
+    }
+
+    /* ========================================================================
+       3. VERIFIED MELAKA SCHOOL DATASET
+       Exact core 5 order first, followed by 5 additional Melaka schools
+       ======================================================================== */
+    const SCHOOLS = [
+      {
+        id: 'stdavid',
+        coreOrder: 1,
+        name: 'SMK Tinggi St. David',
+        shortName: 'St. David',
+        nativeName: '圣大卫中学 • St. David’s High School',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEB2093',
+        founded: 1912,
+        location: 'Bukit Baru, 75150 Melaka',
+        distanceKm: 5.5,
+        motto: 'Truth and Honour',
+        seedColor: '#1b56b5',
+        shape: 'sunny',
+        forms: 'Forms 1–5 (SPM)',
+        hasForm6: false,
+        dlp: 'STEM & English focus',
+        languages: 'BM, English, Mandarin, Tamil',
+        description:
+          'A historic Anglican missionary national secondary school set on leafy grounds in Bukit Baru. Known for student-led STEM sustainability inventions, multi-ethnic camaraderie, and strong uniformed units.',
+        academicSummary:
+          'Offers Pure Science and Arts/Commerce SPM streams plus four language subjects (BM, English, Mandarin, Tamil). National Champion at DIY Made Simple 2024 (“Simple Shoe Cleaner 1.0”) and active at Melaka State Innovation & Robotics fairs.',
+        academicBenchmark: 'DIY Made Simple 2024 National Champion',
+        metrics: {
+          stem: 86,
+          languages: 90,
+          preU: 42,
+          ccaVariety: 85
+        },
+        cca: {
+          uniformed: ['St. John Ambulance', 'Scouts', 'Red Crescent'],
+          arts: ['Choral Speaking', 'Debate & Drama'],
+          stem: ['STEM & DIY Innovation Club', 'Robotics'],
+          sports: ['Athletics', 'Badminton', 'Basketball', 'Chess'],
+          signature: 'DIY & Sustainability Innovation Team'
+        }
+      },
+      {
+        id: 'tinggicina',
+        coreOrder: 2,
+        name: 'SMJK Tinggi Cina Melaka',
+        shortName: 'Tinggi Cina',
+        nativeName: '马六甲华文国民型高等中学',
+        isStay: false,
+        type: 'SMJK',
+        gender: 'Co-Ed',
+        code: 'MEB2104',
+        founded: 1960,
+        location: '28, Jalan Malim, 75250 Melaka',
+        distanceKm: 2.8,
+        motto: 'Beriltizam Untuk Kecemerlangan',
+        seedColor: '#b3261e',
+        shape: 'cookie7',
+        forms: 'Forms 1–5 (SPM)',
+        hasForm6: false,
+        dlp: 'Trilingual + Chinese Lit',
+        languages: 'BM, English, Mandarin (Compulsory)',
+        description:
+          'A vibrant co-educational SMJK along Jalan Malim bridging strong Chinese cultural heritage with modern Pure Science, Accounting/Economics, and digital data-science projects.',
+        academicSummary:
+          'Upper secondary offerings span Pure Science (Biology, Chemistry, Physics), Accounting & Economics, and Chinese Literature electives. Active in ASEAN Data Science Explorers, MMU IoT Smart Farm initiatives, and national Chinese literary awards.',
+        academicBenchmark: 'ASEAN Data Science & IoT Smart Farm Projects',
+        metrics: {
+          stem: 84,
+          languages: 92,
+          preU: 42,
+          ccaVariety: 86
+        },
+        cca: {
+          uniformed: ['St. John Ambulance', 'Scouts', 'Girl Guides'],
+          arts: ['Chinese Orchestra / Cultural', 'Creative Writing'],
+          stem: ['STEM & IoT Club', 'Data Science Explorers'],
+          sports: ['Basketball', 'Table Tennis', 'Athletics'],
+          signature: 'Chinese Literature & IoT STEM Projects'
+        }
+      },
+      {
+        id: 'bukitbaru',
+        coreOrder: 3,
+        name: 'SMK Bukit Baru',
+        shortName: 'Bukit Baru',
+        nativeName: 'Sekolah Menengah Kebangsaan Bukit Baru',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2093',
+        founded: 1993,
+        location: 'Jalan Istana, Bukit Baru, 75450 Melaka',
+        distanceKm: 6.0,
+        motto: 'Berilmu Berakhlak',
+        seedColor: '#8e1d39',
+        shape: 'clover4',
+        forms: 'Forms 1–6 (SPM + STPM)',
+        hasForm6: true,
+        dlp: 'Form 6 Centre + PPKI',
+        languages: 'BM, English',
+        description:
+          'Situated beside Jabatan Pendidikan Melaka on Jalan Istana, SMK Bukit Baru is a large comprehensive campus featuring Forms 1–5, an established Form 6 (STPM) centre, and inclusive PPKI programmes.',
+        academicSummary:
+          'Provides continuous SPM through STPM (Form 6 Humanities, Economics, Business & Sports Science) pathways without switching campuses, supported by green-tech showcases and its on-campus Galeri Warisan Rakyat.',
+        academicBenchmark: 'Full Form 6 (STPM) Pathway + Athletics Pedigree',
+        metrics: {
+          stem: 76,
+          languages: 74,
+          preU: 92,
+          ccaVariety: 84
+        },
+        cca: {
+          uniformed: ['Pengakap (Air & ASEAN Scouts)', 'Kadet Polis', 'Puteri Islam'],
+          arts: ['Choir & Cultural Arts', 'Heritage Gallery'],
+          stem: ['Green-Tech & Science Society'],
+          sports: ['Track & Field Athletics', 'Football', 'Netball'],
+          signature: 'ASEAN/Air Scouts & National Athletics Heritage'
+        }
+      },
+      {
+        id: 'gajahberang',
+        coreOrder: 4,
+        name: 'SMK Gajah Berang',
+        shortName: 'Gajah Berang',
+        nativeName: 'Sekolah Menengah Kebangsaan Gajah Berang (GBS)',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEB2091',
+        founded: 1956,
+        location: '67, Jalan Gajah Berang, 75200 Melaka',
+        distanceKm: 0.3,
+        motto: 'Labor Omnia Vincit',
+        seedColor: '#7b1e32',
+        shape: 'arch',
+        forms: 'Forms 1–6 (SPM + STPM)',
+        hasForm6: true,
+        dlp: '8 Science Labs + Form 6',
+        languages: 'BM, English, Mandarin/Tamil electives',
+        description:
+          'Established in 1956 just 300 metres down Jalan Gajah Berang, GBS is a multi-cultural co-ed school equipped with eight science laboratories, ICT labs, Eco-Ranger initiatives, and a Form 6 stream.',
+        academicSummary:
+          'Offers Forms 1–5 and Form 6 (STPM) supported by eight dedicated Science labs and two computer labs. Hosts STEM Carnival competitions such as water-rocket engineering and inter-school robotics challenges.',
+        academicBenchmark: '8 Science Labs + Form 6 + Walking Distance',
+        metrics: {
+          stem: 82,
+          languages: 80,
+          preU: 88,
+          ccaVariety: 82
+        },
+        cca: {
+          uniformed: ['Scouts', 'Red Crescent', 'Kadet Polis'],
+          arts: ['Literary & Debate Club'],
+          stem: ['Robotics & Water Rocket STEM', 'Eco-Ranger Club'],
+          sports: ['Hockey', 'Table Tennis', 'Tennis', 'Chess', 'Basketball'],
+          signature: '8 Science Labs, Eco-Ranger & STEM Carnival'
+        }
+      },
+      {
+        id: 'katholik',
+        coreOrder: 5,
+        name: 'SMJK Katholik Melaka',
+        shortName: 'SMJK Katholik',
+        nativeName: '马六甲公教国民型华文中学 • Catholic High School',
+        isStay: true,
+        type: 'SMJK',
+        gender: 'Boys',
+        code: 'MEB2099',
+        founded: 1958,
+        location: '251, Jalan Gajah Berang, 75200 Melaka',
+        distanceKm: 0.0,
+        motto: '亲爱忠诚 • Penyayang dan Taat',
+        seedColor: '#0f5faf',
+        shape: 'cookie9',
+        forms: 'Forms 1–5 (SPM)',
+        hasForm6: false,
+        dlp: 'DLP Science & Maths (English)',
+        languages: 'BM, English, Mandarin (Compulsory)',
+        description:
+          'Your current home campus on Jalan Gajah Berang—founded by the Marist Brothers in 1958. A close-knit ~700-student boys’ SMJK with Dual Language Programme (DLP) classes and deep alumni brotherhood.',
+        academicSummary:
+          'Recorded an 86.39% SPM pass rate (2023) with DLP Science & Mathematics taught in English alongside compulsory Bahasa Cina and Bahasa Melayu. Smaller class community provides high teacher accessibility.',
+        academicBenchmark: '86.39% SPM Pass Rate (2023) • DLP Classes',
+        metrics: {
+          stem: 85,
+          languages: 89,
+          preU: 42,
+          ccaVariety: 84
+        },
+        cca: {
+          uniformed: ['St. John Ambulance', 'Scouts'],
+          arts: ['CHS Wind / Marching Band (Est. 1971)', 'Debate & Literary'],
+          stem: ['Science & Mathematics Society', 'ICT Club'],
+          sports: ['Basketball', 'Table Tennis', 'Badminton', 'House Athletics'],
+          signature: 'CHS Wind & Marching Band (Since 1971)'
+        }
+      },
+      {
+        id: 'mhs',
+        coreOrder: null,
+        name: 'SMK Tinggi Melaka (MHS)',
+        shortName: 'MHS',
+        nativeName: '马六甲高等中学 • Malacca High School',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Boys',
+        code: 'MEB2090',
+        founded: 1826,
+        location: '61, Jalan Chan Koon Cheng, 75000 Melaka',
+        distanceKm: 2.2,
+        motto: 'Meliora Hic Sequamur',
+        seedColor: '#6e3068',
+        shape: 'arch',
+        forms: 'Forms 1–6 (Boys F1–5, Co-Ed F6)',
+        hasForm6: true,
+        dlp: 'Cluster School • Boys Hostel',
+        languages: 'BM, English, electives',
+        description:
+          'Malaysia’s second-oldest school (celebrating its 200th bicentennial in 2026!) in Banda Hilir. A MOE Cluster School of Excellence with Form 1–6 pathways, hostel accommodation, and rich heritage.',
+        academicSummary:
+          'Recognized as a Cluster School of Excellence and Anugerah Sekolah Cemerlang (Lonjakan Saujana SPM) honouree. Strong Science & Humanities tracks up to STPM Form 6 with active international sister-school exchanges.',
+        academicBenchmark: 'Cluster School of Excellence • Bicentennial 1826–2026',
+        metrics: {
+          stem: 88,
+          languages: 82,
+          preU: 95,
+          ccaVariety: 92
+        },
+        cca: {
+          uniformed: ['MHS Cadet Corps (Est. 1902)', 'Scouts'],
+          arts: ['MHS Brass Band', 'Literary & Debating Society'],
+          stem: ['STEM & Innovation Society'],
+          sports: ['Cricket', 'Rugby', 'Hockey', 'Athletics'],
+          signature: 'Historic Cadet Corps (1902) & Cricket/Rugby'
+        }
+      },
+      {
+        id: 'yokbin',
+        coreOrder: null,
+        name: 'SMJK Yok Bin',
+        shortName: 'Yok Bin',
+        nativeName: '马六甲育民国民型华文中学',
+        isStay: false,
+        type: 'SMJK',
+        gender: 'Co-Ed',
+        code: 'PPD Melaka Tengah',
+        founded: 1947,
+        location: '19, Jalan Ayer Leleh, Bukit Serindit, 75050 Melaka',
+        distanceKm: 3.5,
+        motto: 'Knowledge is the Key to Progress',
+        seedColor: '#0e6b5e',
+        shape: 'sunny',
+        forms: 'Forms 1–5 (SPM)',
+        hasForm6: false,
+        dlp: 'Strong Robotics & Trilingual SMJK',
+        languages: 'BM, English, Mandarin (Compulsory)',
+        description:
+          'A premier co-educational SMJK in Bukit Serindit renowned across Melaka for robotics engineering, trilingual academic rigour, and energetic performing arts and sports programmes.',
+        academicSummary:
+          'Strong Pure Science and Accounting/Commerce streams coupled with a celebrated Robotics & STEM track (host & competitor in regional Robot Olympic and national STEM engineering competitions).',
+        academicBenchmark: 'Regional Robotics & STEM Award Powerhouse',
+        metrics: {
+          stem: 92,
+          languages: 90,
+          preU: 42,
+          ccaVariety: 89
+        },
+        cca: {
+          uniformed: ['St. John Ambulance', 'Scouts'],
+          arts: ['Chinese Orchestra', 'Cultural Dance & Choir'],
+          stem: ['Robotics & Makerspace Team', 'STEM Innovation'],
+          sports: ['Basketball', 'Badminton', 'Table Tennis', 'Athletics'],
+          signature: 'Competitive Robotics & Chinese Orchestra'
+        }
+      },
+      {
+        id: 'stfrancis',
+        coreOrder: null,
+        name: 'SMK St. Francis (SFI)',
+        shortName: 'St. Francis',
+        nativeName: 'St. Francis’ Institution',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Boys',
+        code: 'MEB2096',
+        founded: 1872,
+        location: 'Jalan Parameswara, Banda Hilir, 75000 Melaka',
+        distanceKm: 2.1,
+        motto: 'Age Quod Agis',
+        seedColor: '#1c6b3b',
+        shape: 'clover4',
+        forms: 'Forms 1–5 (SPM)',
+        hasForm6: false,
+        dlp: 'Lasallian Character & Band Heritage',
+        languages: 'BM, English, electives',
+        description:
+          'Malaysia’s second-oldest Lasallian school located along Jalan Parameswara. “Franciscans” are renowned for strong camaraderie, English fluency, hockey, and their prestigious Military Band.',
+        academicSummary:
+          'Structured Science and Commerce/Arts streams emphasizing Lasallian holistic character formation, active debate/oratory culture, and strong alumni mentorship networks.',
+        academicBenchmark: 'Historic Lasallian Brotherhood & Military Band',
+        metrics: {
+          stem: 79,
+          languages: 81,
+          preU: 42,
+          ccaVariety: 87
+        },
+        cca: {
+          uniformed: ['St. John Ambulance', 'Scouts', 'Lasallian Youth'],
+          arts: ['Franciscan Military Band', 'English Debate'],
+          stem: ['Science & ICT Club'],
+          sports: ['Hockey', 'Football', 'Athletics', 'Basketball'],
+          signature: 'Franciscan Military Band & Hockey Tradition'
+        }
+      },
+      {
+        id: 'acs',
+        coreOrder: null,
+        name: 'SMK Methodist (ACS)',
+        shortName: 'ACS Melaka',
+        nativeName: 'Anglo-Chinese School (Tengkera) Melaka',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Boys',
+        code: 'MEB2094',
+        founded: 1910,
+        location: 'Jalan Tengkera, 75200 Melaka',
+        distanceKm: 1.2,
+        motto: 'The Best Is Yet To Be',
+        seedColor: '#1e3a8a',
+        shape: 'cookie7',
+        forms: 'Forms 1–6 (Boys F1–5, Co-Ed F6)',
+        hasForm6: true,
+        dlp: 'Methodist Tradition + Form 6',
+        languages: 'BM, English, electives',
+        description:
+          'A century-old Methodist mission institution along nearby Jalan Tengkera with iconic Boys’ Brigade heritage, Form 6 availability, and a convenient 1.2 km commute from Gajah Berang.',
+        academicSummary:
+          'Offers Forms 1–5 Science & Humanities streams as well as Form 6 (STPM) pathways, continuing a long-standing ACS legacy of English communication and community leadership.',
+        academicBenchmark: '115+ Years Heritage • Form 6 + 1.2 km Commute',
+        metrics: {
+          stem: 77,
+          languages: 80,
+          preU: 86,
+          ccaVariety: 82
+        },
+        cca: {
+          uniformed: ['Boys’ Brigade', 'Scouts', 'St. John Ambulance'],
+          arts: ['Choir & Music Society', 'Debate'],
+          stem: ['Science & Computer Club'],
+          sports: ['Basketball', 'Cricket', 'Badminton', 'Athletics'],
+          signature: 'Boys’ Brigade Company & Tengkera Heritage'
+        }
+      },
+      {
+        id: 'notredame',
+        coreOrder: null,
+        name: 'SMJK Notre Dame Convent',
+        shortName: 'Notre Dame',
+        nativeName: '马六甲圣母女子国民型华文中学',
+        isStay: false,
+        type: 'SMJK',
+        gender: 'Girls',
+        code: 'MEB2100',
+        founded: 1960,
+        location: '265, Jalan Gajah Berang, 75200 Melaka',
+        distanceKm: 0.15,
+        motto: 'Simple in Virtue, Steadfast in Duty',
+        seedColor: '#9c2760',
+        shape: 'cookie9',
+        forms: 'Forms 1–5 (SPM)',
+        hasForm6: false,
+        dlp: 'Girls SMJK • STEM & Netball',
+        languages: 'BM, English, Mandarin (Compulsory)',
+        description:
+          'Located right next door at 265 Jalan Gajah Berang, Notre Dame Convent is a distinguished all-girls SMJK blending trilingual academics, STEM problem-solving, and strong sports/uniformed teams.',
+        academicSummary:
+          'Delivers Pure Science, Accounting, and Chinese Language streams alongside active participation in state Physics/STEM module showcases and mathematical puzzle challenges.',
+        academicBenchmark: 'Trilingual Girls’ SMJK • Next-Door Campus',
+        metrics: {
+          stem: 84,
+          languages: 90,
+          preU: 42,
+          ccaVariety: 85
+        },
+        cca: {
+          uniformed: ['Pandu Puteri (Girl Guides)', 'Red Crescent / SJAM'],
+          arts: ['Chinese Cultural & Choir', 'Public Speaking'],
+          stem: ['STEM Cube & Physics Module Club'],
+          sports: ['Netball (District Host)', 'Badminton', 'Table Tennis'],
+          signature: 'Pandu Puteri & District Netball Powerhouse'
+        }
+      }
+    ];
+
+    /* ========================================================================
+       4. APPLICATION STATE
+       ======================================================================== */
+    const state = {
+      darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
+      autoTheme: true,
+      activeSeed: '#0f5faf',
+      activeThemeLabel: 'SMJK Katholik (Stay)',
+      activeSchoolThemeId: 'katholik',
+      filter: 'all',
+      search: '',
+      compareIds: ['katholik', 'stdavid', 'tinggicina'],
+      compareTab: 'all',
+      mobileDuoMode: true,
+      mobilePair: ['katholik', 'stdavid'],
+      openSheetId: null
+    };
+
+    /* ========================================================================
+       5. RENDER HELPERS
+       ======================================================================== */
+    function getSchool(id) {
+      return SCHOOLS.find(s => s.id === id);
+    }
+
+    function renderSchoolCard(school) {
+      const isQueued = state.compareIds.includes(school.id);
+      const isActiveTheme = state.activeSchoolThemeId === school.id;
+      const shapePath = SHAPE_PATHS[school.shape] || SHAPE_PATHS.arch;
+
+      return `
+        <article
+          class="school-card ${isActiveTheme ? 'is-selected-theme' : ''}"
+          style="--school-accent:${school.seedColor};"
+          data-school-id="${school.id}"
+          data-stay="${school.isStay}"
+          tabindex="0"
+          role="button"
+          aria-label="Explore ${school.name}${school.isStay ? ' (Stay at current school)' : ''}"
+        >
+          <div class="card-top-badges">
+            <span class="badge-chip">${school.type} • ${school.gender}</span>
+            ${school.isStay
+              ? `<span class="badge-chip badge-chip--stay"><span class="badge-chip--stay-dot" aria-hidden="true"></span>Stay</span>`
+              : `<span class="badge-chip">${school.distanceKm === 0 ? 'Current' : school.distanceKm + ' km'}</span>`
+            }
+          </div>
+
+          <div class="emblem-stage" aria-hidden="true">
+            <svg class="emblem-shape-bg" viewBox="0 0 120 120">
+              <path d="${shapePath}" fill="currentColor" />
+            </svg>
+            <div class="emblem-crest">${getSchoolCrestSVG(school.id)}</div>
+          </div>
+
+          <h3 class="school-name">${school.name}</h3>
+          <p class="school-native">${school.nativeName}</p>
+
+          <div class="school-meta-pills">
+            <span class="meta-mini">Est. ${school.founded}</span>
+            <span class="meta-mini">${school.hasForm6 ? 'Forms 1–6' : 'Forms 1–5'}</span>
+          </div>
+
+          <div class="card-actions">
+            <button type="button" class="card-btn-detail" data-action="detail" data-id="${school.id}">
+              ${school.isStay ? 'View Current' : 'Explore'}
+            </button>
+            <button
+              type="button"
+              class="card-btn-compare ${isQueued ? 'is-queued' : ''}"
+              data-action="compare"
+              data-id="${school.id}"
+              aria-pressed="${isQueued}"
+              title="${isQueued ? 'Remove from comparison' : 'Add to side-by-side comparison'}"
+            >
+              ${isQueued ? '✓ Added' : '+ Compare'}
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCoreGrid() {
+      const coreSchools = SCHOOLS
+        .filter(s => s.coreOrder !== null)
+        .sort((a, b) => a.coreOrder - b.coreOrder);
+      document.getElementById('coreGrid').innerHTML = coreSchools.map(renderSchoolCard).join('');
+    }
+
+    function renderMoreGrid() {
+      const q = state.search.trim().toLowerCase();
+      const filtered = SCHOOLS.filter(school => {
+        if (state.filter === 'more' && school.coreOrder !== null) return false;
+        if (state.filter === 'coed' && school.gender !== 'Co-Ed') return false;
+        if (state.filter === 'boys' && school.gender !== 'Boys') return false;
+        if (state.filter === 'girls' && school.gender !== 'Girls') return false;
+        if (state.filter === 'smjk' && school.type !== 'SMJK') return false;
+        if (state.filter === 'smk' && school.type !== 'SMK') return false;
+        if (state.filter === 'form6' && !school.hasForm6) return false;
+
+        if (q) {
+          const hay = [
+            school.name,
+            school.nativeName,
+            school.location,
+            school.motto,
+            school.cca.signature,
+            ...school.cca.uniformed,
+            ...school.cca.arts,
+            ...school.cca.stem,
+            ...school.cca.sports
+          ].join(' ').toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      const container = document.getElementById('moreGrid');
+      if (!filtered.length) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1; padding:32px; text-align:center; background:var(--md-sys-color-surface-container-low); border-radius:24px;">
+            <p style="margin:0 0 10px; font-variation-settings:'wght' 700;">No schools match "${state.search}" under this filter.</p>
+            <button type="button" class="filter-chip is-active" onclick="resetFilters()">Reset Filters</button>
+          </div>
+        `;
+        return;
+      }
+      container.innerHTML = filtered.map(renderSchoolCard).join('');
+    }
+
+    function renderDockAndBadges() {
+      const count = state.compareIds.length;
+      document.getElementById('navCompareCount').textContent = count;
+
+      const dock = document.getElementById('floatingDock');
+      const avatars = document.getElementById('dockAvatars');
+      const label = document.getElementById('dockLabel');
+
+      if (count === 0) {
+        dock.classList.add('is-hidden');
+        return;
+      }
+      dock.classList.remove('is-hidden');
+      avatars.innerHTML = state.compareIds.map(id => `
+        <div class="dock-avatar" title="${getSchool(id).shortName}">${getSchoolCrestSVG(id)}</div>
+      `).join('');
+      label.textContent = count === 1 ? '1 school queued (pick 1 more)' : `${count} schools ready to compare`;
+    }
+
+    function syncMobilePairDefaults() {
+      const validIds = state.compareIds.length >= 2 ? state.compareIds : SCHOOLS.slice(0, 2).map(s => s.id);
+      if (!validIds.includes(state.mobilePair[0])) {
+        state.mobilePair[0] = validIds[0];
+      }
+      if (!validIds.includes(state.mobilePair[1]) || state.mobilePair[1] === state.mobilePair[0]) {
+        state.mobilePair[1] = validIds.find(id => id !== state.mobilePair[0]) || validIds[0];
+      }
+    }
+
+    function renderComparison() {
+      const slotBar = document.getElementById('compareSlotBar');
+      const availableToAdd = SCHOOLS.filter(s => !state.compareIds.includes(s.id));
+
+      slotBar.innerHTML = `
+        ${state.compareIds.map(id => {
+          const s = getSchool(id);
+          return `
+            <div class="slot-pill" style="--school-accent:${s.seedColor}">
+              <span style="width:22px; height:22px; display:inline-block;">${getSchoolCrestSVG(id)}</span>
+              <span>${s.shortName}${s.isStay ? ' (Stay)' : ''}</span>
+              <button type="button" class="slot-remove" data-remove-compare="${id}" aria-label="Remove ${s.name}">×</button>
+            </div>
+          `;
+        }).join('')}
+        ${state.compareIds.length < 4 && availableToAdd.length ? `
+          <select class="compare-add-select" id="addCompareSelect" aria-label="Add a school to compare">
+            <option value="">+ Add school (${state.compareIds.length}/4)</option>
+            ${availableToAdd.map(s => `<option value="${s.id}">${s.name}${s.isStay ? ' (Stay)' : ''}</option>`).join('')}
+          </select>
+        ` : ''}
+      `;
+
+      const addSel = document.getElementById('addCompareSelect');
+      if (addSel) {
+        addSel.addEventListener('change', e => {
+          if (e.target.value) {
+            toggleCompare(e.target.value);
+          }
+        });
+      }
+
+      const tableWrap = document.getElementById('compareTableContainer');
+      const mobileControls = document.getElementById('mobileCompareControls');
+
+      if (state.compareIds.length < 2) {
+        mobileControls.style.display = 'none';
+        tableWrap.innerHTML = `
+          <div style="padding:36px 20px; text-align:center;">
+            <p style="margin:0 0 12px; font-variation-settings:'wght' 720; font-size:1.05rem;">Select at least 2 schools to compare side by side.</p>
+            <button type="button" class="btn-primary-expressive" style="max-width:280px;" onclick="loadDefaultComparison()">
+              Compare Katholik (Stay) vs St. David &amp; Tinggi Cina
+            </button>
+          </div>
+        `;
+        document.getElementById('decisionHelper').innerHTML = '';
+        return;
+      }
+
+      syncMobilePairDefaults();
+
+      // Update mobile controls
+      const isNarrow = window.innerWidth < 768;
+      mobileControls.style.display = isNarrow ? 'flex' : 'none';
+      const selectA = document.getElementById('mobileSelectA');
+      const selectB = document.getElementById('mobileSelectB');
+      const mobileToggleBtn = document.getElementById('mobileModeToggle');
+      const pairPickers = document.getElementById('mobilePairPickers');
+
+      mobileToggleBtn.textContent = state.mobileDuoMode ? 'Show All Columns' : 'Use 2-School Split';
+      pairPickers.style.display = state.mobileDuoMode ? 'grid' : 'none';
+
+      const optionsHtml = state.compareIds.map(id => {
+        const s = getSchool(id);
+        return `<option value="${id}">${s.shortName}${s.isStay ? ' (Stay)' : ''}</option>`;
+      }).join('');
+      selectA.innerHTML = optionsHtml;
+      selectB.innerHTML = optionsHtml;
+      selectA.value = state.mobilePair[0];
+      selectB.value = state.mobilePair[1];
+
+      const activeCols = (isNarrow && state.mobileDuoMode)
+        ? state.mobilePair.map(getSchool)
+        : state.compareIds.map(getSchool);
+
+      const useMobileDuoClass = isNarrow && state.mobileDuoMode ? 'is-mobile-duo' : '';
+      const showOverview = state.compareTab === 'all';
+      const showAcademic = state.compareTab === 'all' || state.compareTab === 'academic';
+      const showCca = state.compareTab === 'all' || state.compareTab === 'cca';
+      const colCount = activeCols.length + 1;
+
+      const row = (label, fn) => `
+        <tr class="metric-row">
+          <th scope="row" class="compare-label-col">${label}</th>
+          ${activeCols.map(s => `<td style="--school-accent:${s.seedColor}">${fn(s)}</td>`).join('')}
+        </tr>
+      `;
+
+      const meter = (pct, caption) => `
+        <div class="meter-wrap">
+          <div class="meter-head"><span>${caption}</span><span>${pct}%</span></div>
+          <div class="wavy-track"><div class="wavy-fill" style="width:${pct}%"></div></div>
+        </div>
+      `;
+
+      tableWrap.innerHTML = `
+        <table class="compare-table ${useMobileDuoClass}">
+          <thead>
+            <tr>
+              <th class="compare-label-col">School</th>
+              ${activeCols.map(s => `
+                <th style="--school-accent:${s.seedColor}">
+                  <div class="compare-school-head">
+                    <div class="compare-school-head-top">
+                      <span style="width:36px; height:36px; flex-shrink:0;">${getSchoolCrestSVG(s.id)}</span>
+                      <div>
+                        <div style="font-size:0.94rem; font-variation-settings:'wght' 800; line-height:1.2;">${s.shortName}</div>
+                        <div style="font-size:0.74rem; font-weight:500; color:var(--md-sys-color-on-surface-variant);">${s.type} • ${s.gender}</div>
+                      </div>
+                    </div>
+                    ${s.isStay
+                      ? `<span class="badge-chip badge-chip--stay">Current School (Stay)</span>`
+                      : `<span class="badge-chip">Transfer Option</span>`
+                    }
+                  </div>
+                </th>
+              `).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${showOverview ? `
+              <tr class="group-row"><td colspan="${colCount}">Overview &amp; Commute</td></tr>
+              ${row('Location & Distance', s => `<strong>${s.distanceKm === 0 ? '0 km (Current Campus)' : '~' + s.distanceKm + ' km from Gajah Berang'}</strong><br><span style="color:var(--md-sys-color-on-surface-variant); font-size:0.78rem;">${s.location}</span>`)}
+              ${row('Founded & Code', s => `Est. <strong>${s.founded}</strong><br><span style="font-size:0.78rem; color:var(--md-sys-color-on-surface-variant);">Code: ${s.code}</span>`)}
+              ${row('Motto', s => `<em>“${s.motto}”</em>`)}
+            ` : ''}
+
+            ${showAcademic ? `
+              <tr class="group-row"><td colspan="${colCount}">Academic Performance &amp; Curriculum</td></tr>
+              ${row('Form Levels', s => s.hasForm6
+                ? `<span class="check-yes">✓ ${s.forms}</span>`
+                : `<span class="check-no">${s.forms}</span>`
+              )}
+              ${row('Language & DLP', s => `<strong>${s.dlp}</strong><br><span style="font-size:0.78rem; color:var(--md-sys-color-on-surface-variant);">${s.languages}</span>`)}
+              ${row('Documented Highlights', s => `<span class="cca-pill is-signature" style="margin-bottom:6px;">${s.academicBenchmark}</span><div style="font-size:0.8rem; color:var(--md-sys-color-on-surface-variant);">${s.academicSummary}</div>`)}
+              ${row('STEM & Science Breadth', s => meter(s.metrics.stem, 'Labs / STEM'))}
+              ${row('Language & Stream Range', s => meter(s.metrics.languages, 'Trilingual / Electives'))}
+              ${row('Pre-U / Form 6 Continuity', s => meter(s.metrics.preU, s.hasForm6 ? 'On-Campus STPM' : 'SPM Focus (F1–5)'))}
+            ` : ''}
+
+            ${showCca ? `
+              <tr class="group-row"><td colspan="${colCount}">Extracurricular Availability (CCA)</td></tr>
+              ${row('Signature CCA', s => `<span class="cca-pill is-signature">★ ${s.cca.signature}</span>`)}
+              ${row('Uniformed Bodies', s => `<div class="cca-badge-list">${s.cca.uniformed.map(u => `<span class="cca-pill">${u}</span>`).join('')}</div>`)}
+              ${row('Music, Arts & Debate', s => `<div class="cca-badge-list">${s.cca.arts.map(a => `<span class="cca-pill">${a}</span>`).join('')}</div>`)}
+              ${row('STEM & Innovation', s => `<div class="cca-badge-list">${s.cca.stem.map(st => `<span class="cca-pill">${st}</span>`).join('')}</div>`)}
+              ${row('Major Sports', s => `<div class="cca-badge-list">${s.cca.sports.map(sp => `<span class="cca-pill">${sp}</span>`).join('')}</div>`)}
+            ` : ''}
+          </tbody>
+        </table>
+      `;
+
+      renderDecisionHelper(activeCols);
+    }
+
+    function renderDecisionHelper(cols) {
+      const box = document.getElementById('decisionHelper');
+      const katholik = getSchool('katholik');
+      const transfers = cols.filter(c => !c.isStay);
+
+      if (!transfers.length) {
+        box.innerHTML = '';
+        return;
+      }
+
+      box.innerHTML = `
+        <h3>Transfer Snapshot vs. Staying at SMJK Katholik</h3>
+        <div style="font-size:0.84rem; color:var(--md-sys-color-on-surface-variant);">
+          Quick takeaways if you move from your current campus (${katholik.location}) to one of these selected destinations:
+        </div>
+        <div class="decision-grid">
+          ${transfers.map(t => {
+            const notes = [];
+            if (t.gender === 'Co-Ed') notes.push('Moves from Boys-only to a Co-Ed environment');
+            if (t.gender === 'Girls') notes.push('Girls-only SMJK campus (next door on Jalan Gajah Berang)');
+            if (t.type === 'SMK') notes.push('Switches from SMJK (compulsory Mandarin) to national SMK stream');
+            if (t.type === 'SMJK') notes.push('Preserves trilingual SMJK & Mandarin exam continuity');
+            if (t.hasForm6) notes.push('Adds on-campus Form 6 (STPM) pathway');
+            notes.push(`Signature perk: ${t.cca.signature}`);
+            return `
+              <div class="decision-card">
+                <strong style="color:${t.seedColor}">${t.name}</strong>
+                <div style="font-size:0.75rem; color:var(--md-sys-color-on-surface-variant); margin:2px 0 6px;">${t.distanceKm} km away • ${t.forms}</div>
+                <ul style="margin:0; padding-left:16px; display:flex; flex-direction:column; gap:3px;">
+                  ${notes.map(n => `<li>${n}</li>`).join('')}
+                </ul>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    /* ========================================================================
+       6. INTERACTIONS: MODAL SHEET, COMPARE QUEUE, THEME CONTROLS
+       ======================================================================== */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('is-visible');
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(() => toast.classList.remove('is-visible'), 2800);
+    }
+
+    function maybeMatchSchoolTheme(school) {
+      state.activeSchoolThemeId = school.id;
+      if (state.autoTheme) {
+        state.activeSeed = school.seedColor;
+        state.activeThemeLabel = `${school.shortName}${school.isStay ? ' (Stay)' : ''}`;
+        applyDynamicTheme(school.seedColor, state.darkMode, state.activeThemeLabel);
+      }
+      renderCoreGrid();
+      renderMoreGrid();
+    }
+
+    function openSchoolSheet(id) {
+      const school = getSchool(id);
+      if (!school) return;
+
+      maybeMatchSchoolTheme(school);
+      state.openSheetId = id;
+
+      const sheet = document.getElementById('detailSheet');
+      sheet.style.setProperty('--school-accent', school.seedColor);
+      document.getElementById('sheetCrestBox').innerHTML = getSchoolCrestSVG(school.id);
+      document.getElementById('sheetSchoolName').textContent = school.name;
+      document.getElementById('sheetNativeName').textContent = school.nativeName;
+      document.getElementById('sheetMotto').textContent = `“${school.motto}”`;
+      document.getElementById('sheetDescription').textContent = school.description;
+      document.getElementById('sheetAcademicText').textContent = school.academicSummary;
+
+      document.getElementById('sheetTopBadges').innerHTML = `
+        <span class="badge-chip">${school.type}</span>
+        <span class="badge-chip">${school.gender}</span>
+        ${school.isStay ? `<span class="badge-chip badge-chip--stay">Current School — Stay</span>` : ''}
+      `;
+
+      document.getElementById('sheetFactGrid').innerHTML = `
+        <div class="fact-tile">
+          <div class="fact-label">Location</div>
+          <div class="fact-value">${school.location}</div>
+        </div>
+        <div class="fact-tile">
+          <div class="fact-label">Founded / Code</div>
+          <div class="fact-value">Est. ${school.founded} (${school.code})</div>
+        </div>
+        <div class="fact-tile">
+          <div class="fact-label">Pathways</div>
+          <div class="fact-value">${school.forms}</div>
+        </div>
+        <div class="fact-tile">
+          <div class="fact-label">Distance</div>
+          <div class="fact-value">${school.distanceKm === 0 ? 'Current Campus' : '~' + school.distanceKm + ' km from Gajah Berang'}</div>
+        </div>
+      `;
+
+      const allCcas = [
+        { label: `★ ${school.cca.signature}`, sig: true },
+        ...school.cca.uniformed.map(x => ({ label: x })),
+        ...school.cca.arts.map(x => ({ label: x })),
+        ...school.cca.stem.map(x => ({ label: x })),
+        ...school.cca.sports.map(x => ({ label: x }))
+      ];
+      document.getElementById('sheetCcaList').innerHTML = allCcas
+        .map(c => `<span class="cca-pill ${c.sig ? 'is-signature' : ''}">${c.label}</span>`)
+        .join('');
+
+      updateSheetActionButtons();
+      document.getElementById('detailBackdrop').classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function updateSheetActionButtons() {
+      const school = getSchool(state.openSheetId);
+      if (!school) return;
+      const isQueued = state.compareIds.includes(school.id);
+      const cmpBtn = document.getElementById('sheetCompareToggleBtn');
+      cmpBtn.textContent = isQueued ? '✓ In Comparison List' : '+ Add to Compare';
+
+      const chooseBtn = document.getElementById('sheetChooseBtn');
+      chooseBtn.textContent = school.isStay
+        ? 'Decided: Stay at SMJK Katholik'
+        : `Shortlist ${school.shortName} Transfer`;
+    }
+
+    function closeSchoolSheet() {
+      state.openSheetId = null;
+      document.getElementById('detailBackdrop').classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function toggleCompare(id) {
+      const school = getSchool(id);
+      if (!school) return;
+      const idx = state.compareIds.indexOf(id);
+      if (idx >= 0) {
+        state.compareIds.splice(idx, 1);
+        showToast(`Removed ${school.shortName} from comparison`);
+      } else {
+        if (state.compareIds.length >= 4) {
+          state.compareIds.shift();
+        }
+        state.compareIds.push(id);
+        showToast(`Added ${school.shortName} to comparison`);
+      }
+      renderCoreGrid();
+      renderMoreGrid();
+      renderDockAndBadges();
+      renderComparison();
+      if (state.openSheetId) updateSheetActionButtons();
+    }
+
+    window.loadDefaultComparison = function() {
+      state.compareIds = ['katholik', 'stdavid', 'tinggicina'];
+      renderCoreGrid();
+      renderMoreGrid();
+      renderDockAndBadges();
+      renderComparison();
+    };
+
+    window.resetFilters = function() {
+      state.filter = 'all';
+      state.search = '';
+      document.getElementById('schoolSearchInput').value = '';
+      document.querySelectorAll('#filterChips .filter-chip').forEach(btn => {
+        btn.classList.toggle('is-active', btn.dataset.filter === 'all');
+      });
+      renderMoreGrid();
+    };
+
+    /* ========================================================================
+       7. EVENT BINDINGS & INITIALIZATION
+       ======================================================================== */
+    document.addEventListener('click', e => {
+      const removeBtn = e.target.closest('[data-remove-compare]');
+      if (removeBtn) {
+        toggleCompare(removeBtn.dataset.removeCompare);
+        return;
+      }
+
+      const cmpBtn = e.target.closest('[data-action="compare"]');
+      if (cmpBtn) {
+        e.stopPropagation();
+        toggleCompare(cmpBtn.dataset.id);
+        return;
+      }
+
+      const detailBtn = e.target.closest('[data-action="detail"]');
+      if (detailBtn) {
+        e.stopPropagation();
+        openSchoolSheet(detailBtn.dataset.id);
+        return;
+      }
+
+      const card = e.target.closest('.school-card');
+      if (card) {
+        openSchoolSheet(card.dataset.schoolId);
+        return;
+      }
+
+      // Close Theme Popover if clicked outside
+      const popover = document.getElementById('themePopover');
+      const studioBtn = document.getElementById('themeStudioBtn');
+      if (popover.classList.contains('is-open') && !popover.contains(e.target) && !studioBtn.contains(e.target)) {
+        popover.classList.remove('is-open');
+        studioBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Keyboard activation for school cards
+    document.addEventListener('keydown', e => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('school-card')) {
+        e.preventDefault();
+        openSchoolSheet(e.target.dataset.schoolId);
+      }
+      if (e.key === 'Escape') {
+        if (state.openSheetId) closeSchoolSheet();
+        const popover = document.getElementById('themePopover');
+        if (popover.classList.contains('is-open')) {
+          popover.classList.remove('is-open');
+          document.getElementById('themeStudioBtn').setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+
+    // Sheet buttons & backdrop
+    document.getElementById('sheetCloseBtn').addEventListener('click', closeSchoolSheet);
+    document.getElementById('detailBackdrop').addEventListener('click', e => {
+      if (e.target.id === 'detailBackdrop') closeSchoolSheet();
+    });
+    document.getElementById('sheetCompareToggleBtn').addEventListener('click', () => {
+      if (state.openSheetId) toggleCompare(state.openSheetId);
+    });
+    document.getElementById('sheetChooseBtn').addEventListener('click', () => {
+      const s = getSchool(state.openSheetId);
+      if (!s) return;
+      if (!state.compareIds.includes(s.id)) toggleCompare(s.id);
+      closeSchoolSheet();
+      showToast(
+        s.isStay
+          ? 'Awesome — staying at SMJK Katholik Melaka!'
+          : `Shortlisted ${s.name} as a transfer destination!`
+      );
+    });
+
+    // Top Nav & Floating Dock Scrolling
+    document.getElementById('navExplore').addEventListener('click', () => {
+      document.getElementById('navExplore').classList.add('is-active');
+      document.getElementById('navCompare').classList.remove('is-active');
+      document.getElementById('exploreAnchor').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    function jumpToComparison() {
+      document.getElementById('navCompare').classList.add('is-active');
+      document.getElementById('navExplore').classList.remove('is-active');
+      document.getElementById('compareAnchor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    document.getElementById('navCompare').addEventListener('click', jumpToComparison);
+    document.getElementById('dockJumpBtn').addEventListener('click', jumpToComparison);
+
+    // Filter chips & search
+    document.getElementById('filterChips').addEventListener('click', e => {
+      const chip = e.target.closest('.filter-chip');
+      if (!chip) return;
+      state.filter = chip.dataset.filter;
+      document.querySelectorAll('#filterChips .filter-chip').forEach(btn => {
+        btn.classList.toggle('is-active', btn === chip);
+      });
+      renderMoreGrid();
+    });
+
+    document.getElementById('schoolSearchInput').addEventListener('input', e => {
+      state.search = e.target.value;
+      renderMoreGrid();
+    });
+
+    // Comparison category tabs
+    document.querySelectorAll('[data-ctab]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.compareTab = btn.dataset.ctab;
+        document.querySelectorAll('[data-ctab]').forEach(b => b.classList.toggle('is-active', b === btn));
+        renderComparison();
+      });
+    });
+
+    // Mobile comparison split controls
+    document.getElementById('mobileModeToggle').addEventListener('click', () => {
+      state.mobileDuoMode = !state.mobileDuoMode;
+      renderComparison();
+    });
+    document.getElementById('mobileSelectA').addEventListener('change', e => {
+      state.mobilePair[0] = e.target.value;
+      renderComparison();
+    });
+    document.getElementById('mobileSelectB').addEventListener('change', e => {
+      state.mobilePair[1] = e.target.value;
+      renderComparison();
+    });
+    window.addEventListener('resize', renderComparison);
+
+    // Theme Studio Controls & Dark Mode
+    document.getElementById('themeStudioBtn').addEventListener('click', () => {
+      const pop = document.getElementById('themePopover');
+      const open = pop.classList.toggle('is-open');
+      document.getElementById('themeStudioBtn').setAttribute('aria-expanded', String(open));
+    });
+
+    document.getElementById('autoThemeSwitch').addEventListener('click', function() {
+      state.autoTheme = !state.autoTheme;
+      this.setAttribute('aria-checked', String(state.autoTheme));
+      showToast(state.autoTheme ? 'Auto-matching clicked school crest color' : 'Manual seed color locked');
+    });
+
+    document.querySelectorAll('.seed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.autoTheme = false;
+        document.getElementById('autoThemeSwitch').setAttribute('aria-checked', 'false');
+        document.querySelectorAll('.seed-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+        state.activeSeed = btn.dataset.seed;
+        state.activeThemeLabel = btn.dataset.label;
+        document.getElementById('customSeedPicker').value = state.activeSeed;
+        applyDynamicTheme(state.activeSeed, state.darkMode, state.activeThemeLabel);
+      });
+    });
+
+    document.getElementById('customSeedPicker').addEventListener('input', e => {
+      state.autoTheme = false;
+      document.getElementById('autoThemeSwitch').setAttribute('aria-checked', 'false');
+      document.querySelectorAll('.seed-btn').forEach(b => b.classList.remove('is-active'));
+      state.activeSeed = e.target.value;
+      state.activeThemeLabel = `Custom (${e.target.value.toUpperCase()})`;
+      applyDynamicTheme(state.activeSeed, state.darkMode, state.activeThemeLabel);
+    });
+
+    function updateDarkModeIcon() {
+      const icon = document.getElementById('darkModeIcon');
+      icon.innerHTML = state.darkMode
+        ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    }
+
+    document.getElementById('darkModeBtn').addEventListener('click', () => {
+      state.darkMode = !state.darkMode;
+      updateDarkModeIcon();
+      applyDynamicTheme(state.activeSeed, state.darkMode, state.activeThemeLabel);
+    });
+
+    // Boot sequence
+    updateDarkModeIcon();
+    applyDynamicTheme(state.activeSeed, state.darkMode, state.activeThemeLabel);
+    renderCoreGrid();
+    renderMoreGrid();
+    renderDockAndBadges();
+    renderComparison();
+  </script>
+</body>
+</html>
