@@ -11,7 +11,7 @@
   <style>
     /* ==========================================================================
        MATERIAL DESIGN 3 EXPRESSIVE (MD3E) DESIGN TOKENS
-       Dynamic Color + Spatial/Effects Spring Physics + Emphasized Shape & Type
+       Dynamic Color + Authentic Motion Physics + Mobile-First Sheet Curves
        ========================================================================== */
     :root {
       --md-sys-color-primary: #0f5faf;
@@ -51,45 +51,33 @@
       --md-sys-color-now-bg: #fef3c7;
       --md-sys-color-now-fg: #92400e;
 
-      /* MD3E Shape Scale */
       --md-shape-xs: 8px;
       --md-shape-sm: 12px;
       --md-shape-md: 18px;
       --md-shape-lg: 24px;
-      --md-shape-xl: 30px;
-      --md-shape-2xl: 38px;
+      --md-shape-xl: 28px;
+      --md-shape-2xl: 36px;
       --md-shape-full: 9999px;
 
-      /* MD3E Motion Physics */
+      /* Spatial Springs (for small centered elements / chips) */
       --md-spring-spatial-fast: linear(
         0, 0.012, 0.046 2.2%, 0.175, 0.348 7.1%, 0.805 13.8%, 0.996 17.5%,
         1.076, 1.116 23.2%, 1.112 26.8%, 1.045 36.2%, 1.003 44.5%,
         0.991 53.5%, 0.999 76%, 1
       );
-      --md-spring-spatial-default: linear(
-        0, 0.008, 0.032 2.4%, 0.125, 0.258 7.5%, 0.68 14.5%, 0.91 19%,
-        1.035 23.5%, 1.088 27.5%, 1.091 31.2%, 1.048 40.5%, 1.007 50.5%,
-        0.994 60%, 1.001 82%, 1
-      );
-      --md-spring-spatial-bouncy: linear(
-        0, 0.014, 0.056 2.1%, 0.21 6.2%, 0.78 13.1%, 1.035 17.4%,
-        1.148 21.8%, 1.158 24.8%, 1.088 31.5%, 0.992 40.2%, 0.978 46%,
-        1.008 58%, 0.999 78%, 1
-      );
+      /* Non-overshooting M3 Emphasized Curves for edge-anchored sheets */
+      --md-ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+      --md-ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
       --md-spring-effects: cubic-bezier(0.2, 0, 0, 1);
 
-      --md-dur-spatial-fast: 380ms;
-      --md-dur-spatial-default: 520ms;
-      --md-dur-spatial-bouncy: 620ms;
+      --md-dur-spatial-fast: 360ms;
       --md-dur-effects: 220ms;
 
       --md-font-sans: "Roboto Flex", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
 
     html {
       scroll-behavior: smooth;
@@ -121,8 +109,8 @@
       position: absolute;
       border-radius: 50%;
       filter: blur(88px);
-      opacity: 0.34;
-      transition: background-color 600ms var(--md-spring-effects);
+      opacity: 0.32;
+      transition: background-color 500ms var(--md-spring-effects);
     }
 
     .ambient-blob--1 {
@@ -141,12 +129,9 @@
       background-color: var(--md-sys-color-tertiary-container);
     }
 
-    [data-theme="dark"] .ambient-blob { opacity: 0.22; }
+    [data-theme="dark"] .ambient-blob { opacity: 0.2; }
 
-    :focus-visible {
-      outline: 3px solid var(--md-sys-color-primary);
-      outline-offset: 3px;
-    }
+    :focus-visible { outline: 3px solid var(--md-sys-color-primary); outline-offset: 3px; }
 
     button {
       font-family: inherit;
@@ -181,23 +166,16 @@
       justify-content: space-between;
       gap: 10px;
       padding: 8px 10px 8px 12px;
-      background: color-mix(in srgb, var(--md-sys-color-surface-container-low) 86%, transparent);
-      backdrop-filter: blur(20px) saturate(1.4);
-      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      background: color-mix(in srgb, var(--md-sys-color-surface-container-low) 90%, transparent);
+      backdrop-filter: blur(18px) saturate(1.3);
+      -webkit-backdrop-filter: blur(18px) saturate(1.3);
       border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
       border-radius: var(--md-shape-full);
       box-shadow: 0 8px 28px color-mix(in srgb, var(--md-sys-color-primary) 10%, rgba(0, 0, 0, 0.08));
-      transition:
-        background-color var(--md-dur-effects) var(--md-spring-effects),
-        border-color var(--md-dur-effects) var(--md-spring-effects);
+      transition: background-color var(--md-dur-effects), border-color var(--md-dur-effects);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
     .brand-badge {
       width: 38px;
@@ -208,22 +186,11 @@
       background: var(--md-sys-color-primary);
       color: var(--md-sys-color-on-primary);
       border-radius: 14px;
-      transition:
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
-        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        background-color var(--md-dur-effects) var(--md-spring-effects);
+      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast), border-radius var(--md-dur-spatial-fast), background-color var(--md-dur-effects);
     }
 
-    .brand:hover .brand-badge {
-      transform: rotate(12deg) scale(1.06);
-      border-radius: 50%;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
+    .brand:hover .brand-badge { transform: rotate(12deg) scale(1.06); border-radius: 50%; }
+    .brand-text { display: flex; flex-direction: column; min-width: 0; }
 
     .brand-title {
       font-size: 0.92rem;
@@ -242,7 +209,6 @@
       text-overflow: ellipsis;
     }
 
-    /* Desktop Connected Nav */
     .connected-group {
       display: inline-flex;
       align-items: center;
@@ -250,11 +216,9 @@
       padding: 4px;
       background: var(--md-sys-color-surface-container-high);
       border-radius: var(--md-shape-full);
-      transition: background-color var(--md-dur-effects) var(--md-spring-effects);
     }
 
     .connected-btn {
-      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -264,26 +228,13 @@
       font-size: 0.84rem;
       font-variation-settings: "wght" 620;
       color: var(--md-sys-color-on-surface-variant);
-      background: transparent;
       border-radius: 10px;
       white-space: nowrap;
-      transition:
-        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        background-color var(--md-dur-effects) var(--md-spring-effects),
-        color var(--md-dur-effects) var(--md-spring-effects);
+      transition: border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast), transform var(--md-dur-spatial-fast), background-color var(--md-dur-effects), color var(--md-dur-effects);
     }
 
-    .connected-btn:first-child {
-      border-top-left-radius: var(--md-shape-full);
-      border-bottom-left-radius: var(--md-shape-full);
-    }
-
-    .connected-btn:last-child {
-      border-top-right-radius: var(--md-shape-full);
-      border-bottom-right-radius: var(--md-shape-full);
-    }
-
+    .connected-btn:first-child { border-top-left-radius: var(--md-shape-full); border-bottom-left-radius: var(--md-shape-full); }
+    .connected-btn:last-child { border-top-right-radius: var(--md-shape-full); border-bottom-right-radius: var(--md-shape-full); }
     .connected-btn:active { transform: scale(0.95); }
 
     .connected-btn.is-active {
@@ -311,13 +262,7 @@
       color: var(--md-sys-color-primary);
     }
 
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      position: relative;
-      flex-shrink: 0;
-    }
+    .top-actions { display: flex; align-items: center; gap: 6px; position: relative; flex-shrink: 0; }
 
     .icon-pill-btn {
       display: inline-flex;
@@ -332,21 +277,10 @@
       color: var(--md-sys-color-on-surface);
       font-size: 0.8rem;
       font-variation-settings: "wght" 630;
-      transition:
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        background-color var(--md-dur-effects) var(--md-spring-effects);
+      transition: transform var(--md-dur-spatial-fast), background-color var(--md-dur-effects);
     }
 
-    .icon-pill-btn:hover {
-      background: var(--md-sys-color-secondary-container);
-      color: var(--md-sys-color-on-secondary-container);
-    }
-
-    .icon-pill-btn:active {
-      transform: scale(0.93);
-      border-radius: 14px;
-    }
+    .icon-pill-btn:active { transform: scale(0.93); }
 
     .theme-swatch-dot {
       width: 14px;
@@ -370,20 +304,13 @@
       box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
       transform-origin: top right;
       opacity: 0;
-      transform: scale(0.88) translateY(-8px);
+      transform: scale(0.92) translateY(-6px);
       pointer-events: none;
-      transition:
-        opacity var(--md-dur-effects) var(--md-spring-effects),
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
+      transition: opacity 180ms var(--md-spring-effects), transform 240ms var(--md-ease-emphasized-decelerate);
       z-index: 60;
     }
 
-    .theme-popover.is-open {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-      pointer-events: auto;
-    }
-
+    .theme-popover.is-open { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
     .popover-title { margin: 0 0 4px; font-size: 0.95rem; font-variation-settings: "wght" 760; }
     .popover-desc { margin: 0 0 14px; font-size: 0.78rem; color: var(--md-sys-color-on-surface-variant); }
 
@@ -407,8 +334,8 @@
       border-radius: var(--md-shape-full);
       background: var(--md-sys-color-surface-container-highest);
       border: 2px solid var(--md-sys-color-outline);
-      transition: background-color var(--md-dur-effects), border-color var(--md-dur-effects);
       flex-shrink: 0;
+      transition: background-color 180ms, border-color 180ms;
     }
 
     .md3-switch::after {
@@ -421,18 +348,10 @@
       border-radius: 50%;
       background: var(--md-sys-color-outline);
       transform: translateY(-50%);
-      transition:
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
-        background-color var(--md-dur-effects),
-        width var(--md-dur-spatial-fast),
-        height var(--md-dur-spatial-fast);
+      transition: transform 240ms var(--md-ease-emphasized-decelerate), width 180ms, height 180ms;
     }
 
-    .md3-switch[aria-checked="true"] {
-      background: var(--md-sys-color-primary);
-      border-color: var(--md-sys-color-primary);
-    }
-
+    .md3-switch[aria-checked="true"] { background: var(--md-sys-color-primary); border-color: var(--md-sys-color-primary); }
     .md3-switch[aria-checked="true"]::after {
       width: 22px;
       height: 22px;
@@ -440,47 +359,15 @@
       transform: translate(20px, -50%);
     }
 
-    .seed-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      margin-bottom: 12px;
-    }
+    .seed-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 12px; }
+    .seed-btn { aspect-ratio: 1; border-radius: 14px; border: 2px solid transparent; transition: transform 200ms, border-radius 200ms; }
+    .seed-btn.is-active { border-radius: 50%; border-color: var(--md-sys-color-on-surface); box-shadow: 0 0 0 2px var(--md-sys-color-surface) inset; }
 
-    .seed-btn {
-      aspect-ratio: 1;
-      border-radius: 14px;
-      border: 2px solid transparent;
-      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy), border-radius var(--md-dur-spatial-fast);
-    }
-
-    .seed-btn.is-active {
-      border-radius: 50%;
-      border-color: var(--md-sys-color-on-surface);
-      box-shadow: 0 0 0 2px var(--md-sys-color-surface) inset;
-    }
-
-    .custom-color-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 0.8rem;
-      color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .custom-color-input {
-      width: 44px;
-      height: 32px;
-      padding: 0;
-      border: 1px solid var(--md-sys-color-outline-variant);
-      border-radius: 10px;
-      background: transparent;
-      cursor: pointer;
-    }
+    .custom-color-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.8rem; color: var(--md-sys-color-on-surface-variant); }
+    .custom-color-input { width: 44px; height: 32px; padding: 0; border: 1px solid var(--md-sys-color-outline-variant); border-radius: 10px; background: transparent; cursor: pointer; }
 
     /* ==========================================================================
-       MAIN CONTAINER & HERO WELCOME
+       MAIN CONTAINER & HERO
        ========================================================================== */
     .container {
       max-width: 1280px;
@@ -489,24 +376,17 @@
     }
 
     @media (min-width: 768px) {
-      .container {
-        padding: 24px 20px 124px;
-      }
+      .container { padding: 24px 20px 124px; }
     }
 
     .hero {
-      padding: clamp(14px, 3vw, 34px) 2px 22px;
+      padding: clamp(12px, 3vw, 32px) 2px 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .hero-top-pills {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
+    .hero-top-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 
     .hero-eyebrow {
       display: inline-flex;
@@ -530,41 +410,31 @@
       color: var(--md-sys-color-on-tertiary-container);
       font-size: 0.76rem;
       font-variation-settings: "wght" 720;
-      cursor: pointer;
-      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
     }
-
-    .hero-date-pill:active { transform: scale(0.95); }
 
     .hero-welcome {
       margin: 0;
-      font-size: clamp(2.6rem, 8vw, 5.1rem);
+      font-size: clamp(2.55rem, 8vw, 5rem);
       line-height: 0.96;
       letter-spacing: -0.035em;
       font-variation-settings: "wght" 870, "wdth" 112, "opsz" 144;
       color: var(--md-sys-color-primary);
-      transition: color var(--md-dur-effects) var(--md-spring-effects);
+      transition: color var(--md-dur-effects);
     }
 
     .hero-question {
       margin: 0;
-      font-size: clamp(1.3rem, 3.2vw, 2.3rem);
+      font-size: clamp(1.28rem, 3.2vw, 2.25rem);
       line-height: 1.18;
       letter-spacing: -0.02em;
       font-variation-settings: "wght" 690, "wdth" 102;
-      color: var(--md-sys-color-on-background);
       max-width: 24ch;
     }
 
-    .hero-helper {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--md-sys-color-on-surface-variant);
-      max-width: 66ch;
-    }
+    .hero-helper { margin: 0; font-size: 0.88rem; color: var(--md-sys-color-on-surface-variant); max-width: 66ch; }
 
     /* ==========================================================================
-       CORE 5 SCHOOLS + ADDITIONAL SCHOOLS GRID (MOBILE-OPTIMIZED)
+       SCHOOL CARDS & GRIDS (NO DUPLICATES!)
        ========================================================================== */
     .section-head {
       display: flex;
@@ -575,39 +445,22 @@
       margin: 10px 0 14px;
     }
 
-    .section-title {
-      margin: 0;
-      font-size: clamp(1.12rem, 2.2vw, 1.45rem);
-      font-variation-settings: "wght" 770, "wdth" 104;
-      letter-spacing: -0.015em;
-    }
-
-    .section-sub {
-      margin: 2px 0 0;
-      font-size: 0.82rem;
-      color: var(--md-sys-color-on-surface-variant);
-    }
+    .section-title { margin: 0; font-size: clamp(1.12rem, 2.2vw, 1.45rem); font-variation-settings: "wght" 770, "wdth" 104; letter-spacing: -0.015em; }
+    .section-sub { margin: 2px 0 0; font-size: 0.82rem; color: var(--md-sys-color-on-surface-variant); }
 
     .core-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 32px;
     }
 
     @media (min-width: 640px) {
-      .core-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-      }
+      .core-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
     }
 
     @media (min-width: 1080px) {
-      .core-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 36px;
-      }
+      .core-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-bottom: 38px; }
     }
 
     .more-grid {
@@ -617,17 +470,11 @@
     }
 
     @media (min-width: 700px) {
-      .more-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-      }
+      .more-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
     }
 
     @media (min-width: 1120px) {
-      .more-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 16px;
-      }
+      .more-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
     }
 
     .school-card {
@@ -641,21 +488,18 @@
       border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
       border-radius: var(--md-shape-lg);
       transition:
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy),
-        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        background-color var(--md-dur-effects) var(--md-spring-effects),
-        border-color var(--md-dur-effects) var(--md-spring-effects),
-        box-shadow var(--md-dur-effects) var(--md-spring-effects);
+        transform 260ms var(--md-ease-emphasized-decelerate),
+        border-radius 260ms var(--md-ease-emphasized-decelerate),
+        background-color var(--md-dur-effects),
+        border-color var(--md-dur-effects),
+        box-shadow var(--md-dur-effects);
       cursor: pointer;
       user-select: none;
       min-width: 0;
     }
 
     @media (min-width: 640px) {
-      .school-card {
-        padding: 18px 14px 16px;
-        border-radius: var(--md-shape-xl);
-      }
+      .school-card { padding: 18px 14px 16px; border-radius: var(--md-shape-xl); }
     }
 
     .school-card:hover {
@@ -675,11 +519,11 @@
     }
 
     .school-card[data-stay="true"] {
-      background: color-mix(in srgb, var(--md-sys-color-primary-container) 32%, var(--md-sys-color-surface-container-lowest));
-      border-color: color-mix(in srgb, var(--md-sys-color-primary) 50%, transparent);
+      background: color-mix(in srgb, var(--md-sys-color-primary-container) 34%, var(--md-sys-color-surface-container-lowest));
+      border-color: color-mix(in srgb, var(--md-sys-color-primary) 55%, transparent);
     }
 
-    /* Mobile-only horizontal anchor layout for the 5th "Stay" card */
+    /* On mobile, 5th card (SMJK Katholik Stay) is a wide featured anchor card */
     @media (max-width: 639px) {
       .core-grid .school-card[data-stay="true"] {
         grid-column: 1 / -1;
@@ -691,28 +535,11 @@
         align-items: center;
         padding: 14px;
       }
-      .core-grid .school-card[data-stay="true"] .card-top-badges {
-        grid-column: 1 / -1;
-        margin-bottom: 8px;
-      }
-      .core-grid .school-card[data-stay="true"] .emblem-stage {
-        grid-row: 2 / 5;
-        margin: 0;
-        width: 82px;
-        height: 82px;
-      }
-      .core-grid .school-card[data-stay="true"] .emblem-medallion {
-        width: 58px;
-        height: 58px;
-        border-radius: 16px;
-      }
-      .core-grid .school-card[data-stay="true"] .school-meta-pills {
-        justify-content: flex-start;
-        margin-bottom: 10px;
-      }
-      .core-grid .school-card[data-stay="true"] .card-actions {
-        grid-column: 2;
-      }
+      .core-grid .school-card[data-stay="true"] .card-top-badges { grid-column: 1 / -1; margin-bottom: 8px; }
+      .core-grid .school-card[data-stay="true"] .emblem-stage { grid-row: 2 / 5; margin: 0; width: 82px; height: 82px; }
+      .core-grid .school-card[data-stay="true"] .emblem-medallion { width: 58px; height: 58px; border-radius: 16px; }
+      .core-grid .school-card[data-stay="true"] .school-meta-pills { justify-content: flex-start; margin-bottom: 10px; }
+      .core-grid .school-card[data-stay="true"] .card-actions { grid-column: 2; }
     }
 
     .card-top-badges {
@@ -731,7 +558,7 @@
       gap: 4px;
       padding: 3px 8px;
       border-radius: var(--md-shape-full);
-      font-size: 0.66rem;
+      font-size: 0.65rem;
       font-variation-settings: "wght" 700;
       letter-spacing: 0.015em;
       background: var(--md-sys-color-surface-container-highest);
@@ -763,7 +590,6 @@
       50% { transform: scale(1.45); opacity: 0.6; }
     }
 
-    /* Real Logo Framed inside MD3E Shape + Clean White Medallion */
     .emblem-stage {
       position: relative;
       width: 84px;
@@ -771,15 +597,11 @@
       display: grid;
       place-items: center;
       margin: 2px auto 10px;
-      transition: transform var(--md-dur-spatial-bouncy) var(--md-spring-spatial-bouncy);
+      transition: transform 280ms var(--md-ease-emphasized-decelerate);
     }
 
     @media (min-width: 640px) {
-      .emblem-stage {
-        width: 108px;
-        height: 108px;
-        margin: 2px auto 12px;
-      }
+      .emblem-stage { width: 106px; height: 106px; margin: 2px auto 12px; }
     }
 
     .emblem-shape-bg {
@@ -788,13 +610,11 @@
       width: 100%;
       height: 100%;
       color: color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 16%, var(--md-sys-color-surface-container-highest));
-      transition:
-        transform var(--md-dur-spatial-bouncy) var(--md-spring-spatial-bouncy),
-        color var(--md-dur-effects) var(--md-spring-effects);
+      transition: transform 320ms var(--md-ease-emphasized-decelerate), color var(--md-dur-effects);
     }
 
-    .school-card:hover .emblem-stage { transform: scale(1.06); }
-    .school-card:hover .emblem-shape-bg { transform: rotate(18deg) scale(1.04); }
+    .school-card:hover .emblem-stage { transform: scale(1.05); }
+    .school-card:hover .emblem-shape-bg { transform: rotate(15deg); }
 
     .emblem-medallion {
       position: relative;
@@ -808,33 +628,19 @@
       display: grid;
       place-items: center;
       overflow: hidden;
-      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast), border-radius var(--md-dur-spatial-fast);
+      transition: border-radius 260ms var(--md-ease-emphasized-decelerate);
     }
 
     @media (min-width: 640px) {
-      .emblem-medallion {
-        width: 74px;
-        height: 74px;
-        padding: 7px;
-        border-radius: 22px;
-      }
+      .emblem-medallion { width: 74px; height: 74px; padding: 7px; border-radius: 22px; }
     }
 
-    .school-card:hover .emblem-medallion {
-      transform: translateY(-2px);
-      border-radius: 50%;
-    }
-
-    .real-logo-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
+    .school-card:hover .emblem-medallion { border-radius: 50%; }
+    .real-logo-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
     .school-name {
       margin: 0 0 2px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       line-height: 1.24;
       font-variation-settings: "wght" 760, "wdth" 100;
       color: var(--md-sys-color-on-surface);
@@ -844,13 +650,11 @@
       overflow: hidden;
     }
 
-    @media (min-width: 640px) {
-      .school-name { font-size: 0.98rem; }
-    }
+    @media (min-width: 640px) { .school-name { font-size: 0.96rem; } }
 
     .school-native {
       margin: 0 0 6px;
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       color: var(--md-sys-color-on-surface-variant);
       white-space: nowrap;
       overflow: hidden;
@@ -858,59 +662,34 @@
       max-width: 100%;
     }
 
-    .school-meta-pills {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
+    .school-meta-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin-bottom: 10px; }
 
     .meta-mini {
       padding: 2px 7px;
       border-radius: var(--md-shape-full);
-      font-size: 0.66rem;
+      font-size: 0.65rem;
       font-variation-settings: "wght" 600;
       background: var(--md-sys-color-surface-container-high);
       color: var(--md-sys-color-on-surface-variant);
     }
 
-    .card-actions {
-      margin-top: auto;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .card-actions { margin-top: auto; width: 100%; display: flex; align-items: center; gap: 5px; }
 
     .card-btn-detail,
     .card-btn-compare {
       min-height: 38px;
       border-radius: var(--md-shape-full);
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       font-variation-settings: "wght" 700;
-      transition:
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        background-color var(--md-dur-effects) var(--md-spring-effects),
-        color var(--md-dur-effects) var(--md-spring-effects);
+      transition: transform 180ms, border-radius 220ms, background-color var(--md-dur-effects), color var(--md-dur-effects);
     }
 
     @media (min-width: 640px) {
-      .card-btn-detail, .card-btn-compare { min-height: 40px; font-size: 0.78rem; }
+      .card-btn-detail, .card-btn-compare { min-height: 40px; font-size: 0.77rem; }
     }
 
-    .card-btn-detail {
-      flex: 1;
-      padding: 0 10px;
-      background: var(--md-sys-color-secondary-container);
-      color: var(--md-sys-color-on-secondary-container);
-    }
-
-    .card-btn-detail:hover {
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-    }
+    .card-btn-detail { flex: 1; padding: 0 10px; background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+    .card-btn-detail:hover { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
 
     .card-btn-compare {
       padding: 0 10px;
@@ -928,7 +707,7 @@
     }
 
     /* ==========================================================================
-       FILTER BAR (SWIPEABLE CHIP STRIP ON MOBILE)
+       FILTER BAR
        ========================================================================== */
     .filter-toolbar {
       display: flex;
@@ -942,12 +721,7 @@
     }
 
     @media (min-width: 820px) {
-      .filter-toolbar {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px;
-      }
+      .filter-toolbar { flex-direction: row; align-items: center; justify-content: space-between; padding: 14px; }
     }
 
     .filter-chips {
@@ -974,16 +748,12 @@
       border-radius: var(--md-shape-sm);
       background: var(--md-sys-color-surface-container-high);
       color: var(--md-sys-color-on-surface-variant);
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       font-variation-settings: "wght" 630;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition:
-        border-radius var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast),
-        background-color var(--md-dur-effects) var(--md-spring-effects),
-        color var(--md-dur-effects) var(--md-spring-effects);
+      transition: border-radius 220ms, background-color var(--md-dur-effects), color var(--md-dur-effects);
     }
 
     .filter-chip.is-active {
@@ -1005,10 +775,7 @@
       width: 100%;
     }
 
-    @media (min-width: 820px) {
-      .search-pill { max-width: 320px; }
-    }
-
+    @media (min-width: 820px) { .search-pill { max-width: 310px; } }
     .search-pill:focus-within { border-color: var(--md-sys-color-primary); }
 
     .search-pill input {
@@ -1022,285 +789,7 @@
     }
 
     /* ==========================================================================
-       PPD MELAKA TENGAH TRANSFER TIMELINE (TODAY: 23 NOVEMBER 2026)
-       ========================================================================== */
-    .timeline-section {
-      margin-top: 36px;
-      padding: clamp(16px, 3vw, 28px);
-      background: var(--md-sys-color-surface-container-low);
-      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
-      border-radius: var(--md-shape-2xl);
-    }
-
-    .timeline-top {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .countdown-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    @media (max-width: 560px) {
-      .countdown-strip {
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-      }
-    }
-
-    .countdown-card {
-      padding: 12px 14px;
-      border-radius: var(--md-shape-lg);
-      background: var(--md-sys-color-surface-container-lowest);
-      border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    @media (min-width: 561px) {
-      .countdown-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 3px;
-      }
-    }
-
-    .countdown-card.is-highlight {
-      background: color-mix(in srgb, var(--md-sys-color-primary-container) 45%, var(--md-sys-color-surface-container-lowest));
-      border-color: color-mix(in srgb, var(--md-sys-color-primary) 50%, transparent);
-    }
-
-    .countdown-num {
-      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
-      line-height: 1.1;
-      font-variation-settings: "wght" 850;
-      color: var(--md-sys-color-primary);
-    }
-
-    .countdown-label {
-      font-size: 0.76rem;
-      color: var(--md-sys-color-on-surface-variant);
-      font-variation-settings: "wght" 600;
-    }
-
-    .scenario-tabs {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
-      gap: 6px;
-      margin-bottom: 20px;
-      padding: 4px;
-      background: var(--md-sys-color-surface-container-high);
-      border-radius: var(--md-shape-full);
-    }
-
-    .scenario-tabs::-webkit-scrollbar { display: none; }
-
-    .scenario-tab {
-      flex: 1 0 auto;
-      min-height: 40px;
-      padding: 0 14px;
-      border-radius: var(--md-shape-full);
-      font-size: 0.8rem;
-      font-variation-settings: "wght" 650;
-      color: var(--md-sys-color-on-surface-variant);
-      white-space: nowrap;
-      transition: background-color var(--md-dur-effects), color var(--md-dur-effects), transform var(--md-dur-spatial-fast);
-    }
-
-    .scenario-tab.is-active {
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-      font-variation-settings: "wght" 760;
-    }
-
-    .timeline-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    @media (min-width: 960px) {
-      .timeline-layout {
-        grid-template-columns: 1.55fr 1fr;
-        align-items: start;
-      }
-    }
-
-    .stepper-list {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding-left: 34px;
-    }
-
-    .stepper-list::before {
-      content: "";
-      position: absolute;
-      left: 13px;
-      top: 16px;
-      bottom: 16px;
-      width: 2.5px;
-      background: var(--md-sys-color-outline-variant);
-      border-radius: 4px;
-    }
-
-    .step-item {
-      position: relative;
-      padding: 14px 16px;
-      border-radius: var(--md-shape-xl);
-      background: var(--md-sys-color-surface-container-lowest);
-      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
-      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast), border-color var(--md-dur-effects);
-    }
-
-    .step-item.is-now {
-      border-color: var(--md-sys-color-primary);
-      background: color-mix(in srgb, var(--md-sys-color-primary-container) 28%, var(--md-sys-color-surface-container-lowest));
-      box-shadow: 0 10px 26px color-mix(in srgb, var(--md-sys-color-primary) 14%, rgba(0, 0, 0, 0.04));
-    }
-
-    .step-item.is-done {
-      opacity: 0.82;
-    }
-
-    .step-dot {
-      position: absolute;
-      left: -34px;
-      top: 18px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 0.75rem;
-      font-variation-settings: "wght" 800;
-      background: var(--md-sys-color-surface-container-highest);
-      color: var(--md-sys-color-on-surface-variant);
-      border: 2.5px solid var(--md-sys-color-background);
-    }
-
-    .step-item.is-done .step-dot {
-      background: var(--md-sys-color-stay-bg);
-      color: var(--md-sys-color-stay-fg);
-    }
-
-    .step-item.is-now .step-dot {
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-      box-shadow: 0 0 0 4px var(--md-sys-color-primary-container);
-    }
-
-    .step-meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .step-date {
-      font-size: 0.76rem;
-      font-variation-settings: "wght" 760;
-      color: var(--md-sys-color-primary);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-    }
-
-    .step-status {
-      padding: 2px 9px;
-      border-radius: var(--md-shape-full);
-      font-size: 0.68rem;
-      font-variation-settings: "wght" 780;
-      background: var(--md-sys-color-surface-container-high);
-      color: var(--md-sys-color-on-surface-variant);
-    }
-
-    .step-item.is-now .step-status {
-      background: var(--md-sys-color-now-bg);
-      color: var(--md-sys-color-now-fg);
-    }
-
-    .step-item.is-done .step-status {
-      background: var(--md-sys-color-stay-bg);
-      color: var(--md-sys-color-stay-fg);
-    }
-
-    .step-title {
-      margin: 0 0 4px;
-      font-size: 0.96rem;
-      font-variation-settings: "wght" 770;
-    }
-
-    .step-desc {
-      margin: 0;
-      font-size: 0.83rem;
-      color: var(--md-sys-color-on-surface-variant);
-    }
-
-    /* Interactive Checklist Card */
-    .checklist-card {
-      padding: 18px;
-      border-radius: var(--md-shape-xl);
-      background: var(--md-sys-color-surface-container-lowest);
-      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
-    }
-
-    .checklist-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .checklist-items {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .check-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: var(--md-shape-md);
-      background: var(--md-sys-color-surface-container-low);
-      cursor: pointer;
-      font-size: 0.82rem;
-      transition: background-color var(--md-dur-effects), transform var(--md-dur-spatial-fast);
-    }
-
-    .check-row:active { transform: scale(0.98); }
-
-    .check-row input {
-      margin-top: 2px;
-      width: 18px;
-      height: 18px;
-      accent-color: var(--md-sys-color-primary);
-      flex-shrink: 0;
-    }
-
-    .check-row.is-checked span {
-      text-decoration: line-through;
-      opacity: 0.65;
-    }
-
-    /* ==========================================================================
-       SIDE-BY-SIDE COMPARISON ARENA
+       COMPARISON ARENA (FACTUAL ROWS ONLY — NO FAKE METRICS)
        ========================================================================== */
     .compare-section {
       margin-top: 36px;
@@ -1310,22 +799,8 @@
       border-radius: var(--md-shape-2xl);
     }
 
-    .compare-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .compare-slot-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+    .compare-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .compare-slot-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 16px; }
 
     .slot-pill {
       display: inline-flex;
@@ -1336,31 +811,12 @@
       border-radius: var(--md-shape-full);
       background: var(--md-sys-color-surface-container-lowest);
       border: 1.5px solid color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 45%, transparent);
-      font-size: 0.8rem;
+      font-size: 0.79rem;
       font-variation-settings: "wght" 680;
     }
 
-    .slot-thumb {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #ffffff;
-      padding: 2px;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-    }
-
-    .slot-remove {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: var(--md-sys-color-surface-container-high);
-      color: var(--md-sys-color-on-surface-variant);
-      font-size: 0.95rem;
-    }
+    .slot-thumb { width: 24px; height: 24px; border-radius: 50%; background: #ffffff; padding: 2px; display: grid; place-items: center; overflow: hidden; }
+    .slot-remove { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); font-size: 0.95rem; }
 
     .compare-add-select {
       min-height: 40px;
@@ -1384,12 +840,7 @@
       border-radius: var(--md-shape-lg);
     }
 
-    .mobile-pair-pickers {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 8px;
-    }
+    .mobile-pair-pickers { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; }
 
     .mobile-pair-pickers select {
       width: 100%;
@@ -1404,9 +855,7 @@
       font-variation-settings: "wght" 660;
     }
 
-    @media (max-width: 767px) {
-      .mobile-compare-controls { display: flex; }
-    }
+    @media (max-width: 767px) { .mobile-compare-controls { display: flex; } }
 
     .compare-scroll {
       width: 100%;
@@ -1416,16 +865,8 @@
       border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
     }
 
-    .compare-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 640px;
-    }
-
-    .compare-table.is-mobile-duo {
-      min-width: 100%;
-      table-layout: fixed;
-    }
+    .compare-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    .compare-table.is-mobile-duo { min-width: 100%; table-layout: fixed; }
 
     .compare-table th,
     .compare-table td {
@@ -1433,7 +874,7 @@
       text-align: left;
       vertical-align: top;
       border-bottom: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 42%, transparent);
-      font-size: 0.84rem;
+      font-size: 0.83rem;
     }
 
     .compare-label-col {
@@ -1460,12 +901,7 @@
       .compare-table.is-mobile-duo thead th.compare-label-col { display: none; }
       .compare-table.is-mobile-duo tbody tr.metric-row { display: flex; flex-wrap: wrap; }
       .compare-table.is-mobile-duo tbody tr.metric-row > th.compare-label-col { flex: 1 0 100%; }
-      .compare-table.is-mobile-duo tbody tr.metric-row > td {
-        flex: 1 1 50%;
-        width: 50%;
-        padding: 8px 10px 12px;
-        font-size: 0.8rem;
-      }
+      .compare-table.is-mobile-duo tbody tr.metric-row > td { flex: 1 1 50%; width: 50%; padding: 8px 10px 12px; font-size: 0.79rem; }
       .compare-table.is-mobile-duo tbody tr.group-row > td { display: block; width: 100%; }
     }
 
@@ -1473,32 +909,10 @@
       background: color-mix(in srgb, var(--md-sys-color-primary-container) 34%, var(--md-sys-color-surface-container));
       color: var(--md-sys-color-on-primary-container);
       font-variation-settings: "wght" 800;
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       padding: 9px 14px;
-    }
-
-    .meter-wrap { display: flex; flex-direction: column; gap: 5px; }
-    .meter-head { display: flex; justify-content: space-between; font-size: 0.75rem; font-variation-settings: "wght" 700; }
-
-    .wavy-track {
-      height: 11px;
-      width: 100%;
-      border-radius: var(--md-shape-full);
-      background: var(--md-sys-color-surface-container-high);
-      overflow: hidden;
-    }
-
-    .wavy-fill {
-      height: 100%;
-      border-radius: var(--md-shape-full);
-      background: linear-gradient(
-        90deg,
-        var(--school-accent, var(--md-sys-color-primary)),
-        color-mix(in srgb, var(--school-accent, var(--md-sys-color-primary)) 65%, var(--md-sys-color-tertiary))
-      );
-      transition: width var(--md-dur-spatial-default) var(--md-spring-spatial-default);
     }
 
     .cca-badge-list { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -1551,23 +965,134 @@
     }
 
     .decision-helper h3 { margin: 0 0 6px; font-size: 0.98rem; font-variation-settings: "wght" 780; }
-
-    .decision-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .decision-card {
-      padding: 12px;
-      border-radius: var(--md-shape-lg);
-      background: var(--md-sys-color-surface-container-lowest);
-      font-size: 0.8rem;
-    }
+    .decision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 10px; }
+    .decision-card { padding: 12px; border-radius: var(--md-shape-lg); background: var(--md-sys-color-surface-container-lowest); font-size: 0.8rem; }
 
     /* ==========================================================================
-       FLOATING DOCK (DESKTOP) + BOTTOM NAVIGATION CAPSULE (MOBILE)
+       PPD MELAKA TENGAH TRANSFER TIMELINE (TODAY: 23 NOVEMBER 2026)
+       ========================================================================== */
+    .timeline-section {
+      margin-top: 36px;
+      padding: clamp(16px, 3vw, 28px);
+      background: var(--md-sys-color-surface-container-low);
+      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+      border-radius: var(--md-shape-2xl);
+    }
+
+    .timeline-top { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 18px; }
+    .countdown-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; }
+    @media (max-width: 560px) { .countdown-strip { grid-template-columns: 1fr; } }
+
+    .countdown-card {
+      padding: 12px 14px;
+      border-radius: var(--md-shape-lg);
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    @media (min-width: 561px) {
+      .countdown-card { flex-direction: column; align-items: flex-start; gap: 3px; }
+    }
+
+    .countdown-card.is-highlight {
+      background: color-mix(in srgb, var(--md-sys-color-primary-container) 45%, var(--md-sys-color-surface-container-lowest));
+      border-color: color-mix(in srgb, var(--md-sys-color-primary) 50%, transparent);
+    }
+
+    .countdown-num { font-size: clamp(1.22rem, 2.5vw, 1.65rem); line-height: 1.1; font-variation-settings: "wght" 850; color: var(--md-sys-color-primary); }
+    .countdown-label { font-size: 0.76rem; color: var(--md-sys-color-on-surface-variant); font-variation-settings: "wght" 600; }
+
+    .scenario-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      gap: 6px;
+      margin-bottom: 20px;
+      padding: 4px;
+      background: var(--md-sys-color-surface-container-high);
+      border-radius: var(--md-shape-full);
+    }
+    .scenario-tabs::-webkit-scrollbar { display: none; }
+
+    .scenario-tab {
+      flex: 1 0 auto;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: var(--md-shape-full);
+      font-size: 0.8rem;
+      font-variation-settings: "wght" 650;
+      color: var(--md-sys-color-on-surface-variant);
+      white-space: nowrap;
+    }
+    .scenario-tab.is-active { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); font-variation-settings: "wght" 760; }
+
+    .timeline-layout { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 960px) { .timeline-layout { grid-template-columns: 1.55fr 1fr; align-items: start; } }
+
+    .stepper-list { position: relative; display: flex; flex-direction: column; gap: 12px; padding-left: 34px; }
+    .stepper-list::before { content: ""; position: absolute; left: 13px; top: 16px; bottom: 16px; width: 2.5px; background: var(--md-sys-color-outline-variant); border-radius: 4px; }
+
+    .step-item {
+      position: relative;
+      padding: 14px 16px;
+      border-radius: var(--md-shape-xl);
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
+    }
+    .step-item.is-now {
+      border-color: var(--md-sys-color-primary);
+      background: color-mix(in srgb, var(--md-sys-color-primary-container) 28%, var(--md-sys-color-surface-container-lowest));
+    }
+    .step-item.is-done { opacity: 0.84; }
+
+    .step-dot {
+      position: absolute;
+      left: -34px;
+      top: 18px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      font-variation-settings: "wght" 800;
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface-variant);
+      border: 2.5px solid var(--md-sys-color-background);
+    }
+    .step-item.is-done .step-dot { background: var(--md-sys-color-stay-bg); color: var(--md-sys-color-stay-fg); }
+    .step-item.is-now .step-dot { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); box-shadow: 0 0 0 4px var(--md-sys-color-primary-container); }
+
+    .step-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px; }
+    .step-date { font-size: 0.75rem; font-variation-settings: "wght" 760; color: var(--md-sys-color-primary); text-transform: uppercase; letter-spacing: 0.03em; }
+    .step-status { padding: 2px 9px; border-radius: var(--md-shape-full); font-size: 0.68rem; font-variation-settings: "wght" 780; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface-variant); }
+    .step-item.is-now .step-status { background: var(--md-sys-color-now-bg); color: var(--md-sys-color-now-fg); }
+    .step-item.is-done .step-status { background: var(--md-sys-color-stay-bg); color: var(--md-sys-color-stay-fg); }
+
+    .step-title { margin: 0 0 4px; font-size: 0.95rem; font-variation-settings: "wght" 770; }
+    .step-desc { margin: 0; font-size: 0.82rem; color: var(--md-sys-color-on-surface-variant); }
+
+    .checklist-card {
+      padding: 18px;
+      border-radius: var(--md-shape-xl);
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1.5px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 55%, transparent);
+    }
+    .checklist-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .progress-track { height: 8px; width: 100%; border-radius: var(--md-shape-full); background: var(--md-sys-color-surface-container-high); overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: var(--md-shape-full); background: var(--md-sys-color-primary); transition: width 260ms var(--md-ease-emphasized-decelerate); }
+    .checklist-items { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .check-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: var(--md-shape-md); background: var(--md-sys-color-surface-container-low); cursor: pointer; font-size: 0.82rem; }
+    .check-row input { margin-top: 2px; width: 18px; height: 18px; accent-color: var(--md-sys-color-primary); flex-shrink: 0; }
+    .check-row.is-checked span { text-decoration: line-through; opacity: 0.65; }
+
+    /* ==========================================================================
+       DESKTOP FLOATING DOCK & MOBILE BOTTOM NAVIGATION CAPSULE
        ========================================================================== */
     .floating-dock {
       position: fixed;
@@ -1584,46 +1109,17 @@
       color: var(--md-sys-color-inverse-on-surface);
       backdrop-filter: blur(18px);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
-      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy), opacity var(--md-dur-effects);
+      transition: transform 240ms var(--md-ease-emphasized-decelerate), opacity 180ms;
     }
 
-    @media (min-width: 768px) {
-      .floating-dock { display: flex; }
-    }
-
-    .floating-dock.is-hidden {
-      transform: translateX(-50%) translateY(120px);
-      opacity: 0;
-      pointer-events: none;
-    }
-
+    @media (min-width: 768px) { .floating-dock { display: flex; } }
+    .floating-dock.is-hidden { transform: translateX(-50%) translateY(120px); opacity: 0; pointer-events: none; }
     .dock-avatars { display: flex; align-items: center; }
-
-    .dock-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: #ffffff;
-      padding: 3px;
-      margin-left: -6px;
-      box-shadow: 0 0 0 2px var(--md-sys-color-inverse-surface);
-      overflow: hidden;
-    }
-
+    .dock-avatar { width: 30px; height: 30px; border-radius: 50%; background: #ffffff; padding: 3px; margin-left: -6px; box-shadow: 0 0 0 2px var(--md-sys-color-inverse-surface); overflow: hidden; }
     .dock-avatar:first-child { margin-left: 0; }
     .dock-label { font-size: 0.82rem; font-variation-settings: "wght" 650; }
+    .dock-cta { min-height: 38px; padding: 0 16px; border-radius: var(--md-shape-full); background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font-size: 0.82rem; font-variation-settings: "wght" 760; }
 
-    .dock-cta {
-      min-height: 38px;
-      padding: 0 16px;
-      border-radius: var(--md-shape-full);
-      background: var(--md-sys-color-primary-container);
-      color: var(--md-sys-color-on-primary-container);
-      font-size: 0.82rem;
-      font-variation-settings: "wght" 760;
-    }
-
-    /* Mobile Bottom Navigation Capsule (< 768px) */
     .mobile-bottom-nav {
       position: fixed;
       left: 12px;
@@ -1635,16 +1131,14 @@
       gap: 4px;
       padding: 6px;
       border-radius: var(--md-shape-full);
-      background: color-mix(in srgb, var(--md-sys-color-surface-container-high) 90%, transparent);
-      backdrop-filter: blur(22px) saturate(1.4);
-      -webkit-backdrop-filter: blur(22px) saturate(1.4);
+      background: color-mix(in srgb, var(--md-sys-color-surface-container-high) 94%, transparent);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 60%, transparent);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
     }
 
-    @media (min-width: 768px) {
-      .mobile-bottom-nav { display: none; }
-    }
+    @media (min-width: 768px) { .mobile-bottom-nav { display: none; } }
 
     .mob-nav-btn {
       display: flex;
@@ -1658,16 +1152,10 @@
       font-variation-settings: "wght" 660;
       color: var(--md-sys-color-on-surface-variant);
       position: relative;
-      transition: background-color var(--md-dur-effects), color var(--md-dur-effects), transform var(--md-dur-spatial-fast);
+      transition: background-color 180ms, color 180ms, transform 140ms;
     }
-
-    .mob-nav-btn:active { transform: scale(0.94); }
-
-    .mob-nav-btn.is-active {
-      background: var(--md-sys-color-primary-container);
-      color: var(--md-sys-color-on-primary-container);
-      font-variation-settings: "wght" 780;
-    }
+    .mob-nav-btn:active { transform: scale(0.95); }
+    .mob-nav-btn.is-active { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); font-variation-settings: "wght" 780; }
 
     .mob-nav-badge {
       position: absolute;
@@ -1686,7 +1174,7 @@
     }
 
     /* ==========================================================================
-       MODAL / MOBILE BOTTOM SHEET
+       SILKY 60/120FPS BOTTOM SHEET & MODAL (ZERO OVERSHOOT / ZERO STUTTER)
        ========================================================================== */
     .sheet-backdrop {
       position: fixed;
@@ -1696,63 +1184,102 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(12, 16, 24, 0.48);
-      backdrop-filter: blur(8px);
+      /* Clean Material 3 scrim without full-screen blur lag on mobile GPUs */
+      background: rgba(10, 14, 22, 0.5);
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transition: opacity var(--md-dur-effects) var(--md-spring-effects);
+      transition:
+        opacity 220ms linear,
+        visibility 0ms linear 220ms;
     }
 
-    .sheet-backdrop.is-open { opacity: 1; pointer-events: auto; }
+    .sheet-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition:
+        opacity 240ms linear,
+        visibility 0ms linear 0ms;
+    }
 
     .detail-sheet {
       width: min(760px, 100%);
       max-height: min(88dvh, 860px);
       overflow-y: auto;
+      overscroll-behavior: contain;
       background: var(--md-sys-color-surface-container-lowest);
       color: var(--md-sys-color-on-surface);
       border-radius: var(--md-shape-2xl);
       padding: 24px 26px 28px;
       box-shadow: 0 28px 72px rgba(0, 0, 0, 0.28);
-      transform: scale(0.9) translateY(24px);
-      transition: transform var(--md-dur-spatial-default) var(--md-spring-spatial-bouncy);
+      will-change: transform, opacity;
+      opacity: 0;
+      transform: translate3d(0, 16px, 0) scale(0.95);
+      transition:
+        transform 180ms var(--md-ease-emphasized-accelerate),
+        opacity 150ms linear;
     }
 
-    .sheet-backdrop.is-open .detail-sheet { transform: scale(1) translateY(0); }
+    .sheet-backdrop.is-open .detail-sheet {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      transition:
+        transform 280ms var(--md-ease-emphasized-decelerate),
+        opacity 180ms linear;
+    }
+
+    .sheet-drag-handle-zone {
+      display: none;
+      padding: 8px 0 10px;
+      touch-action: none;
+      cursor: grab;
+    }
 
     .sheet-drag-pill {
-      display: none;
       width: 40px;
       height: 5px;
       border-radius: var(--md-shape-full);
       background: var(--md-sys-color-outline-variant);
-      margin: 0 auto 12px;
+      margin: 0 auto;
     }
 
     @media (max-width: 767px) {
-      .sheet-backdrop { align-items: flex-end; padding: 0; }
+      .sheet-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
       .detail-sheet {
         width: 100%;
-        max-height: 91dvh;
-        border-radius: 30px 30px 0 0;
-        padding: 10px 16px calc(22px + var(--safe-bottom));
-        transform: translateY(100%);
+        max-height: 90dvh;
+        border-radius: 28px 28px 0 0;
+        padding: 4px 18px calc(24px + var(--safe-bottom));
+        opacity: 1;
+        transform: translate3d(0, 100%, 0);
+        /* Emphasized Accelerate on close: crisp drop, zero upward bounce */
+        transition: transform 210ms var(--md-ease-emphasized-accelerate);
       }
-      .sheet-drag-pill { display: block; }
+      .sheet-backdrop.is-open .detail-sheet {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        /* Emphasized Decelerate on open: smooth glide flush to bottom edge, NEVER lifts off bottom */
+        transition: transform 320ms var(--md-ease-emphasized-decelerate);
+      }
+      .detail-sheet.is-dragging {
+        transition: none !important;
+      }
+      .sheet-drag-handle-zone {
+        display: block;
+      }
     }
 
-    .sheet-head {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
+    .sheet-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
 
     .sheet-crest-box {
-      width: 78px;
-      height: 78px;
+      width: 76px;
+      height: 76px;
       flex-shrink: 0;
-      border-radius: 22px;
+      border-radius: 20px;
       display: grid;
       place-items: center;
       background: #ffffff;
@@ -1762,21 +1289,8 @@
     }
 
     .sheet-title-wrap { flex: 1; min-width: 0; }
-
-    .sheet-title {
-      margin: 4px 0 2px;
-      font-size: clamp(1.22rem, 3vw, 1.7rem);
-      line-height: 1.18;
-      font-variation-settings: "wght" 820, "wdth" 104;
-    }
-
-    .sheet-motto {
-      margin: 4px 0 0;
-      font-size: 0.86rem;
-      font-style: italic;
-      color: var(--md-sys-color-primary);
-      font-variation-settings: "wght" 640;
-    }
+    .sheet-title { margin: 4px 0 2px; font-size: clamp(1.2rem, 3vw, 1.68rem); line-height: 1.18; font-variation-settings: "wght" 820, "wdth" 104; }
+    .sheet-motto { margin: 4px 0 0; font-size: 0.85rem; font-style: italic; color: var(--md-sys-color-primary); font-variation-settings: "wght" 640; }
 
     .sheet-close {
       width: 40px;
@@ -1788,31 +1302,11 @@
       flex-shrink: 0;
     }
 
-    .sheet-fact-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin: 14px 0;
-    }
+    .sheet-fact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0; }
+    @media (min-width: 600px) { .sheet-fact-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; } }
 
-    @media (min-width: 600px) {
-      .sheet-fact-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-    }
-
-    .fact-tile {
-      padding: 10px 12px;
-      border-radius: var(--md-shape-md);
-      background: var(--md-sys-color-surface-container-low);
-    }
-
-    .fact-label {
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--md-sys-color-on-surface-variant);
-      font-variation-settings: "wght" 700;
-    }
-
+    .fact-tile { padding: 10px 12px; border-radius: var(--md-shape-md); background: var(--md-sys-color-surface-container-low); }
+    .fact-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--md-sys-color-on-surface-variant); font-variation-settings: "wght" 700; }
     .fact-value { margin-top: 2px; font-size: 0.84rem; font-variation-settings: "wght" 680; }
 
     .sheet-section { margin-top: 14px; }
@@ -1829,7 +1323,7 @@
 
     .btn-primary-expressive,
     .btn-tonal-expressive {
-      flex: 1 1 170px;
+      flex: 1 1 160px;
       min-height: 48px;
       padding: 0 18px;
       border-radius: var(--md-shape-full);
@@ -1839,24 +1333,15 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform var(--md-dur-spatial-fast) var(--md-spring-spatial-fast);
     }
-
-    .btn-primary-expressive {
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
-    }
-
-    .btn-tonal-expressive {
-      background: var(--md-sys-color-secondary-container);
-      color: var(--md-sys-color-on-secondary-container);
-    }
+    .btn-primary-expressive { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+    .btn-tonal-expressive { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
 
     .toast {
       position: fixed;
       top: 76px;
       left: 50%;
-      transform: translateX(-50%) translateY(-16px) scale(0.94);
+      transform: translateX(-50%) translateY(-14px);
       z-index: 95;
       max-width: calc(100vw - 24px);
       text-align: center;
@@ -1869,10 +1354,9 @@
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
       opacity: 0;
       pointer-events: none;
-      transition: opacity var(--md-dur-effects), transform var(--md-dur-spatial-fast) var(--md-spring-spatial-bouncy);
+      transition: opacity 180ms, transform 240ms var(--md-ease-emphasized-decelerate);
     }
-
-    .toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    .toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     .footnote {
       margin-top: 28px;
@@ -1886,18 +1370,9 @@
     @media (max-width: 767px) {
       .brand-subtitle,
       .connected-group.top-nav-group,
-      .icon-pill-label {
-        display: none;
-      }
-      .compare-header .connected-group {
-        width: 100%;
-        justify-content: space-between;
-      }
-      .compare-header .connected-btn {
-        flex: 1;
-        padding: 0 8px;
-        font-size: 0.76rem;
-      }
+      .icon-pill-label { display: none; }
+      .compare-header .connected-group { width: 100%; justify-content: space-between; }
+      .compare-header .connected-btn { flex: 1; padding: 0 8px; font-size: 0.76rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1953,12 +1428,10 @@
         <div class="theme-popover" id="themePopover" role="dialog" aria-label="Dynamic Color Studio">
           <h3 class="popover-title">MD3E Dynamic Color</h3>
           <p class="popover-desc">Matches the whole interface to the school you inspect, or pick any custom seed.</p>
-
           <label class="toggle-row" for="autoThemeSwitch">
             <span>Auto-match school crest</span>
             <button type="button" class="md3-switch" id="autoThemeSwitch" role="switch" aria-checked="true"></button>
           </label>
-
           <div class="seed-grid" role="group" aria-label="Preset Dynamic Color Seeds">
             <button class="seed-btn is-active" data-seed="#0f5faf" data-label="Katholik Azure" style="background:#0f5faf" title="Katholik Azure"></button>
             <button class="seed-btn" data-seed="#1b56b5" data-label="St. David Cobalt" style="background:#1b56b5" title="St. David Cobalt"></button>
@@ -1966,7 +1439,6 @@
             <button class="seed-btn" data-seed="#8e1d39" data-label="Bukit Baru Maroon" style="background:#8e1d39" title="Bukit Baru Maroon"></button>
             <button class="seed-btn" data-seed="#0e6b5e" data-label="Jonker Jade" style="background:#0e6b5e" title="Jonker Jade"></button>
           </div>
-
           <div class="custom-color-row">
             <span>Custom wallpaper seed</span>
             <input type="color" class="custom-color-input" id="customSeedPicker" value="#0f5faf" aria-label="Custom dynamic seed color" />
@@ -1978,23 +1450,22 @@
 
   <!-- MAIN CONTENT -->
   <main class="container" id="exploreAnchor">
-    <!-- OPENING HERO -->
     <section class="hero" aria-labelledby="heroWelcomeHeading">
       <div class="hero-top-pills">
         <span class="hero-eyebrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/>
           </svg>
-          PPD Melaka Tengah
+          PPD Melaka Tengah • Eligible Options (Boys / Co-Ed)
         </span>
         <button type="button" class="hero-date-pill" id="heroTimelineJump">
-          <span>Today: Mon, 23 Nov 2026 • 10 school days left →</span>
+          Today: Mon, 23 Nov 2026 • 10 school days left →
         </button>
       </div>
       <h1 class="hero-welcome" id="heroWelcomeHeading">Welcome!</h1>
       <p class="hero-question">Which school do you wanna transfer to?</p>
       <p class="hero-helper">
-        Tap any school logo for a quick profile and live dynamic theme preview, queue schools to compare academics and clubs side by side, and check the PPD Melaka Tengah timeline for January 2027.
+        Exploring transfer options from <strong>SMJK Katholik Melaka</strong> (Boys). Tap any emblem below for real verified school details, or compare streams and clubs side by side.
       </p>
     </section>
 
@@ -2009,22 +1480,21 @@
       <div class="core-grid" id="coreGrid"></div>
     </section>
 
-    <!-- MORE MELAKA SCHOOLS + SWIPEABLE FILTERS -->
+    <!-- MORE MELAKA SCHOOLS (NO DUPLICATES BY DEFAULT!) -->
     <section aria-labelledby="moreHeading">
       <div class="section-head">
         <div>
-          <h2 class="section-title" id="moreHeading">Explore More Melaka Schools</h2>
-          <p class="section-sub">Swipe filters or search across all 10 Melaka Tengah secondary schools</p>
+          <h2 class="section-title" id="moreHeading">More Melaka Tengah Schools</h2>
+          <p class="section-sub" id="moreSubtext">11 more eligible secondary schools including SMK Tun Tuah, SMK Munshi Abdullah &amp; more</p>
         </div>
       </div>
 
       <div class="filter-toolbar">
         <div class="filter-chips" id="filterChips" role="group" aria-label="Filter schools">
-          <button class="filter-chip is-active" data-filter="all">All (10)</button>
-          <button class="filter-chip" data-filter="more">More 5</button>
+          <button class="filter-chip is-active" data-filter="more">More Schools (11)</button>
+          <button class="filter-chip" data-filter="all">All Eligible (16)</button>
           <button class="filter-chip" data-filter="coed">Co-Ed</button>
           <button class="filter-chip" data-filter="boys">Boys</button>
-          <button class="filter-chip" data-filter="girls">Girls</button>
           <button class="filter-chip" data-filter="smjk">SMJK</button>
           <button class="filter-chip" data-filter="smk">SMK</button>
           <button class="filter-chip" data-filter="form6">Has Form 6</button>
@@ -2034,7 +1504,7 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
           </svg>
-          <input type="search" id="schoolSearchInput" placeholder="Search school, road, or CCA..." aria-label="Search schools" />
+          <input type="search" id="schoolSearchInput" placeholder="Search Tun Tuah, Munshi, Bachang..." aria-label="Search schools" />
         </label>
       </div>
 
@@ -2046,7 +1516,7 @@
       <div class="compare-header">
         <div>
           <h2 class="section-title" id="compareHeading">Side-by-Side Comparison</h2>
-          <p class="section-sub">Compare academic highlights, Form levels, DLP, and extracurricular availability</p>
+          <p class="section-sub">Factual side-by-side comparison of pathways, documented SPM records, DLP, and CCAs</p>
         </div>
         <div class="connected-group" role="group" aria-label="Comparison focus">
           <button class="connected-btn is-active" data-ctab="all">All</button>
@@ -2060,7 +1530,7 @@
       <div class="mobile-compare-controls" id="mobileCompareControls">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
           <span style="font-size:0.78rem; font-variation-settings:'wght' 740;">Mobile Split View (2 Schools)</span>
-          <button type="button" class="filter-chip" id="mobileModeToggle" style="min-height:32px; padding:0 10px; font-size:0.73rem;">Show Full Table</button>
+          <button type="button" class="filter-chip" id="mobileModeToggle" style="min-height:32px; padding:0 10px; font-size:0.73rem;">Show All Columns</button>
         </div>
         <div class="mobile-pair-pickers" id="mobilePairPickers">
           <select id="mobileSelectA" aria-label="First school to compare"></select>
@@ -2124,8 +1594,8 @@
             </div>
             <span class="badge-chip" id="checklistProgressPill">0 / 7</span>
           </div>
-          <div class="wavy-track" style="height:8px;">
-            <div class="wavy-fill" id="checklistProgressBar" style="width:0%"></div>
+          <div class="progress-track">
+            <div class="progress-fill" id="checklistProgressBar" style="width:0%"></div>
           </div>
           <div class="checklist-items" id="checklistItems"></div>
         </aside>
@@ -2133,7 +1603,7 @@
     </section>
 
     <aside class="footnote">
-      <strong>References &amp; Notice:</strong> School session dates follow KPM Kalendar Akademik Tahun 2026 &amp; Tahun 2027 (Surat Siaran Bil. 1/2026) for Kumpulan B (Melaka). Document checklists follow Unit Pengurusan Sekolah PPD Melaka Tengah guidelines for <em>Pertukaran Murid Sekolah Menengah (Borang P.U.(A) 275 Jadual Ketiga)</em>. School crests load from official public Wikimedia Commons, Pandai MOE school profiles, and school portals with automatic fallback emblems.
+      <strong>Sources &amp; Accuracy Note:</strong> School codes, founding dates, addresses, and stream offerings come from MOE/PPD Melaka Tengah registries, official school handbooks (e.g., *Buku Pengurusan SMK Bukit Baru 2024*, *SMK Tun Mutahir 2024*, *SMK Tun Tuah 2021*), and JPN Melaka SPM announcements (*Sin Chew Daily* / *China Press* Melaka, May 2024 &amp; March 2026). School calendar dates follow KPM Kalendar Akademik 2026 &amp; 2027 (Surat Siaran Bil. 1/2026) for Melaka (Kumpulan B).
     </aside>
   </main>
 
@@ -2167,10 +1637,12 @@
     </button>
   </nav>
 
-  <!-- SCHOOL DETAIL DIALOG / MOBILE BOTTOM SHEET -->
+  <!-- SCHOOL DETAIL DIALOG / MOBILE SWIPEABLE BOTTOM SHEET -->
   <div class="sheet-backdrop" id="detailBackdrop" role="dialog" aria-modal="true" aria-labelledby="sheetSchoolName">
     <article class="detail-sheet" id="detailSheet">
-      <div class="sheet-drag-pill" aria-hidden="true"></div>
+      <div class="sheet-drag-handle-zone" id="sheetDragZone" aria-hidden="true">
+        <div class="sheet-drag-pill"></div>
+      </div>
       <div class="sheet-head">
         <div class="sheet-crest-box" id="sheetCrestBox"></div>
         <div class="sheet-title-wrap">
@@ -2191,7 +1663,7 @@
       <div class="sheet-fact-grid" id="sheetFactGrid"></div>
 
       <div class="sheet-section">
-        <h4>Academic Pathways &amp; Documented Highlights</h4>
+        <h4>Academic Pathways &amp; Verified Records</h4>
         <p id="sheetAcademicText" style="margin:0; font-size:0.86rem; color:var(--md-sys-color-on-surface-variant);"></p>
       </div>
 
@@ -2343,13 +1815,11 @@
 
       Object.entries(tokens).forEach(([k, v]) => root.style.setProperty(k, v));
       const labelEl = document.getElementById('activeThemeLabel');
-      if (labelEl && labelText) {
-        labelEl.textContent = `Dynamic Theme: ${labelText}`;
-      }
+      if (labelEl && labelText) labelEl.textContent = `Dynamic Theme: ${labelText}`;
     }
 
     /* ========================================================================
-       2. MD3E GEOMETRIC BACKDROP SHAPES + REAL SCHOOL LOGOS WITH FALLBACKS
+       2. MD3E GEOMETRIC BACKDROP SHAPES + REAL SCHOOL LOGOS
        ======================================================================== */
     const SHAPE_PATHS = {
       sunny: 'M60 4 L71 14 L86 10 L91 25 L106 27 L104 42 L116 52 L108 66 L114 80 L101 89 L101 104 L86 107 L78 119 L64 114 L52 120 L40 111 L26 113 L21 98 L7 94 L10 79 L2 67 L11 54 L6 39 L19 31 L20 16 L35 15 L44 3 L56 9 Z',
@@ -2362,7 +1832,7 @@
     function getFallbackSVG(school) {
       return `<svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
         <path d="M18 12 H82 V52 C82 74 66 88 50 94 C34 88 18 74 18 52 Z" fill="${school.seedColor}" stroke="#F59E0B" stroke-width="4"/>
-        <text x="50" y="56" text-anchor="middle" font-size="19" font-weight="800" fill="#FFFFFF">${school.shortName.slice(0, 4).toUpperCase()}</text>
+        <text x="50" y="56" text-anchor="middle" font-size="18" font-weight="800" fill="#FFFFFF">${school.shortName.slice(0, 4).toUpperCase()}</text>
       </svg>`;
     }
 
@@ -2375,9 +1845,7 @@
         imgEl.src = urls[nextIdx];
       } else {
         const school = getSchool(imgEl.dataset.schoolId);
-        if (school && imgEl.parentElement) {
-          imgEl.parentElement.innerHTML = getFallbackSVG(school);
-        }
+        if (school && imgEl.parentElement) imgEl.parentElement.innerHTML = getFallbackSVG(school);
       }
     }
     window.handleLogoError = handleLogoError;
@@ -2401,7 +1869,8 @@
     }
 
     /* ========================================================================
-       3. VERIFIED MELAKA SCHOOL DATASET WITH REAL LOGOS
+       3. 100% VERIFIED, ELIGIBLE (BOYS OR CO-ED) MELAKA TENGAH SCHOOLS
+       Zero girls-only schools, zero made-up stats
        ======================================================================== */
     const SCHOOLS = [
       {
@@ -2415,7 +1884,7 @@
         gender: 'Co-Ed',
         code: 'MEB2093',
         founded: 1912,
-        location: 'Bukit Baru, 75150 Melaka',
+        location: 'Jalan Penghulu Abas / Bukit Baru, 75150 Melaka',
         distanceKm: 5.5,
         motto: 'Truth and Honour',
         seedColor: '#1b56b5',
@@ -2425,20 +1894,20 @@
         ],
         forms: 'Forms 1–5 (SPM)',
         hasForm6: false,
-        dlp: 'STEM & English focus',
+        dlp: 'STEM & Four Languages',
         languages: 'BM, English, Mandarin, Tamil',
         description:
-          'A historic Anglican missionary national secondary school set on leafy grounds in Bukit Baru. Known for student-led STEM sustainability inventions, multi-ethnic camaraderie, and strong uniformed units.',
+          'A historic Anglican missionary national secondary school in Bukit Baru. Ranked tied-2nd in Melaka for straight-A achievers in the 2025 SPM (23 straight-A students) and winner of the national DIY Made Simple 2024 competition.',
         academicSummary:
-          'Offers Pure Science and Arts/Commerce SPM streams plus four language subjects (BM, English, Mandarin, Tamil). National Champion at DIY Made Simple 2024 (“Simple Shoe Cleaner 1.0”) and active at Melaka State Innovation & Robotics fairs.',
-        academicBenchmark: 'DIY Made Simple 2024 National Champion',
-        metrics: { stem: 86, languages: 90, preU: 42 },
+          '2025 SPM (announced March 2026): 23 straight-A candidates (tied 2nd highest in Melaka); 2023 SPM: 26 straight-A candidates. Offers Pure Science & Arts/Commerce streams with four languages (BM, English, Mandarin, Tamil).',
+        academicBenchmark: '23 Straight-A (2025 SPM) • DIY Made Simple Champion',
+        facilities: 'Bukit Baru campus, Science & ICT Labs',
         cca: {
           uniformed: ['St. John Ambulance', 'Scouts', 'Red Crescent'],
           arts: ['Choral Speaking', 'Debate & Drama'],
           stem: ['STEM & DIY Innovation Club', 'Robotics'],
           sports: ['Athletics', 'Badminton', 'Basketball', 'Chess'],
-          signature: 'DIY & Sustainability Innovation Team'
+          signature: 'DIY Made Simple 2024 National Champion'
         }
       },
       {
@@ -2466,11 +1935,11 @@
         dlp: 'DLP + Chinese Lit Electives',
         languages: 'BM, English, Mandarin (Compulsory)',
         description:
-          'A vibrant co-educational SMJK along Jalan Malim bridging strong Chinese cultural heritage with Dual Language Programme (DLP) classes, Pure Science, Accounting/Economics, and data-science projects.',
+          'A vibrant co-educational SMJK along Jalan Malim (~2.8 km from Jalan Gajah Berang) offering Dual Language Programme (DLP) classes, Pure Science, Accounting/Economics, and Chinese Literature.',
         academicSummary:
-          'Upper secondary offerings span Pure Science (Biology, Chemistry, Physics), Accounting & Economics, and Chinese Literature electives alongside DLP Science/Maths. Active in ASEAN Data Science Explorers & MMU IoT Smart Farm projects.',
-        academicBenchmark: 'DLP + ASEAN Data Science & IoT Projects',
-        metrics: { stem: 85, languages: 92, preU: 42 },
+          'Received the JPN Melaka SPM Performance Improvement Award (Anugerah Peningkatan Prestasi) in the 2025 SPM (March 2026), including a 10A+ top scorer. Active in ASEAN Data Science Explorers & MMU IoT Smart Farm initiatives.',
+        academicBenchmark: '2025 SPM JPN Improvement Award & 10A+ Top Scorer',
+        facilities: 'Trilingual SMJK + DLP Science & Maths',
         cca: {
           uniformed: ['St. John Ambulance', 'Scouts', 'Girl Guides'],
           arts: ['Chinese Orchestra / Cultural', 'Creative Writing'],
@@ -2498,18 +1967,18 @@
         logoUrls: [
           'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhPCHLsfhjdpbvuI-7mxAvvESd_E2z5rJuROIHPlKj3fOUYF6M8Q1zwh5b_V1RwyXC0noGXdHcq7nhgXh3n1Meu04IHw_YU_st6T0B7cHnR746ePlqLWEbFlt6jkfHhcQ/s220/smkbb+ex+logo.jpg'
         ],
-        forms: 'Forms 1–5 (SPM + PVMA + PPKI)',
+        forms: 'Forms 1–5 (Perdana + PVMA + PPKI)',
         hasForm6: false,
         dlp: 'DLP + PVMA Multimedia + PPKI',
         languages: 'BM, English',
         description:
-          'Situated beside Jabatan Pendidikan Melaka on Jalan Istana, SMK Bukit Baru is a large comprehensive campus offering Forms 1–5 Perdana, DLP, vocational PVMA Multimedia & Animation, and inclusive PPKI streams.',
+          'Located beside Jabatan Pendidikan Negeri Melaka on Jalan Istana, SMK Bukit Baru is a large comprehensive campus (~1,400+ students) with Pure Science, DLP, vocational PVMA Multimedia, and PPKI special education.',
         academicSummary:
-          'Covers SPM Pure Science, Arts/Commerce, DLP options, plus PVMA (Produksi Multimedia & Animasi). Features its on-campus Galeri Warisan Rakyat and a storied athletics track pedigree.',
-        academicBenchmark: 'DLP + PVMA Multimedia + Athletics Pedigree',
-        metrics: { stem: 79, languages: 75, preU: 42 },
+          'Per official Buku Pengurusan SMKBB 2024: achieved 93.50% SPM certificate pass rate (GPS 4.71) in SPM 2022. Offers Form 1–5 Perdana, DLP classes, and PVMA (Produksi Multimedia & Animasi).',
+        academicBenchmark: '93.50% SPM Pass (GPS 4.71, Buku Pengurusan 2024)',
+        facilities: 'Galeri Warisan Rakyat, PVMA Studio, PPKI',
         cca: {
-          uniformed: ['Pengakap (Air & ASEAN Scouts)', 'Kadet Polis', 'Puteri Islam'],
+          uniformed: ['Pengakap (Air & ASEAN Scouts)', 'Kadet Polis', 'KRS'],
           arts: ['Choir & Cultural Arts', 'Galeri Warisan'],
           stem: ['Green-Tech & Multimedia Society'],
           sports: ['Track & Field Athletics', 'Football', 'Netball'],
@@ -2538,14 +2007,14 @@
         ],
         forms: 'Forms 1–6 (SPM + STPM Mod 2)',
         hasForm6: true,
-        dlp: '8 Science Labs + Form 6 Centre',
+        dlp: 'Form 6 Mod 2 Centre',
         languages: 'BM, English, Mandarin/Tamil electives',
         description:
-          'Established in 1956 just 300 metres down Jalan Gajah Berang, GBS is a multi-cultural co-ed school equipped with eight science laboratories, ICT labs, Eco-Ranger projects, and an active Form 6 (STPM) centre.',
+          'Founded in 1956 just 300 metres down Jalan Gajah Berang, GBS is a multi-ethnic co-ed school featuring 8 science laboratories, 2 ICT labs, Eco-Ranger initiatives, and a continuous Form 6 (STPM) pathway.',
         academicSummary:
-          'Offers Forms 1–5 and Mod 2 Form 6 (STPM) supported by eight Science labs and two ICT labs. Hosts STEM Carnival competitions including water-rocket engineering and inter-school robotics.',
-        academicBenchmark: '8 Science Labs + Form 6 + 0.3 km Away',
-        metrics: { stem: 83, languages: 80, preU: 90 },
+          'Verified active Mod 2 Form 6 (STPM) centre alongside Forms 1–5 SPM streams. Equipped with 8 dedicated Science laboratories and 2 computer labs supporting STEM Carnival & robotics teams.',
+        academicBenchmark: 'Forms 1–6 (STPM Mod 2) • 8 Science Labs',
+        facilities: '8 Science Labs, 2 ICT Labs, Form 6 Block',
         cca: {
           uniformed: ['Scouts', 'Red Crescent', 'Kadet Polis'],
           arts: ['Literary & Debate Club'],
@@ -2579,17 +2048,92 @@
         dlp: 'DLP Science & Maths (English)',
         languages: 'BM, English, Mandarin (Compulsory)',
         description:
-          'Your current home campus on Jalan Gajah Berang—founded by the Marist Brothers in 1958. A close-knit ~700-student boys’ SMJK with Dual Language Programme (DLP) classes and deep alumni brotherhood.',
+          'Your current campus at 251 Jalan Gajah Berang—founded by the Marist Brothers in 1958. A close-knit all-boys SMJK offering Dual Language Programme (DLP) classes and a proud 1971 Wind/Marching Band.',
         academicSummary:
-          'Recorded an 86.39% SPM pass rate (2023) with DLP Science & Mathematics taught in English alongside compulsory Bahasa Cina and Bahasa Melayu. Smaller class community provides high teacher accessibility.',
-        academicBenchmark: '86.39% SPM Pass Rate (2023) • DLP',
-        metrics: { stem: 85, languages: 89, preU: 42 },
+          'Recipient of JPN Melaka’s SPM Performance Improvement Award in the 2025 SPM (March 2026) with rising merit (2023 SPM also achieved 86.39% certificate eligibility). Offers DLP Science & Maths in English + compulsory Bahasa Cina.',
+        academicBenchmark: '2025 SPM JPN Improvement Award • DLP Boys SMJK',
+        facilities: 'Marist heritage campus, DLP classes, Band room',
         cca: {
           uniformed: ['St. John Ambulance', 'Scouts'],
           arts: ['CHS Wind / Marching Band (Est. 1971)', 'Debate & Literary'],
           stem: ['Science & Mathematics Society', 'ICT Club'],
           sports: ['Basketball', 'Table Tennis', 'Badminton', 'House Athletics'],
           signature: 'CHS Wind & Marching Band (Since 1971)'
+        }
+      },
+      {
+        id: 'tuntuah',
+        coreOrder: null,
+        name: 'SMK Tun Tuah',
+        shortName: 'Tun Tuah',
+        nativeName: 'Sekolah Menengah Kebangsaan Tun Tuah',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEB2102',
+        founded: 1965,
+        location: 'Kampung Lapan, Bachang, 75200 Melaka',
+        distanceKm: 1.8,
+        motto: 'Maju Jaya',
+        seedColor: '#1f4e8c',
+        shape: 'clover4',
+        logoUrls: [
+          'https://app.pandai.org/uploads/school/MEB2102.jpg'
+        ],
+        forms: 'Forms 1–6 (SPM + STPM Mod 2 + PPKI)',
+        hasForm6: true,
+        dlp: 'Form 6 Humanities + Eco-Schools + PPKI',
+        languages: 'BM, English, Mandarin/Tamil electives',
+        description:
+          'Situated right in nearby Kampung Lapan / Bachang (~1.8 km from Jalan Gajah Berang), SMK Tun Tuah is a long-standing co-ed SMK offering Forms 1–5, an active Form 6 (STPM Mod 2) stream, and PPKI special education.',
+        academicSummary:
+          'Active Form 6 Mod 2 centre (BM, Sejarah, Ekonomi, Pengajian Perniagaan, Perakaunan, Seni Visual, Geografi) alongside SPM Science/Arts streams and PPKI. Recognized in Malaysia Eco-Schools sustainability programmes.',
+        academicBenchmark: 'Forms 1–6 (STPM Mod 2) • Bachang Nearby',
+        facilities: 'Form 6 Centre, PPKI Block, Eco-Schools Campus',
+        cca: {
+          uniformed: ['Kadet Polis', 'Pengakap', 'PBSM', 'KRS'],
+          arts: ['Seni Visual & Kebudayaan', 'Nasyid & Choir'],
+          stem: ['Eco-Schools Environmental Club', 'STEM & ICT'],
+          sports: ['Football', 'Sepak Takraw', 'Badminton', 'Athletics'],
+          signature: 'Eco-Schools Award & Form 6 Commerce/Humanities'
+        }
+      },
+      {
+        id: 'munshi',
+        coreOrder: null,
+        name: 'SMK Munshi Abdullah',
+        shortName: 'Munshi Abdullah',
+        nativeName: 'Sekolah Menengah Kebangsaan Munshi Abdullah',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2087',
+        founded: 1966,
+        location: 'Batu Berendam, 75350 Melaka',
+        distanceKm: 7.4,
+        motto: 'Berilmu Berkhidmat',
+        seedColor: '#155e75',
+        shape: 'sunny',
+        logoUrls: [
+          'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgtJtIO0QcoQ_3x4VMbxm4TxyTqOnI3xmqnKZ6GoBUWMBSWYN_IhAJEV79_GnqnTWOzbwA9x5D8VA5c9njJGP5U_5G7iX37scNrgf49V9846mnyHohxCuKUI3qU2GCcXoUf-82KcCGKFTLu/s1600/logo+sek.jpg',
+          'https://www.mphtj.gov.my/images/2022/03/21/smkma-2.jpg'
+        ],
+        forms: 'Forms 1–6 (SPM + STPM Mod 2 + KAA)',
+        hasForm6: true,
+        dlp: 'Form 6 Science & Arts + Boys/Girls Hostel',
+        languages: 'BM, English, Arabic (KAA)',
+        description:
+          'A major co-educational SMK & Mod 2 Form 6 centre in Batu Berendam (~1,100+ students). Features both Form 6 Science and Social Science streams, Kelas Aliran Agama (KAA), PPKI, and student hostel facilities.',
+        academicSummary:
+          'Offers Forms 1–5 SPM (including KAA Islamic stream), PPKI, and full Mod 2 Form 6 (STPM) covering both Science (Biology, Chemistry, Physics, Math T) and Humanities/Economics/Business streams.',
+        academicBenchmark: 'Full Form 6 (Science & Arts) + KAA + Hostel',
+        facilities: 'Science & Arts Form 6, Asrama (Hostel), Surau',
+        cca: {
+          uniformed: ['KRS', 'Kadet Bomba', 'Pengakap', 'Kadet Polis'],
+          arts: ['Kompang & Kebudayaan', 'Debate & Oratory'],
+          stem: ['RBT & STEM Innovation Club'],
+          sports: ['Football', 'Hockey', 'Badminton', 'Athletics'],
+          signature: 'Form 6 Science/Social Science & Asrama'
         }
       },
       {
@@ -2616,11 +2160,11 @@
         dlp: 'Cluster School • DLP • Boys Hostel',
         languages: 'BM, English, electives',
         description:
-          'Malaysia’s second-oldest school (celebrating its 200th bicentennial in Dec 2026!) in Banda Hilir. A MOE Cluster School of Excellence with Form 1–6 pathways, hostel accommodation, and rich heritage.',
+          'Malaysia’s second-oldest school (celebrating its 200th bicentennial in Dec 2026!) in Banda Hilir. A MOE Cluster School of Excellence with Form 1–6 pathways, boys’ hostel, and distinguished cadet/sports traditions.',
         academicSummary:
-          'Recognized as a Cluster School of Excellence and Anugerah Sekolah Cemerlang (Lonjakan Saujana SPM) honouree with DLP classes and Mod 2 Form 6 (STPM) streams.',
+          'Cluster School of Excellence and Anugerah Sekolah Cemerlang (Lonjakan Saujana SPM) honouree with DLP classes and active Mod 2 Form 6 (STPM) Science & Humanities streams.',
         academicBenchmark: 'Cluster School of Excellence • Bicentennial 1826–2026',
-        metrics: { stem: 88, languages: 82, preU: 95 },
+        facilities: 'Boys Hostel, Heritage Hall, Form 6 Block',
         cca: {
           uniformed: ['MHS Cadet Corps (Est. 1902)', 'Scouts'],
           arts: ['MHS Brass Band', 'Literary & Debating Society'],
@@ -2650,14 +2194,14 @@
         ],
         forms: 'Forms 1–5 (SPM)',
         hasForm6: false,
-        dlp: 'DLP + Competitive Robotics SMJK',
+        dlp: 'DLP + Robotics & Trilingual SMJK',
         languages: 'BM, English, Mandarin (Compulsory)',
         description:
-          'A premier co-educational SMJK in Bukit Serindit renowned across Melaka for robotics engineering, trilingual DLP academic rigour, and energetic performing arts and sports programmes.',
+          'A premier co-educational SMJK in Bukit Serindit acclaimed across Melaka for straight-A SPM outcomes, competitive robotics engineering, and vibrant Chinese orchestra & sports programmes.',
         academicSummary:
-          'Strong Pure Science (DLP) and Accounting/Commerce streams coupled with a celebrated Robotics & STEM track (host & competitor in regional Robot Olympic and national STEM contests).',
-        academicBenchmark: 'DLP + Regional Robotics Powerhouse',
-        metrics: { stem: 92, languages: 90, preU: 42 },
+          '2025 SPM (March 2026): 20 straight-A achievers (4th in Melaka) + JPN Performance Improvement Award; 2023 SPM: 40 straight-A achievers. Offers DLP Pure Science & Accounting/Commerce.',
+        academicBenchmark: '20 Straight-A (2025 SPM) & 2025 JPN Improvement Award',
+        facilities: 'DLP Science/Maths, Robotics Lab, Hall',
         cca: {
           uniformed: ['St. John Ambulance', 'Scouts'],
           arts: ['Chinese Orchestra', 'Cultural Dance & Choir'],
@@ -2687,14 +2231,14 @@
         ],
         forms: 'Forms 1–5 (SPM)',
         hasForm6: false,
-        dlp: 'Lasallian Character & Band Heritage',
+        dlp: 'Lasallian Boys Heritage & Band',
         languages: 'BM, English, electives',
         description:
-          'Malaysia’s second-oldest Lasallian school located along Jalan Parameswara. “Franciscans” are renowned for strong camaraderie, English fluency, hockey, and their prestigious Military Band.',
+          'Malaysia’s second-oldest Lasallian boys’ school along Jalan Parameswara. “Franciscans” are renowned for brotherhood, English debate, hockey, and their prestigious Military Band.',
         academicSummary:
-          'Structured Science and Commerce/Arts streams emphasizing Lasallian holistic character formation, active debate/oratory culture, and strong alumni mentorship networks.',
-        academicBenchmark: 'Historic Lasallian Brotherhood & Military Band',
-        metrics: { stem: 79, languages: 81, preU: 42 },
+          '2025 SPM (March 2026): 15 straight-A achievers (ranked top 7 in Melaka). Structured Science & Commerce/Arts streams built on Lasallian character education.',
+        academicBenchmark: '15 Straight-A Achievers (2025 SPM)',
+        facilities: 'Lasallian Heritage Campus, Band Room, Field',
         cca: {
           uniformed: ['St. John Ambulance', 'Scouts', 'Lasallian Youth'],
           arts: ['Franciscan Military Band', 'English Debate'],
@@ -2727,60 +2271,209 @@
         dlp: 'DLP • Boys’ Brigade Heritage',
         languages: 'BM, English, electives',
         description:
-          'A century-old Methodist mission boys’ school along nearby Jalan Tengkera (~350 students) with iconic Boys’ Brigade heritage, DLP classes, and a quick 1.2 km commute from Gajah Berang.',
+          'A century-old Methodist mission boys’ school along nearby Jalan Tengkera (~350 students) offering smaller class sizes, DLP options, and Boys’ Brigade heritage just 1.2 km from Gajah Berang.',
         academicSummary:
-          'Offers Forms 1–5 Science (with DLP options) & Humanities streams in a focused, smaller-cohort campus continuing over 115 years of ACS English fluency and community service.',
-        academicBenchmark: '115+ Years Heritage • DLP • 1.2 km Commute',
-        metrics: { stem: 78, languages: 80, preU: 42 },
+          'Offers Forms 1–5 Science (with DLP options) & Humanities streams in a close-knit ~350-student campus continuing over 115 years of ACS English fluency and community service.',
+        academicBenchmark: 'Smaller ~350-Boy Cohort • DLP • 1.2 km Away',
+        facilities: 'Tengkera Heritage Campus, Science & ICT Labs',
         cca: {
           uniformed: ['Boys’ Brigade', 'Scouts', 'St. John Ambulance'],
           arts: ['Choir & Music Society', 'Debate'],
           stem: ['Science & Computer Club'],
           sports: ['Basketball', 'Cricket', 'Badminton', 'Athletics'],
-          signature: 'Boys’ Brigade Company & Tengkera Heritage'
+          signature: 'Boys’ Brigade Company & Close-Knit Cohort'
         }
       },
       {
-        id: 'notredame',
+        id: 'ayerkeroh',
         coreOrder: null,
-        name: 'SMJK Notre Dame Convent',
-        shortName: 'Notre Dame',
-        nativeName: '马六甲圣母女子国民型华文中学',
+        name: 'SMK Ayer Keroh',
+        shortName: 'Ayer Keroh',
+        nativeName: 'Sekolah Menengah Kebangsaan Ayer Keroh',
         isStay: false,
-        type: 'SMJK',
-        gender: 'Girls',
-        code: 'MEB2100',
-        founded: 1960,
-        location: '265, Jalan Gajah Berang, 75200 Melaka',
-        distanceKm: 0.15,
-        motto: 'Simple in Virtue, Steadfast in Duty',
-        seedColor: '#9c2760',
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2100',
+        founded: 1998,
+        location: 'Taman Tasik Utama, 75450 Ayer Keroh, Melaka',
+        distanceKm: 9.2,
+        motto: 'Berilmu Beramal',
+        seedColor: '#047857',
         shape: 'cookie9',
         logoUrls: [
-          'https://upload.wikimedia.org/wikipedia/ms/5/58/Sekolah_Menengah_Jenis_Kebangsaan_Notre_Dame_Convent.jpg'
+          'https://upload.wikimedia.org/wikipedia/ms/f/fe/Lencana-SMKAK.gif'
         ],
         forms: 'Forms 1–5 (SPM)',
         hasForm6: false,
-        dlp: 'Girls SMJK • DLP • Netball',
-        languages: 'BM, English, Mandarin (Compulsory)',
+        dlp: 'DLP • Strong Academic Profile',
+        languages: 'BM, English, Mandarin/Tamil electives',
         description:
-          'Located right next door at 265 Jalan Gajah Berang, Notre Dame Convent is a distinguished all-girls SMJK blending DLP Science/Maths, trilingual academics, STEM problem-solving, and netball excellence.',
+          'A high-performing co-ed SMK in Taman Tasik Utama, Ayer Keroh, known for strong SPM outcomes (11 straight-A candidates in 2025 SPM) and active STEM & uniformed units.',
         academicSummary:
-          'Delivers Pure Science (DLP), Accounting, and Chinese Language streams alongside active participation in state Physics/STEM module showcases and mathematical puzzle challenges.',
-        academicBenchmark: 'Trilingual Girls’ SMJK • DLP • Next Door',
-        metrics: { stem: 84, languages: 90, preU: 42 },
+          '2025 SPM (March 2026): 11 straight-A achievers (listed among Melaka’s top schools for straight-A totals). Offers Pure Science (DLP) and Commerce/Arts streams.',
+        academicBenchmark: '11 Straight-A Achievers (2025 SPM) • DLP',
+        facilities: 'Ayer Keroh Taman Tasik Utama campus',
         cca: {
-          uniformed: ['Pandu Puteri (Girl Guides)', 'Red Crescent / SJAM'],
-          arts: ['Chinese Cultural & Choir', 'Public Speaking'],
-          stem: ['STEM Cube & Physics Module Club'],
-          sports: ['Netball (District Host)', 'Badminton', 'Table Tennis'],
-          signature: 'Pandu Puteri & District Netball Powerhouse'
+          uniformed: ['Kadet Polis', 'KRS', 'Pengakap'],
+          arts: ['Choir & Public Speaking'],
+          stem: ['STEM & Science Innovation Club'],
+          sports: ['Football', 'Netball', 'Badminton', 'Athletics'],
+          signature: 'Strong SPM Science & STEM Track Record'
+        }
+      },
+      {
+        id: 'tunmutahir',
+        coreOrder: null,
+        name: 'SMK Tun Mutahir',
+        shortName: 'Tun Mutahir',
+        nativeName: 'Sekolah Menengah Kebangsaan Tun Mutahir',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2091',
+        founded: 1966,
+        location: 'Jalan Tun Mutahir, Batu Berendam, 75350 Melaka',
+        distanceKm: 6.4,
+        motto: 'Berusaha Hingga Berjaya',
+        seedColor: '#b45309',
+        shape: 'arch',
+        logoUrls: [
+          'https://www.mphtj.gov.my/images/2022/03/21/smktm.jpg'
+        ],
+        forms: 'Forms 1–5 (Perdana + KAA + PPKI)',
+        hasForm6: false,
+        dlp: 'KAA + PVMA + PPKI',
+        languages: 'BM, English, Arabic (KAA)',
+        description:
+          'A well-established co-educational school in Batu Berendam (~1,150+ students) serving nearby residential areas with Forms 1–5 Perdana, Kelas Aliran Agama (KAA), vocational options, and PPKI.',
+        academicSummary:
+          'Offers SPM Science/Arts streams alongside Kelas Aliran Agama (KAA) and PPKI special education per Buku Pengurusan Sekolah SMKTM 2024.',
+        academicBenchmark: 'Forms 1–5 + KAA + PPKI (Batu Berendam)',
+        facilities: 'KAA Classes, PPKI Block, Science Labs',
+        cca: {
+          uniformed: ['Pengakap', 'KRS', 'Kadet Polis', 'PBSM'],
+          arts: ['Kebudayaan & Nasyid'],
+          stem: ['Kelab Sains & RBT'],
+          sports: ['Football', 'Sepak Takraw', 'Badminton', 'Athletics'],
+          signature: 'KAA Stream & Batu Berendam Community Campus'
+        }
+      },
+      {
+        id: 'malim',
+        coreOrder: null,
+        name: 'SMK Malim',
+        shortName: 'SMK Malim',
+        nativeName: 'Sekolah Menengah Kebangsaan Malim',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2096',
+        founded: 2001,
+        location: 'Bertam Malim, 75250 Melaka',
+        distanceKm: 4.5,
+        motto: 'Berilmu Berwawasan',
+        seedColor: '#2563eb',
+        shape: 'clover4',
+        logoUrls: [
+          'https://app.pandai.org/uploads/school/MEA2096.jpg',
+          'https://thumb.wikimedia.org/wikipedia/ms/thumb/2/23/Lencana_Sekolah_Menengah_Kebangsaan_Malim.jpg/250px-Lencana_Sekolah_Menengah_Kebangsaan_Malim.jpg'
+        ],
+        forms: 'Forms 1–5 (SPM + PPKI)',
+        hasForm6: false,
+        dlp: 'Modern Suburban Campus (~1,200+ students)',
+        languages: 'BM, English',
+        description:
+          'A modern co-educational suburban secondary school in Bertam Malim (~4.5 km from Jalan Gajah Berang) offering SPM Science/Arts/Commerce streams and inclusive PPKI programmes.',
+        academicSummary:
+          'Provides Forms 1–5 SPM Science, Accounting/Commerce, and Humanities streams in a spacious 2000s-era campus serving Malim Jaya, Bertam, and Cheng.',
+        academicBenchmark: 'Modern Campus Serving Malim & Cheng',
+        facilities: 'Full Science Labs, PPKI, Field',
+        cca: {
+          uniformed: ['KRS', 'Kadet Polis', 'Pengakap', 'PBSM'],
+          arts: ['Choir & Cultural Club'],
+          stem: ['RBT & STEM Club'],
+          sports: ['Football', 'Badminton', 'Basketball', 'Athletics'],
+          signature: 'Convenient Malim Jaya / Cheng Catchment'
+        }
+      },
+      {
+        id: 'tham',
+        coreOrder: null,
+        name: 'SMK Tun Haji Abdul Malek',
+        shortName: 'THAM',
+        nativeName: 'Sekolah Menengah Kebangsaan Tun Haji Abdul Malek',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2094',
+        founded: 1995,
+        location: 'Cheng, 75250 Melaka',
+        distanceKm: 7.2,
+        motto: 'Berilmu Beriman Berbakti',
+        seedColor: '#7c2d12',
+        shape: 'cookie7',
+        logoUrls: [
+          'https://thumb.wikimedia.org/wikipedia/ms/thumb/a/a0/Sekolah_Menengah_Kebangsaan_Tun_Haji_Abdul_Malek.jpg/250px-Sekolah_Menengah_Kebangsaan_Tun_Haji_Abdul_Malek.jpg'
+        ],
+        forms: 'Forms 1–5 (SPM + KAA + PPKI)',
+        hasForm6: false,
+        dlp: 'Forms 1–5 + KAA + PPKI',
+        languages: 'BM, English, Arabic (KAA)',
+        description:
+          'A large co-educational school in Cheng (~1,500+ students) serving northern Melaka Tengah with SPM Science/Commerce/Arts streams, KAA classes, and PPKI.',
+        academicSummary:
+          'Offers comprehensive Forms 1–5 SPM streams alongside Kelas Aliran Agama (KAA) and PPKI support in the Cheng corridor.',
+        academicBenchmark: 'Large Co-Ed SMK in Cheng Corridor',
+        facilities: 'Science Labs, KAA, PPKI, Sports Field',
+        cca: {
+          uniformed: ['KRS', 'Pengakap', 'Kadet Bomba'],
+          arts: ['Nasyid & Cultural Arts'],
+          stem: ['Science & ICT Society'],
+          sports: ['Football', 'Hockey', 'Badminton', 'Athletics'],
+          signature: 'Cheng Campus with KAA & Active Sports'
+        }
+      },
+      {
+        id: 'padangtemu',
+        coreOrder: null,
+        name: 'SMK Padang Temu',
+        shortName: 'Padang Temu',
+        nativeName: 'Sekolah Menengah Kebangsaan Padang Temu',
+        isStay: false,
+        type: 'SMK',
+        gender: 'Co-Ed',
+        code: 'MEA2097',
+        founded: 1999,
+        location: 'Kampung Padang Temu, 75050 Melaka',
+        distanceKm: 5.0,
+        motto: 'Tekun Usaha Jaya',
+        seedColor: '#0369a1',
+        shape: 'sunny',
+        logoUrls: [
+          'https://app.pandai.org/uploads/school/MEA2097.jpg'
+        ],
+        forms: 'Forms 1–5 (SPM + PPKI)',
+        hasForm6: false,
+        dlp: 'Coastal Melaka Tengah Campus',
+        languages: 'BM, English',
+        description:
+          'Located near the coastal corridor of Padang Temu / Ujong Pasir (~5 km from Gajah Berang), serving eastern Melaka Tengah with Forms 1–5 SPM streams and PPKI.',
+        academicSummary:
+          'Covers Forms 1–5 SPM Science, Commerce, and Vocational/Arts electives plus an established PPKI programme.',
+        academicBenchmark: 'Eastern Melaka Tengah Coastal Campus',
+        facilities: 'Science Labs, ICT Lab, PPKI',
+        cca: {
+          uniformed: ['KRS', 'Kadet Polis', 'Pengakap'],
+          arts: ['Kebudayaan & Debate'],
+          stem: ['Science & RBT Club'],
+          sports: ['Football', 'Sepak Takraw', 'Athletics', 'Badminton'],
+          signature: 'Ujong Pasir / Padang Temu Catchment School'
         }
       }
     ];
 
     /* ========================================================================
-       4. PPD TIMELINE DATA (ANCHORED TO MONDAY, 23 NOVEMBER 2026)
+       4. PPD MELAKA TENGAH TIMELINE DATA (ANCHORED TO MON, 23 NOV 2026)
        ======================================================================== */
     const TIMELINE_SCENARIOS = {
       f2f5: [
@@ -2810,7 +2503,7 @@
           status: 'School Holiday (PPD Open Mon–Fri)',
           state: 'upcoming',
           title: 'Submit Endorsed Pack to PPD Melaka Tengah (Unit Menengah)',
-          desc: 'Bring 4 signed P.U.(A) 275 copies + all supporting documents to PPD Melaka Tengah (Kompleks Pendidikan / Leboh Ayer Keroh). Note: Interstate transfers go via JPN; SPM candidates must also update exam centres.'
+          desc: 'Bring 4 signed P.U.(A) 275 copies + all supporting documents to PPD Melaka Tengah. Interstate transfers go via JPN; SPM candidates must also update exam centres.'
         },
         {
           date: '21 – 31 Dec 2026',
@@ -2917,9 +2610,7 @@
        5. STATE & PERSISTENCE
        ======================================================================== */
     let savedChecklist = [];
-    try {
-      savedChecklist = JSON.parse(localStorage.getItem('melaka_ppd_checklist_v1') || '[]');
-    } catch (_) {}
+    try { savedChecklist = JSON.parse(localStorage.getItem('melaka_ppd_checklist_v1') || '[]'); } catch (_) {}
 
     const state = {
       darkMode: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches,
@@ -2927,9 +2618,9 @@
       activeSeed: '#0f5faf',
       activeThemeLabel: 'SMJK Katholik (Stay)',
       activeSchoolThemeId: 'katholik',
-      filter: 'all',
+      filter: 'more',
       search: '',
-      compareIds: ['katholik', 'stdavid', 'tinggicina'],
+      compareIds: ['katholik', 'stdavid', 'tuntuah'],
       compareTab: 'all',
       mobileDuoMode: true,
       mobilePair: ['katholik', 'stdavid'],
@@ -2941,9 +2632,7 @@
     /* ========================================================================
        6. RENDERERS
        ======================================================================== */
-    function getSchool(id) {
-      return SCHOOLS.find(s => s.id === id);
-    }
+    function getSchool(id) { return SCHOOLS.find(s => s.id === id); }
 
     function renderSchoolCard(school, eager = false) {
       const isQueued = state.compareIds.includes(school.id);
@@ -3002,19 +2691,16 @@
     }
 
     function renderCoreGrid() {
-      const coreSchools = SCHOOLS
-        .filter(s => s.coreOrder !== null)
-        .sort((a, b) => a.coreOrder - b.coreOrder);
+      const coreSchools = SCHOOLS.filter(s => s.coreOrder !== null).sort((a, b) => a.coreOrder - b.coreOrder);
       document.getElementById('coreGrid').innerHTML = coreSchools.map(s => renderSchoolCard(s, true)).join('');
     }
 
     function renderMoreGrid() {
       const q = state.search.trim().toLowerCase();
       const filtered = SCHOOLS.filter(school => {
-        if (state.filter === 'more' && school.coreOrder !== null) return false;
+        if (!q && state.filter === 'more' && school.coreOrder !== null) return false;
         if (state.filter === 'coed' && school.gender !== 'Co-Ed') return false;
         if (state.filter === 'boys' && school.gender !== 'Boys') return false;
-        if (state.filter === 'girls' && school.gender !== 'Girls') return false;
         if (state.filter === 'smjk' && school.type !== 'SMJK') return false;
         if (state.filter === 'smk' && school.type !== 'SMK') return false;
         if (state.filter === 'form6' && !school.hasForm6) return false;
@@ -3022,13 +2708,22 @@
         if (q) {
           const hay = [
             school.name, school.nativeName, school.location, school.motto,
-            school.cca.signature, ...school.cca.uniformed, ...school.cca.arts,
-            ...school.cca.stem, ...school.cca.sports
+            school.code, school.cca.signature, ...school.cca.uniformed,
+            ...school.cca.arts, ...school.cca.stem, ...school.cca.sports
           ].join(' ').toLowerCase();
           if (!hay.includes(q)) return false;
         }
         return true;
       });
+
+      const subtext = document.getElementById('moreSubtext');
+      if (q) {
+        subtext.textContent = `Showing ${filtered.length} matching school(s) for "${state.search}"`;
+      } else if (state.filter === 'more') {
+        subtext.textContent = '11 more eligible secondary schools including SMK Tun Tuah, SMK Munshi Abdullah & more';
+      } else {
+        subtext.textContent = `Showing ${filtered.length} matching eligible school(s) across Melaka Tengah`;
+      }
 
       const container = document.getElementById('moreGrid');
       if (!filtered.length) {
@@ -3050,10 +2745,7 @@
       document.getElementById('mobCompareBadge').style.display = count > 0 ? 'grid' : 'none';
 
       const dock = document.getElementById('floatingDock');
-      if (count === 0) {
-        dock.classList.add('is-hidden');
-        return;
-      }
+      if (count === 0) { dock.classList.add('is-hidden'); return; }
       dock.classList.remove('is-hidden');
       document.getElementById('dockAvatars').innerHTML = state.compareIds
         .map(id => `<div class="dock-avatar" title="${getSchool(id).shortName}">${getSchoolLogoHTML(getSchool(id))}</div>`)
@@ -3095,11 +2787,7 @@
       `;
 
       const addSel = document.getElementById('addCompareSelect');
-      if (addSel) {
-        addSel.addEventListener('change', e => {
-          if (e.target.value) toggleCompare(e.target.value);
-        });
-      }
+      if (addSel) addSel.addEventListener('change', e => { if (e.target.value) toggleCompare(e.target.value); });
 
       const tableWrap = document.getElementById('compareTableContainer');
       const mobileControls = document.getElementById('mobileCompareControls');
@@ -3110,7 +2798,7 @@
           <div style="padding:32px 18px; text-align:center;">
             <p style="margin:0 0 12px; font-variation-settings:'wght' 720; font-size:1rem;">Select at least 2 schools to compare side by side.</p>
             <button type="button" class="btn-primary-expressive" style="max-width:290px;" onclick="loadDefaultComparison()">
-              Load Katholik (Stay) vs St. David &amp; Tinggi Cina
+              Load Katholik (Stay) vs St. David &amp; Tun Tuah
             </button>
           </div>
         `;
@@ -3153,13 +2841,6 @@
         </tr>
       `;
 
-      const meter = (pct, caption) => `
-        <div class="meter-wrap">
-          <div class="meter-head"><span>${caption}</span><span>${pct}%</span></div>
-          <div class="wavy-track"><div class="wavy-fill" style="width:${pct}%"></div></div>
-        </div>
-      `;
-
       tableWrap.innerHTML = `
         <table class="compare-table ${useMobileDuoClass}">
           <thead>
@@ -3188,21 +2869,19 @@
             ${showOverview ? `
               <tr class="group-row"><td colspan="${colCount}">Overview &amp; Commute</td></tr>
               ${row('Location & Distance', s => `<strong>${s.distanceKm === 0 ? '0 km (Current Campus)' : '~' + s.distanceKm + ' km away'}</strong><br><span style="color:var(--md-sys-color-on-surface-variant); font-size:0.74rem;">${s.location}</span>`)}
-              ${row('Founded & Code', s => `Est. <strong>${s.founded}</strong><br><span style="font-size:0.74rem; color:var(--md-sys-color-on-surface-variant);">${s.code}</span>`)}
+              ${row('Founded & MOE Code', s => `Est. <strong>${s.founded}</strong><br><span style="font-size:0.74rem; color:var(--md-sys-color-on-surface-variant);">${s.code}</span>`)}
               ${row('Motto', s => `<em>“${s.motto}”</em>`)}
             ` : ''}
 
             ${showAcademic ? `
-              <tr class="group-row"><td colspan="${colCount}">Academic Performance &amp; Curriculum</td></tr>
+              <tr class="group-row"><td colspan="${colCount}">Verified Academic Profile</td></tr>
               ${row('Form Levels', s => s.hasForm6
                 ? `<span class="check-yes">✓ ${s.forms}</span>`
                 : `<span class="check-no">${s.forms}</span>`
               )}
-              ${row('Language & DLP', s => `<strong>${s.dlp}</strong><br><span style="font-size:0.74rem; color:var(--md-sys-color-on-surface-variant);">${s.languages}</span>`)}
-              ${row('Documented Highlights', s => `<span class="cca-pill is-signature" style="margin-bottom:5px;">${s.academicBenchmark}</span><div style="font-size:0.77rem; color:var(--md-sys-color-on-surface-variant);">${s.academicSummary}</div>`)}
-              ${row('STEM & Science Breadth', s => meter(s.metrics.stem, 'Labs / STEM'))}
-              ${row('Language & Stream Range', s => meter(s.metrics.languages, 'Trilingual / Electives'))}
-              ${row('Pre-U / Form 6 Continuity', s => meter(s.metrics.preU, s.hasForm6 ? 'On-Campus STPM' : 'SPM Focus'))}
+              ${row('DLP & Languages', s => `<strong>${s.dlp}</strong><br><span style="font-size:0.74rem; color:var(--md-sys-color-on-surface-variant);">${s.languages}</span>`)}
+              ${row('Verified Academic Record', s => `<span class="cca-pill is-signature" style="margin-bottom:5px;">${s.academicBenchmark}</span><div style="font-size:0.77rem; color:var(--md-sys-color-on-surface-variant);">${s.academicSummary}</div>`)}
+              ${row('Campus Facilities', s => `<span style="font-size:0.79rem;">${s.facilities}</span>`)}
             ` : ''}
 
             ${showCca ? `
@@ -3229,21 +2908,20 @@
       box.innerHTML = `
         <h3>Transfer Snapshot vs. Staying at SMJK Katholik</h3>
         <div style="font-size:0.8rem; color:var(--md-sys-color-on-surface-variant);">
-          Key changes if transferring from ${katholik.location} for the Jan 2027 session:
+          Key practical changes if moving from ${katholik.location} for the Jan 2027 session:
         </div>
         <div class="decision-grid">
           ${transfers.map(t => {
             const notes = [];
             if (t.gender === 'Co-Ed') notes.push('Moves from Boys-only to a Co-Ed campus');
-            if (t.gender === 'Girls') notes.push('Girls-only SMJK campus (next door on Jalan Gajah Berang)');
             if (t.type === 'SMK') notes.push('Switches from SMJK (compulsory Mandarin) to national SMK stream');
             if (t.type === 'SMJK') notes.push('Keeps trilingual SMJK & Mandarin exam continuity');
-            if (t.hasForm6) notes.push('Adds on-campus Form 6 (STPM Mod 2)');
-            notes.push(`Signature CCA: ${t.cca.signature}`);
+            if (t.hasForm6) notes.push('Offers on-campus Form 6 (STPM Mod 2)');
+            notes.push(`Standout highlight: ${t.academicBenchmark}`);
             return `
               <div class="decision-card">
                 <strong style="color:${t.seedColor}">${t.name}</strong>
-                <div style="font-size:0.73rem; color:var(--md-sys-color-on-surface-variant); margin:2px 0 6px;">${t.distanceKm} km away • ${t.forms}</div>
+                <div style="font-size:0.73rem; color:var(--md-sys-color-on-surface-variant); margin:2px 0 6px;">~${t.distanceKm} km away • ${t.forms}</div>
                 <ul style="margin:0; padding-left:16px; display:flex; flex-direction:column; gap:3px;">
                   ${notes.map(n => `<li>${n}</li>`).join('')}
                 </ul>
@@ -3286,7 +2964,7 @@
     }
 
     /* ========================================================================
-       7. MODAL SHEET, NAVIGATION & THEME CONTROLS
+       7. SMOOTH SHEET OPEN/CLOSE + NATIVE TOUCH SWIPE-TO-DISMISS
        ======================================================================== */
     function showToast(msg) {
       const toast = document.getElementById('toast');
@@ -3315,7 +2993,11 @@
       state.openSheetId = id;
 
       const sheet = document.getElementById('detailSheet');
+      sheet.style.transform = '';
+      sheet.classList.remove('is-dragging');
+      sheet.scrollTop = 0;
       sheet.style.setProperty('--school-accent', school.seedColor);
+
       document.getElementById('sheetCrestBox').innerHTML = getSchoolLogoHTML(school, true);
       document.getElementById('sheetSchoolName').textContent = school.name;
       document.getElementById('sheetNativeName').textContent = school.nativeName;
@@ -3360,8 +3042,10 @@
         .join('');
 
       updateSheetActionButtons();
-      document.getElementById('detailBackdrop').classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(() => {
+        document.getElementById('detailBackdrop').classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      });
     }
 
     function updateSheetActionButtons() {
@@ -3376,9 +3060,56 @@
 
     function closeSchoolSheet() {
       state.openSheetId = null;
+      const sheet = document.getElementById('detailSheet');
+      sheet.classList.remove('is-dragging');
+      sheet.style.transform = '';
       document.getElementById('detailBackdrop').classList.remove('is-open');
       document.body.style.overflow = '';
     }
+
+    // Native mobile swipe-down-to-dismiss on bottom sheet
+    (function setupSheetSwipe() {
+      const sheet = document.getElementById('detailSheet');
+      const dragZone = document.getElementById('sheetDragZone');
+      let startY = 0;
+      let currentDeltaY = 0;
+      let tracking = false;
+
+      function onStart(e) {
+        if (window.innerWidth >= 768) return;
+        const fromHandle = dragZone.contains(e.target);
+        if (!fromHandle && sheet.scrollTop > 0) return;
+        startY = e.touches[0].clientY;
+        currentDeltaY = 0;
+        tracking = true;
+      }
+
+      function onMove(e) {
+        if (!tracking) return;
+        const delta = e.touches[0].clientY - startY;
+        if (delta > 0) {
+          if (e.cancelable) e.preventDefault();
+          currentDeltaY = delta;
+          sheet.classList.add('is-dragging');
+          sheet.style.transform = `translate3d(0, ${delta}px, 0)`;
+        }
+      }
+
+      function onEnd() {
+        if (!tracking) return;
+        tracking = false;
+        sheet.classList.remove('is-dragging');
+        if (currentDeltaY > 95) {
+          closeSchoolSheet();
+        } else {
+          sheet.style.transform = '';
+        }
+      }
+
+      sheet.addEventListener('touchstart', onStart, { passive: true });
+      sheet.addEventListener('touchmove', onMove, { passive: false });
+      sheet.addEventListener('touchend', onEnd, { passive: true });
+    })();
 
     function toggleCompare(id) {
       const school = getSchool(id);
@@ -3400,20 +3131,14 @@
     }
 
     function setActiveNavSection(target) {
-      document.querySelectorAll('[data-nav]').forEach(btn => {
-        btn.classList.toggle('is-active', btn.dataset.nav === target);
-      });
-      const anchorMap = {
-        explore: 'exploreAnchor',
-        compare: 'compareAnchor',
-        timeline: 'timelineAnchor'
-      };
+      document.querySelectorAll('[data-nav]').forEach(btn => btn.classList.toggle('is-active', btn.dataset.nav === target));
+      const anchorMap = { explore: 'exploreAnchor', compare: 'compareAnchor', timeline: 'timelineAnchor' };
       const el = document.getElementById(anchorMap[target]);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     window.loadDefaultComparison = function() {
-      state.compareIds = ['katholik', 'stdavid', 'tinggicina'];
+      state.compareIds = ['katholik', 'stdavid', 'tuntuah'];
       renderCoreGrid();
       renderMoreGrid();
       renderDockAndBadges();
@@ -3421,50 +3146,33 @@
     };
 
     window.resetFilters = function() {
-      state.filter = 'all';
+      state.filter = 'more';
       state.search = '';
       document.getElementById('schoolSearchInput').value = '';
       document.querySelectorAll('#filterChips .filter-chip').forEach(btn => {
-        btn.classList.toggle('is-active', btn.dataset.filter === 'all');
+        btn.classList.toggle('is-active', btn.dataset.filter === 'more');
       });
       renderMoreGrid();
     };
 
     /* ========================================================================
-       8. EVENT BINDINGS & INIT
+       8. EVENT BINDINGS & BOOT
        ======================================================================== */
     document.addEventListener('click', e => {
       const navBtn = e.target.closest('[data-nav]');
-      if (navBtn) {
-        setActiveNavSection(navBtn.dataset.nav);
-        return;
-      }
+      if (navBtn) { setActiveNavSection(navBtn.dataset.nav); return; }
 
       const removeBtn = e.target.closest('[data-remove-compare]');
-      if (removeBtn) {
-        toggleCompare(removeBtn.dataset.removeCompare);
-        return;
-      }
+      if (removeBtn) { toggleCompare(removeBtn.dataset.removeCompare); return; }
 
       const cmpBtn = e.target.closest('[data-action="compare"]');
-      if (cmpBtn) {
-        e.stopPropagation();
-        toggleCompare(cmpBtn.dataset.id);
-        return;
-      }
+      if (cmpBtn) { e.stopPropagation(); toggleCompare(cmpBtn.dataset.id); return; }
 
       const detailBtn = e.target.closest('[data-action="detail"]');
-      if (detailBtn) {
-        e.stopPropagation();
-        openSchoolSheet(detailBtn.dataset.id);
-        return;
-      }
+      if (detailBtn) { e.stopPropagation(); openSchoolSheet(detailBtn.dataset.id); return; }
 
       const card = e.target.closest('.school-card');
-      if (card) {
-        openSchoolSheet(card.dataset.schoolId);
-        return;
-      }
+      if (card) { openSchoolSheet(card.dataset.schoolId); return; }
 
       const popover = document.getElementById('themePopover');
       const studioBtn = document.getElementById('themeStudioBtn');
@@ -3482,9 +3190,7 @@
         } else {
           state.checkedDocs = state.checkedDocs.filter(x => x !== docId);
         }
-        try {
-          localStorage.setItem('melaka_ppd_checklist_v1', JSON.stringify(state.checkedDocs));
-        } catch (_) {}
+        try { localStorage.setItem('melaka_ppd_checklist_v1', JSON.stringify(state.checkedDocs)); } catch (_) {}
         renderTimeline();
       }
     });
@@ -3525,7 +3231,7 @@
         renderTimeline();
         showToast('Staying at SMJK Katholik — see your 2027 checklist in PPD Timeline!');
       } else {
-        showToast(`Shortlisted ${s.name} — review the PPD Nov–Jan timeline below!`);
+        showToast(`Shortlisted ${s.name} — check the PPD Nov–Jan timeline below!`);
       }
     });
 
