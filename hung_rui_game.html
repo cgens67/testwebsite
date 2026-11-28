@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>hung rui's english game</title>
+
+  <!-- Local SF Pro Display Fonts -->
+  <style>
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('fonts/sfprodisplayregular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('fonts/sfprodisplaymedium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('fonts/sfprodisplaysemibold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('fonts/sfprodisplaybold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: url('fonts/sfprodisplayheavy.woff2') format('woff2');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    [v-cloak] {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Material Symbols Rounded -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+            }
+          }
+        }
+      };
+    }
+  </script>
+
+  <!-- Vue 3 Production Build -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+  <script>
+    if (!window.Vue) {
+      document.write('<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"><\/script>');
+    }
+  </script>
+
+  <style>
+    :root {
+      interpolate-size: allow-keywords;
+
+      /* Material Design 3 Expressive Motion Physics */
+      --md-spring-spatial-fast: cubic-bezier(0.42, 1.67, 0.21, 0.90);
+      --md-spring-spatial-default: cubic-bezier(0.38, 1.21, 0.22, 1.00);
+      --md-spring-radius: cubic-bezier(0.22, 1.05, 0.36, 1.00);
+      --md-spring-effects-fast: cubic-bezier(0.31, 0.94, 0.34, 1.00);
+      --md-spring-effects-default: cubic-bezier(0.34, 0.80, 0.34, 1.00);
+
+      --slot-width: 230px;
+      --slot-height: 42px;
+      --slot-font: 0.92rem;
+    }
+
+    @media (min-width: 640px) {
+      :root {
+        --slot-width: 320px;
+        --slot-height: 48px;
+        --slot-font: 1.1rem;
+      }
+    }
+    @media (min-width: 768px) {
+      :root {
+        --slot-width: 400px;
+        --slot-height: 52px;
+        --slot-font: 1.2rem;
+      }
+    }
+
+    body {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      background-color: #000000;
+      color: #FFFFFF;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .material-symbols-rounded {
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Dark Surface Card */
+    .dark-card {
+      background: #0D0E12;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .dark-modal {
+      background: #0F1015;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.95);
+    }
+
+    /* MD3E Buttons & Shape-Morphing */
+    .md3e-btn {
+      border-radius: 18px;
+      transition:
+        transform 320ms var(--md-spring-spatial-fast),
+        border-radius 240ms var(--md-spring-radius),
+        background-color 140ms var(--md-spring-effects-fast),
+        color 140ms var(--md-spring-effects-fast),
+        box-shadow 180ms var(--md-spring-effects-default),
+        opacity 160ms var(--md-spring-effects-fast);
+    }
+    .md3e-btn:hover:not(:disabled) {
+      transform: translateY(-1px) scale(1.01);
+    }
+    .md3e-btn:active:not(:disabled) {
+      transform: scale(0.97);
+      border-radius: 12px;
+    }
+
+    .md3e-chip {
+      border-radius: 14px;
+      transition:
+        transform 300ms var(--md-spring-spatial-fast),
+        border-radius 220ms var(--md-spring-radius),
+        background-color 140ms var(--md-spring-effects-fast),
+        box-shadow 180ms var(--md-spring-effects-default);
+    }
+    .md3e-chip:active:not(:disabled) {
+      transform: scale(0.94);
+      border-radius: 10px;
+    }
+
+    /* Option Card Shape-Morphing */
+    .md3e-option {
+      border-radius: 16px;
+      transition:
+        transform 320ms var(--md-spring-spatial-fast),
+        border-radius 280ms var(--md-spring-radius),
+        background-color 140ms var(--md-spring-effects-fast),
+        border-color 140ms var(--md-spring-effects-fast),
+        color 140ms var(--md-spring-effects-fast),
+        box-shadow 180ms var(--md-spring-effects-default);
+    }
+    .md3e-option:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+    .md3e-option:active:not(:disabled) {
+      transform: scale(0.97);
+      border-radius: 12px;
+    }
+    .md3e-option.is-selected {
+      border-radius: 24px;
+      transform: scale(1.015);
+    }
+
+    .md3e-option-badge {
+      border-radius: 10px;
+      transition:
+        transform 320ms var(--md-spring-spatial-fast),
+        border-radius 280ms var(--md-spring-radius),
+        background-color 140ms var(--md-spring-effects-fast),
+        color 140ms var(--md-spring-effects-fast);
+    }
+    .is-selected .md3e-option-badge {
+      border-radius: 18px;
+      transform: rotate(-4deg) scale(1.06);
+    }
+
+    .md3e-seg-btn {
+      transition:
+        transform 300ms var(--md-spring-spatial-fast),
+        border-radius 260ms var(--md-spring-radius),
+        background-color 150ms var(--md-spring-effects-fast),
+        color 150ms var(--md-spring-effects-fast);
+    }
+
+    /* Page, Dialog & HUD Transitions */
+    .page-enter-active {
+      transition:
+        transform 420ms var(--md-spring-spatial-default),
+        opacity 180ms var(--md-spring-effects-default);
+    }
+    .page-leave-active {
+      transition:
+        transform 150ms var(--md-spring-effects-fast),
+        opacity 130ms var(--md-spring-effects-fast);
+    }
+    .page-enter-from {
+      opacity: 0;
+      transform: scale(0.96) translateY(14px);
+    }
+    .page-leave-to {
+      opacity: 0;
+      transform: scale(1.015) translateY(-6px);
+    }
+
+    .feedback-hud-enter-active {
+      transition:
+        transform 380ms var(--md-spring-spatial-default),
+        opacity 160ms var(--md-spring-effects-fast);
+    }
+    .feedback-hud-leave-active {
+      transition:
+        transform 180ms var(--md-spring-effects-fast),
+        opacity 140ms var(--md-spring-effects-fast);
+    }
+    .feedback-hud-enter-from {
+      opacity: 0;
+      transform: translate3d(0, 22px, 0) scale(0.93);
+    }
+    .feedback-hud-leave-to {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0) scale(0.96);
+    }
+
+    .dialog-enter-active { transition: opacity 180ms var(--md-spring-effects-default); }
+    .dialog-leave-active { transition: opacity 140ms var(--md-spring-effects-fast); }
+    .dialog-enter-active .dialog-content {
+      transition:
+        transform 420ms var(--md-spring-spatial-default),
+        opacity 170ms var(--md-spring-effects-default);
+    }
+    .dialog-leave-active .dialog-content {
+      transition:
+        transform 160ms var(--md-spring-effects-fast),
+        opacity 130ms var(--md-spring-effects-fast);
+    }
+    .dialog-enter-from, .dialog-leave-to { opacity: 0; }
+    .dialog-enter-from .dialog-content { opacity: 0; transform: scale(0.89) translateY(18px); }
+    .dialog-leave-to .dialog-content { opacity: 0; transform: scale(0.94) translateY(8px); }
+
+    /* Slot Picker (Black & White Theme) */
+    .picker-wrapper { width: 100%; display: flex; justify-content: center; margin: 4px 0; }
+    .picker-container { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 820px; }
+    .picker-window {
+      width: 100%;
+      height: var(--slot-height);
+      background: #0A0B0E;
+      border-radius: 9999px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .picker-highlight {
+      position: absolute;
+      width: var(--slot-width);
+      height: 100%;
+      background: #171923;
+      border-radius: 9999px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
+      border: 2px solid #FFFFFF;
+    }
+    .picker-track { display: flex; position: absolute; left: 50%; z-index: 2; will-change: transform; }
+    .picker-item {
+      width: var(--slot-width);
+      flex-shrink: 0;
+      text-align: center;
+      font-size: var(--slot-font);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #525866;
+      transition:
+        color 200ms var(--md-spring-effects-default),
+        transform 380ms var(--md-spring-spatial-fast);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 14px;
+      line-height: var(--slot-height);
+    }
+    .picker-item.active { color: #FFFFFF; transform: scale(1.04); }
+
+    .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.22); border-radius: 10px; }
+    .custom-scrollbar:hover::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.38); }
+
+    @keyframes autoProceed {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+  </style>
+</head>
+<body class="min-h-[100dvh] bg-black text-white antialiased select-none flex flex-col justify-center">
+
+  <!-- SOLID BLACK PRELOAD OVERLAY -->
+  <div 
+    id="appLoadingScreen" 
+    class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center transition-opacity duration-500 ease-out"
+    style="opacity: 1;">
+    <div class="flex flex-col items-center text-center space-y-5 px-6">
+      <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-4 border-white/15 border-t-white animate-spin"></div>
+      </div>
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">hung rui's english game</h2>
+        <p class="text-xs sm:text-sm text-white/50 mt-1 font-medium">loading quiz...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container (Tablet & Mobile Optimized) -->
+  <div id="app" v-cloak class="max-w-5xl lg:max-w-6xl w-full mx-auto min-h-[100dvh] relative flex flex-col justify-between px-4 py-3 sm:px-6 sm:py-4 md:px-8 md:py-5 overflow-x-hidden">
+
+    <!-- Top App Bar -->
+    <header class="flex justify-between items-center min-h-[2.75rem] sm:min-h-[3.25rem] mb-2 sm:mb-3 z-10 gap-2">
+      <div @click="goToMain" class="flex items-center space-x-2.5 min-w-0 shrink cursor-pointer group">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white text-black flex items-center justify-center shrink-0 font-black text-xs sm:text-sm tracking-tighter group-hover:scale-105 transition-transform">
+          HR
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-sm sm:text-base md:text-lg font-bold tracking-tight text-white leading-tight truncate">hung rui's english game</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+        <button 
+          @click="showHistory = true" 
+          class="md3e-chip flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 bg-[#111217] border border-white/15 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm">
+          <span class="material-symbols-rounded text-base text-white/80">leaderboard</span>
+          <span class="hidden xs:inline sm:inline">leaderboard</span>
+        </button>
+        <button 
+          @click="showRules = true" 
+          class="md3e-chip flex items-center space-x-1.5 px-2.5 py-1.5 sm:px-3.5 sm:py-2 bg-[#111217] border border-white/15 hover:bg-white/10 text-white font-semibold text-xs sm:text-sm">
+          <span class="material-symbols-rounded text-base text-white/80">help_outline</span>
+          <span>rules</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main View Transitions Container -->
+    <div class="flex-1 flex flex-col justify-center relative my-auto">
+      <transition name="page" mode="out-in">
+
+        <!-- 1. MAIN MENU (Editorial + Bento Dashboard) -->
+        <div v-if="currentPage === 'main'" key="main" class="w-full max-w-3xl mx-auto flex flex-col justify-center space-y-5 sm:space-y-6 my-auto py-3">
+          
+          <!-- Header Block -->
+          <div class="space-y-2.5 text-left sm:text-center">
+            <div class="inline-flex items-center space-x-2 text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-white/60">
+              <span class="w-2 h-2 rounded-full" :class="availableGroups.length > 0 ? 'bg-emerald-400' : 'bg-white/40'"></span>
+              <span>{{ availableGroups.length > 0 ? `${availableGroups[0].name} up next` : 'all 4 groups completed' }}</span>
+            </div>
+
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-[-0.035em] text-white leading-[1.02]">
+              hung rui's<br class="sm:hidden"> english game
+            </h2>
+          </div>
+
+          <!-- Compact Spec Bar -->
+          <div class="grid grid-cols-3 divide-x divide-white/10 rounded-2xl bg-[#0B0C10] border border-white/12 py-3 sm:py-3.5 text-center">
+            <div class="px-2">
+              <div class="text-lg sm:text-2xl font-black text-white tabular-nums">8</div>
+              <div class="text-[11px] sm:text-xs font-medium text-white/50">questions</div>
+            </div>
+            <div class="px-2">
+              <div class="text-lg sm:text-2xl font-black text-white tabular-nums">15s–3m</div>
+              <div class="text-[11px] sm:text-xs font-medium text-white/50">by section</div>
+            </div>
+            <div class="px-2">
+              <div class="text-lg sm:text-2xl font-black text-white tabular-nums">100</div>
+              <div class="text-[11px] sm:text-xs font-medium text-white/50">full pts</div>
+            </div>
+          </div>
+
+          <!-- 4-Group Status Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+            <div
+              v-for="group in teamData"
+              :key="group.id"
+              :class="[
+                'rounded-2xl p-3 sm:p-3.5 border transition-colors text-left flex flex-col justify-between space-y-2',
+                completedGroupIds.includes(group.id)
+                  ? 'bg-[#08090C] border-white/10 opacity-60'
+                  : (availableGroups[0]?.id === group.id
+                      ? 'bg-[#14161E] border-white/45'
+                      : 'bg-[#0B0C10] border-white/12')
+              ]">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs sm:text-sm font-extrabold text-white">{{ group.name }}</span>
+                <span
+                  v-if="completedGroupIds.includes(group.id)"
+                  class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                  done
+                </span>
+                <span
+                  v-else-if="availableGroups[0]?.id === group.id"
+                  class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-black">
+                  next
+                </span>
+              </div>
+
+              <div class="flex items-baseline justify-between">
+                <span class="text-[11px] sm:text-xs font-medium text-white/55">
+                  {{ group.playerCount }} players
+                </span>
+                <span v-if="getGroupScore(group.name) !== null" class="text-xs font-extrabold text-white tabular-nums">
+                  {{ getGroupScore(group.name) }} pts
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Primary Action -->
+          <div class="pt-1">
+            <button 
+              @click="startNewGame" 
+              class="md3e-btn w-full py-4 sm:py-4.5 px-6 bg-white hover:bg-white/90 text-black font-extrabold text-base sm:text-xl flex items-center justify-center space-x-2.5 shadow-lg">
+              <span>{{ availableGroups.length > 0 ? `draw ${availableGroups[0].name.toLowerCase()} players` : 'view final leaderboard' }}</span>
+              <span class="material-symbols-rounded text-xl sm:text-2xl">{{ availableGroups.length > 0 ? 'arrow_forward' : 'leaderboard' }}</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- 2. SELECTING MEMBERS UI -->
+        <div v-else-if="currentPage === 'picker'" key="picker" class="flex flex-col justify-between h-full space-y-3 py-1 sm:py-2">
+          <div v-animate-size="slotsCompleted" class="text-center space-y-1">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white">
+              {{ slotsCompleted ? `${currentDrawnTeam?.name} selected!` : `drawing ${currentDrawnTeam?.name}...` }}
+            </h1>
+            <p class="text-xs sm:text-base text-white/65 font-medium">
+              {{ slotsCompleted ? `${currentDrawnTeam?.members.length} players randomly locked in!` : `randomly picking ${currentDrawnTeam?.playerCount} players from ${remainingStudentsCount} remaining...` }}
+            </p>
+            <div v-if="slotsCompleted && currentGroupMeta" class="pt-1 flex justify-center">
+              <span :class="[
+                'inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs sm:text-sm font-bold border',
+                currentGroupMeta.isReadingGroup
+                  ? 'bg-amber-500/15 border-amber-400/50 text-amber-300'
+                  : 'bg-white/10 border-white/20 text-white/90'
+              ]">
+                <span class="material-symbols-rounded text-sm sm:text-base">
+                  {{ currentGroupMeta.isReadingGroup ? 'menu_book' : 'quiz' }}
+                </span>
+                <span>{{ currentGroupMeta.badgeText }}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="picker-wrapper flex-1 flex items-center">
+            <div class="picker-container" id="pickerContainer"></div>
+          </div>
+
+          <div v-animate-size.fast="slotsCompleted" class="space-y-2 pt-1 max-w-md mx-auto w-full">
+            <button 
+              v-if="slotsCompleted" 
+              @click="startQuiz" 
+              class="md3e-btn w-full py-3.5 sm:py-4 bg-white hover:bg-white/90 text-black font-extrabold text-lg sm:text-2xl flex items-center justify-center space-x-2 shadow-lg">
+              <span>start</span>
+              <span class="material-symbols-rounded text-2xl">arrow_forward</span>
+            </button>
+
+            <div v-else class="text-center py-2.5 text-sm sm:text-lg font-bold text-white/80 animate-pulse">
+              rolling random member tracks...
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. CHALLENGE QUIZ VIEW -->
+        <div v-else-if="currentPage === 'quiz'" key="quiz" class="flex flex-col justify-between h-full space-y-2.5 sm:space-y-3.5 relative">
+          
+          <!-- Quiz Metadata & Progress -->
+          <div class="space-y-1.5 sm:space-y-2">
+            <div class="flex justify-between items-center gap-2">
+              <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
+                <span class="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-[12px] sm:rounded-[14px] bg-white/15 text-white font-extrabold text-xs sm:text-base flex items-center justify-center border border-white/20 shrink-0">
+                  q{{ currentQIndex + 1 }}
+                </span>
+                <div class="min-w-0">
+                  <div class="text-sm sm:text-lg md:text-xl font-extrabold tracking-tight text-white truncate">{{ currentDrawnTeam?.name }}</div>
+                  <div class="text-[10px] sm:text-xs text-white/60 font-semibold truncate max-w-[180px] sm:max-w-md md:max-w-xl">
+                    {{ currentDrawnTeam?.members.join(', ') }}
+                  </div>
+                </div>
+              </div>
+
+              <div :class="[
+                'flex items-center space-x-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-base md:text-lg font-extrabold transition-colors duration-200 shrink-0 tabular-nums border',
+                isLowTime ? 'bg-red-600 text-white border-red-400 animate-bounce' : 'dark-card text-white'
+              ]">
+                <span class="material-symbols-rounded text-base sm:text-xl text-white">timer</span>
+                <span>{{ formattedTimer }}</span>
+                <span v-if="isCurrentGroupReading" class="text-[10px] sm:text-xs font-semibold text-white/75 uppercase tracking-wide ml-0.5">total</span>
+              </div>
+            </div>
+
+            <!-- Round Progress Bar -->
+            <div class="w-full bg-white/15 h-1.5 sm:h-2 rounded-full overflow-hidden">
+              <div 
+                class="h-full bg-white rounded-full relative transition-[width] duration-500" 
+                :style="{ 
+                  width: `${currentQuestions.length ? ((currentQIndex + 1) / currentQuestions.length) * 100 : 0}%`,
+                  transitionTimingFunction: 'var(--md-spring-spatial-default)'
+                }">
+              </div>
+            </div>
+          </div>
+
+          <!-- Question Body Card (Reading Layout vs Standard Layout) -->
+          <div 
+            v-animate-size="currentQIndex"
+            class="dark-card rounded-[1.5rem] sm:rounded-[1.75rem] p-3.5 sm:p-5 md:p-6 flex-1 flex flex-col justify-center my-auto relative overflow-hidden">
+            
+            <!-- SECTION C: READING COMPREHENSION SPLIT VIEW -->
+            <div v-if="currentQuestion?.isReading" class="w-full grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-5 items-stretch text-left">
+              <!-- Reading Passage -->
+              <div class="lg:col-span-6 rounded-2xl bg-black/60 border border-white/15 p-3.5 sm:p-4 flex flex-col space-y-2 max-h-[26vh] sm:max-h-[30vh] lg:max-h-[54vh] overflow-y-auto custom-scrollbar">
+                <div class="flex items-center justify-between gap-2 pb-1.5 border-b border-white/10">
+                  <span class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                    <span class="material-symbols-rounded text-sm sm:text-base">menu_book</span>
+                    <span>section c · reading passage</span>
+                  </span>
+                  <span class="text-[10px] sm:text-xs text-white/50 font-semibold">3:00 total</span>
+                </div>
+                <h4 class="text-sm sm:text-base font-extrabold text-white leading-snug">
+                  {{ readingPassage.title }}
+                </h4>
+                <div class="space-y-2 text-xs sm:text-sm text-white/85 leading-relaxed font-normal select-text">
+                  <p v-for="(para, pIdx) in readingPassage.paragraphs" :key="pIdx">{{ para }}</p>
+                </div>
+              </div>
+
+              <!-- Question & Options -->
+              <div class="lg:col-span-6 flex flex-col justify-center space-y-3 sm:space-y-4">
+                <div class="inline-flex self-start items-center space-x-1.5 px-3 py-0.5 sm:px-3.5 sm:py-1 bg-white/10 text-white text-[11px] sm:text-xs font-bold tracking-wide rounded-full border border-white/15">
+                  <span class="material-symbols-rounded text-xs sm:text-sm">quiz</span>
+                  <span>question {{ currentQIndex + 1 }} of {{ currentQuestions.length }} · {{ currentQuestion?.category }}</span>
+                </div>
+
+                <h3 class="text-base sm:text-xl md:text-2xl font-extrabold tracking-tight text-white leading-snug">
+                  {{ currentQuestion?.prompt }}
+                </h3>
+
+                <div class="grid grid-cols-1 gap-2 sm:gap-2.5">
+                  <button
+                    v-for="opt in currentQuestion?.options"
+                    :key="opt.letter"
+                    :disabled="showFeedback"
+                    @click="selectOption(opt.letter)"
+                    :class="[
+                      'md3e-option p-2.5 sm:p-3.5 font-bold flex items-center space-x-2.5 sm:space-x-3 text-left border-2',
+                      showFeedback && opt.letter === currentQuestion.correctLetter ? 'is-selected bg-emerald-900/70 border-emerald-400 text-white ring-2 ring-emerald-400/50' : '',
+                      showFeedback && selectedAnswerLetter === opt.letter && opt.letter !== currentQuestion.correctLetter ? 'is-selected bg-red-900/70 border-red-400 text-white' : '',
+                      !showFeedback && selectedAnswerLetter === opt.letter ? 'is-selected bg-white text-black border-white shadow-xl' : '',
+                      !showFeedback && selectedAnswerLetter !== opt.letter ? 'bg-[#15171E] hover:bg-[#1E212B] text-white border-white/15' : ''
+                    ]">
+                    <span :class="[
+                      'md3e-option-badge w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center font-extrabold text-xs sm:text-sm shrink-0',
+                      showFeedback && opt.letter === currentQuestion.correctLetter ? 'bg-emerald-400 text-black' : (selectedAnswerLetter === opt.letter && !showFeedback ? 'bg-black text-white' : 'bg-white/15 text-white')
+                    ]">
+                      {{ opt.letter }}
+                    </span>
+                    <span class="text-xs sm:text-sm md:text-base font-bold leading-tight break-words">{{ opt.text }}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTIONS A, B, D: STANDARD QUESTION LAYOUT -->
+            <div v-else class="w-full flex flex-col justify-center items-center text-center space-y-3 sm:space-y-5">
+              <!-- Category & Round Badge -->
+              <div class="inline-flex items-center space-x-1.5 px-3 py-0.5 sm:px-3.5 sm:py-1 bg-white/10 text-white text-[11px] sm:text-xs font-bold tracking-wide rounded-full border border-white/15">
+                <span class="material-symbols-rounded text-xs sm:text-sm">
+                  {{ currentQuestion?.section === 'A' ? 'spellcheck' : (currentQuestion?.section === 'B' ? 'menu_book' : 'edit_note') }}
+                </span>
+                <span>question {{ currentQIndex + 1 }} of {{ currentQuestions.length }} · {{ currentQuestion?.category }} ({{ currentQuestion?.timeLimit }}s)</span>
+              </div>
+
+              <!-- Instruction hint for Error Correction -->
+              <p v-if="currentQuestion?.section === 'D'" class="text-xs sm:text-sm font-semibold text-amber-300/90">
+                choose the best correction for the underlined word:
+              </p>
+
+              <!-- Question Prompt (supports underlined error word in Section D) -->
+              <h3 class="text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight text-white leading-snug max-w-4xl px-1">
+                <template v-if="currentQuestion?.underlinedWord">
+                  <span>{{ currentQuestion.beforeText }}</span>
+                  <span class="underline decoration-2 decoration-amber-400 underline-offset-4 text-amber-300 px-0.5">{{ currentQuestion.underlinedWord }}</span>
+                  <span>{{ currentQuestion.afterText }}</span>
+                </template>
+                <template v-else>
+                  {{ currentQuestion?.prompt }}
+                </template>
+              </h3>
+
+              <!-- Options Grid -->
+              <div class="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 pt-1">
+                <button
+                  v-for="opt in currentQuestion?.options"
+                  :key="opt.letter"
+                  :disabled="showFeedback"
+                  @click="selectOption(opt.letter)"
+                  :class="[
+                    'md3e-option p-2.5 sm:p-3.5 md:p-4 font-bold flex items-center space-x-2.5 sm:space-x-3 text-left border-2',
+                    showFeedback && opt.letter === currentQuestion.correctLetter ? 'is-selected bg-emerald-900/70 border-emerald-400 text-white ring-2 ring-emerald-400/50' : '',
+                    showFeedback && selectedAnswerLetter === opt.letter && opt.letter !== currentQuestion.correctLetter ? 'is-selected bg-red-900/70 border-red-400 text-white' : '',
+                    !showFeedback && selectedAnswerLetter === opt.letter ? 'is-selected bg-white text-black border-white shadow-xl' : '',
+                    !showFeedback && selectedAnswerLetter !== opt.letter ? 'bg-[#15171E] hover:bg-[#1E212B] text-white border-white/15' : ''
+                  ]">
+                  <span :class="[
+                    'md3e-option-badge w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center font-extrabold text-xs sm:text-sm shrink-0',
+                    showFeedback && opt.letter === currentQuestion.correctLetter ? 'bg-emerald-400 text-black' : (selectedAnswerLetter === opt.letter && !showFeedback ? 'bg-black text-white' : 'bg-white/15 text-white')
+                  ]">
+                    {{ opt.letter }}
+                  </span>
+                  <span class="text-xs sm:text-base font-bold leading-tight break-words">{{ opt.text }}</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Action Dock -->
+          <div class="pt-0.5 max-w-md mx-auto w-full min-h-[50px] sm:min-h-[58px] flex items-center">
+            <button 
+              @click="handleActionClick(false)" 
+              :disabled="!canSubmit || showFeedback"
+              class="md3e-btn w-full py-3 sm:py-3.5 md:py-4 font-extrabold text-base sm:text-xl flex items-center justify-center space-x-2 bg-white hover:bg-white/90 text-black shadow-lg"
+              :class="[(!canSubmit || showFeedback) ? 'opacity-30 cursor-not-allowed pointer-events-none shadow-none' : '']">
+              <span>submit answer</span>
+              <span class="material-symbols-rounded text-xl sm:text-2xl">check</span>
+            </button>
+          </div>
+
+          <!-- FEEDBACK HUD BANNER -->
+          <transition name="feedback-hud">
+            <div 
+              v-if="showFeedback" 
+              class="fixed inset-x-0 bottom-3 sm:bottom-5 z-40 px-3 sm:px-6 flex justify-center pointer-events-none">
+              <div 
+                class="pointer-events-auto w-full max-w-2xl p-4 sm:p-5 rounded-[1.5rem] shadow-2xl relative overflow-hidden border-2 text-white"
+                :class="isLastAnswerCorrect ? 'bg-[#052E1C] border-emerald-400' : 'bg-[#3B0A0A] border-red-400'">
+                <div class="flex items-center justify-center space-x-2 text-base sm:text-xl font-extrabold mb-1">
+                  <span class="material-symbols-rounded text-2xl sm:text-3xl" :class="isLastAnswerCorrect ? 'text-emerald-400' : 'text-red-400'">
+                    {{ isLastAnswerCorrect ? 'check_circle' : 'cancel' }}
+                  </span>
+                  <span>{{ isLastAnswerCorrect ? 'correct! (+12.5 pts)' : (timer === 0 ? "time's up! (0 pts)" : 'incorrect! (0 pts)') }}</span>
+                </div>
+
+                <div class="text-sm sm:text-lg font-bold mt-1 text-center pb-1.5 text-white/90">
+                  correct answer: <span class="font-extrabold underline ml-1 text-white">{{ feedbackCorrectAnswerText }}</span>
+                </div>
+
+                <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-white/10">
+                  <div class="h-full w-full" :class="isLastAnswerCorrect ? 'bg-emerald-400' : 'bg-red-400'" style="animation: autoProceed 2s linear forwards;"></div>
+                </div>
+              </div>
+            </div>
+          </transition>
+
+        </div>
+
+        <!-- 4. RESULT SHOWCASE VIEW (Editorial + Bento Summary) -->
+        <div v-else-if="currentPage === 'result'" key="result" class="w-full max-w-2xl mx-auto flex flex-col justify-center space-y-5 sm:space-y-6 my-auto py-3">
+          
+          <!-- Score Header -->
+          <div class="space-y-2 text-left sm:text-center">
+            <div class="inline-flex items-center space-x-2 text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] text-white/60">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>{{ currentDrawnTeam?.name }} · {{ currentQuestions.length }} rounds complete</span>
+            </div>
+
+            <div class="flex items-baseline sm:justify-center gap-2.5">
+              <span class="text-6xl sm:text-7xl md:text-8xl font-black tracking-[-0.04em] text-white tabular-nums leading-none">
+                {{ animatedScore }}
+              </span>
+              <span class="text-lg sm:text-2xl font-bold text-white/45">/ 100 pts</span>
+            </div>
+          </div>
+
+          <!-- Score Bar -->
+          <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+            <div 
+              class="h-full bg-white rounded-full transition-[width] duration-700"
+              :style="{ width: `${Math.min(100, animatedScore)}%`, transitionTimingFunction: 'var(--md-spring-spatial-default)' }">
+            </div>
+          </div>
+
+          <!-- 3-Column Bento Stat Strip -->
+          <div class="grid grid-cols-3 divide-x divide-white/10 rounded-2xl bg-[#0B0C10] border border-white/12 py-3.5 sm:py-4 text-center">
+            <div class="px-2">
+              <div class="text-xl sm:text-2xl font-black text-emerald-400 tabular-nums">{{ correctCount }}/{{ currentQuestions.length }}</div>
+              <div class="text-[11px] sm:text-xs font-medium text-white/50">correct</div>
+            </div>
+            <div class="px-2">
+              <div class="text-xl sm:text-2xl font-black text-white tabular-nums">{{ currentQuestions.length ? Math.round((correctCount / currentQuestions.length) * 100) : 0 }}%</div>
+              <div class="text-[11px] sm:text-xs font-medium text-white/50">accuracy</div>
+            </div>
+            <div class="px-2">
+              <div class="text-xl sm:text-2xl font-black text-white tabular-nums">{{ completedGroupIds.length }}/{{ teamData.length }}</div>
+              <div class="text-[11px] sm:text-xs font-medium text-white/50">groups done</div>
+            </div>
+          </div>
+
+          <!-- Roster Chips -->
+          <div class="rounded-2xl bg-[#0B0C10] border border-white/12 p-3.5 sm:p-4 space-y-2.5">
+            <div class="text-[11px] font-bold uppercase tracking-[0.12em] text-white/45">
+              {{ currentDrawnTeam?.name }} roster
+            </div>
+            <div class="flex flex-wrap gap-1.5 sm:gap-2">
+              <span
+                v-for="member in currentDrawnTeam?.members"
+                :key="member"
+                class="px-2.5 py-1 rounded-lg bg-[#14161E] border border-white/10 text-[11px] sm:text-xs font-semibold text-white/85">
+                {{ member }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Primary Action -->
+          <div class="pt-1">
+            <button 
+              @click="startNewGame" 
+              class="md3e-btn w-full py-4 sm:py-4.5 px-6 bg-white hover:bg-white/90 text-black font-extrabold text-base sm:text-xl flex items-center justify-center space-x-2.5 shadow-lg">
+              <span>{{ availableGroups.length > 0 ? `draw ${availableGroups[0].name.toLowerCase()} players` : 'view final leaderboard' }}</span>
+              <span class="material-symbols-rounded text-xl sm:text-2xl">{{ availableGroups.length > 0 ? 'arrow_forward' : 'leaderboard' }}</span>
+            </button>
+          </div>
+
+        </div>
+
+      </transition>
+    </div>
+
+    <!-- Bottom Footer -->
+    <footer class="mt-2 sm:mt-3 pt-1 flex items-center justify-center gap-1.5 text-[11px] sm:text-xs font-medium text-white/45 text-center">
+      <span>note: just tikam-tikam sahaja bro</span>
+    </footer>
+
+    <!-- Rules Modal -->
+    <transition name="dialog">
+      <div 
+        v-if="showRules" 
+        @click.self="showRules = false"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 z-50">
+        <div class="dialog-content dark-modal rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-8 max-w-md w-full space-y-4 sm:space-y-5">
+          <div class="flex items-center space-x-2.5 text-white">
+            <span class="material-symbols-rounded text-2xl sm:text-3xl">menu_book</span>
+            <h3 class="font-extrabold text-xl sm:text-2xl text-white tracking-tight">game rules</h3>
+          </div>
+          <ul class="text-xs sm:text-base text-white/80 space-y-2.5 leading-relaxed font-medium">
+            <li class="flex items-start space-x-2.5">
+              <span class="material-symbols-rounded text-white text-lg sm:text-xl shrink-0">check_circle</span>
+              <span>4 groups play in order (group 1 → 4), with players drawn at random (7 players for groups 1–3, 8 players for group 4)</span>
+            </li>
+            <li class="flex items-start space-x-2.5">
+              <span class="material-symbols-rounded text-white text-lg sm:text-xl shrink-0">check_circle</span>
+              <span>all 32 Form 2 English questions are split into 8 questions per group (12.5 pts each, 100 pts full score)</span>
+            </li>
+            <li class="flex items-start space-x-2.5">
+              <span class="material-symbols-rounded text-white text-lg sm:text-xl shrink-0">check_circle</span>
+              <span>1 random "unlucky" group gets all 8 Section C (Reading Comprehension) questions with a 3-minute total timer</span>
+            </li>
+            <li class="flex items-start space-x-2.5">
+              <span class="material-symbols-rounded text-white text-lg sm:text-xl shrink-0">check_circle</span>
+              <span>the other 3 groups get a mix of Section A (15s), Section B (20s), and Section D (15s) questions</span>
+            </li>
+          </ul>
+          <button 
+            @click="showRules = false" 
+            class="md3e-btn w-full py-3 sm:py-3.5 bg-white hover:bg-white/90 text-black font-extrabold text-sm sm:text-base">
+            got it!
+          </button>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Leaderboard & History Modal -->
+    <transition name="dialog">
+      <div 
+        v-if="showHistory" 
+        @click.self="showHistory = false"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 z-50">
+        <div v-animate-size="[historySortBy, sortedHistory.length]" class="dialog-content dark-modal rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-6 max-w-xl w-full space-y-4">
+          
+          <div class="flex items-center justify-between gap-3 min-w-0">
+            <div class="flex items-center space-x-2 text-white min-w-0">
+              <span class="material-symbols-rounded text-xl sm:text-2xl shrink-0">leaderboard</span>
+              <h3 class="font-extrabold text-base sm:text-xl text-white tracking-tight truncate">leaderboard & history</h3>
+            </div>
+            <span class="text-xs font-bold text-black px-2.5 py-1 bg-white rounded-full whitespace-nowrap shrink-0 leading-none">
+              {{ gameHistory.length }} / {{ teamData.length }} played
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1 p-1 bg-white/10 rounded-[16px] text-xs sm:text-sm font-semibold">
+            <button 
+              @click="historySortBy = 'time'"
+              :class="[
+                'md3e-seg-btn flex-1 py-2 px-3 flex items-center justify-center space-x-1.5',
+                historySortBy === 'time' ? 'bg-white text-black rounded-[12px] font-bold' : 'text-white/70 hover:text-white rounded-l-[12px] rounded-r-[6px]'
+              ]">
+              <span class="material-symbols-rounded text-sm sm:text-base">schedule</span>
+              <span>time (recent)</span>
+            </button>
+            <button 
+              @click="historySortBy = 'score'"
+              :class="[
+                'md3e-seg-btn flex-1 py-2 px-3 flex items-center justify-center space-x-1.5',
+                historySortBy === 'score' ? 'bg-white text-black rounded-[12px] font-bold' : 'text-white/70 hover:text-white rounded-r-[12px] rounded-l-[6px]'
+              ]">
+              <span class="material-symbols-rounded text-sm sm:text-base">leaderboard</span>
+              <span>score (highest)</span>
+            </button>
+          </div>
+
+          <div class="max-h-[52vh] overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+            <div v-if="sortedHistory.length === 0" class="text-center py-8 text-sm sm:text-base text-white/50 font-medium">
+              no games played yet!
+            </div>
+
+            <div 
+              v-for="(item, idx) in sortedHistory" 
+              :key="item.timestamp || idx" 
+              class="p-3.5 sm:p-4 bg-[#0B0C10] rounded-2xl border border-white/12 space-y-2.5">
+              
+              <!-- Top Row: Rank, Group Name, Time & Score -->
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-2.5 min-w-0">
+                  <span v-if="historySortBy === 'score'" :class="[
+                    'w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-[11px] sm:text-xs font-extrabold shrink-0',
+                    idx === 0 ? 'bg-amber-400 text-black' : (idx === 1 ? 'bg-slate-300 text-black' : (idx === 2 ? 'bg-amber-700 text-white' : 'bg-white/15 text-white'))
+                  ]">
+                    #{{ idx + 1 }}
+                  </span>
+                  <div class="flex items-baseline gap-2 min-w-0">
+                    <span class="font-extrabold text-white text-sm sm:text-base leading-tight">{{ item.groupName }}</span>
+                    <span class="text-[10px] sm:text-xs text-white/40 font-medium">{{ item.date }}</span>
+                  </div>
+                </div>
+
+                <div class="text-right shrink-0 flex items-baseline gap-2">
+                  <span class="text-[11px] sm:text-xs text-emerald-400 font-bold">{{ item.correctCount }}/{{ item.totalQuestions || 8 }}</span>
+                  <span class="font-black text-white text-sm sm:text-lg tabular-nums">{{ item.score }} <span class="text-[11px] sm:text-xs font-semibold text-white/50">pts</span></span>
+                </div>
+              </div>
+
+              <!-- Bottom Row: Full Player Roster (No Truncation) -->
+              <div v-if="getMembersListForHistory(item).length > 0" class="flex flex-wrap gap-1.5 pt-2 border-t border-white/10">
+                <span
+                  v-for="member in getMembersListForHistory(item)"
+                  :key="member"
+                  class="px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/10 text-[10px] sm:text-xs font-medium text-white/80">
+                  {{ member }}
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5 pt-2 border-t border-white/10">
+            <button 
+              @click="promptClearHistory" 
+              :disabled="gameHistory.length === 0 && completedGroupIds.length === 0 && !drawnGroupId"
+              class="md3e-btn flex-1 py-2.5 sm:py-3 bg-red-950/80 border border-red-500/40 text-red-200 font-bold text-xs sm:text-sm disabled:opacity-40 flex items-center justify-center space-x-1.5">
+              <span class="material-symbols-rounded text-base">delete_forever</span>
+              <span>remove history</span>
+            </button>
+            <button 
+              @click="showHistory = false" 
+              class="md3e-btn flex-1 py-2.5 sm:py-3 bg-white hover:bg-white/90 text-black font-extrabold text-xs sm:text-sm">
+              close
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Confirm Remove History Modal -->
+    <transition name="dialog">
+      <div 
+        v-if="showConfirmDialog" 
+        @click.self="showConfirmDialog = false"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 z-50">
+        <div class="dialog-content dark-modal rounded-[1.75rem] sm:rounded-[2rem] p-6 sm:p-7 max-w-sm w-full space-y-4 text-center">
+          <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-red-950 border border-red-500/40 text-red-400 flex items-center justify-center mx-auto">
+            <span class="material-symbols-rounded text-3xl">warning</span>
+          </div>
+          <div class="space-y-1.5">
+            <h3 class="font-extrabold text-xl text-white tracking-tight">remove history?</h3>
+            <p class="text-xs sm:text-sm text-white/70 leading-relaxed font-medium">
+              this will reset all game history, reshuffle which group gets section c, restore all 4 groups, and reset the 29-student pool!
+            </p>
+          </div>
+          <div class="flex space-x-2.5 pt-1">
+            <button @click="showConfirmDialog = false" class="md3e-btn flex-1 py-2.5 sm:py-3 bg-white/15 text-white font-semibold text-xs sm:text-sm">cancel</button>
+            <button @click="confirmRemoveHistory" class="md3e-btn flex-1 py-2.5 sm:py-3 bg-red-600 text-white font-bold text-xs sm:text-sm">remove</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+  </div>
+
+  <script>
+    const { createApp, ref, reactive, computed, onMounted } = Vue;
+
+    // =========================================================================
+    // ZERO-THRASH `v-animate-size` DIRECTIVE
+    // =========================================================================
+    function cloneDep(val) {
+      return Array.isArray(val) ? val.slice() : val;
+    }
+
+    function depsEqual(a, b) {
+      if (a === b) return true;
+      if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) return false;
+        for (let i = 0; i < a.length; i++) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+      }
+      return false;
+    }
+
+    function runSizeAnimation(el) {
+      if (!el || !el._animateSizeOpts) return;
+      const opts = el._animateSizeOpts;
+      const currentVisual = el._preSize || el._lastSize;
+      el._preSize = null;
+      if (!currentVisual || (currentVisual.width === 0 && currentVisual.height === 0)) {
+        const r = el.getBoundingClientRect();
+        el._lastSize = { width: r.width, height: r.height };
+        return;
+      }
+      const prevAnim = el._sizeAnim;
+      const liveRect = prevAnim ? el.getBoundingClientRect() : currentVisual;
+      if (prevAnim) { prevAnim.cancel(); el._sizeAnim = null; }
+
+      const toRect = el.getBoundingClientRect();
+      const fromW = liveRect.width, fromH = liveRect.height;
+      const toW = toRect.width, toH = toRect.height;
+
+      const animH = opts.height && Math.abs(toH - fromH) > 1.5 && fromH > 0 && toH > 0;
+      const animW = opts.width && Math.abs(toW - fromW) > 1.5 && fromW > 0 && toW > 0;
+      el._lastSize = { width: toW, height: toH };
+      if (!animH && !animW) return;
+
+      const kfFrom = { overflow: 'hidden' };
+      const kfTo = { overflow: 'hidden' };
+      if (animH) { kfFrom.height = `${fromH}px`; kfTo.height = `${toH}px`; }
+      if (animW) { kfFrom.width = `${fromW}px`; kfTo.width = `${toW}px`; }
+
+      const anim = el.animate([kfFrom, kfTo], {
+        duration: opts.fast ? 320 : 420,
+        easing: 'cubic-bezier(0.38, 1.21, 0.22, 1.00)'
+      });
+      el._sizeAnim = anim;
+      anim.onfinish = () => {
+        if (el._sizeAnim === anim) {
+          el._sizeAnim = null;
+          const settled = el.getBoundingClientRect();
+          el._lastSize = { width: settled.width, height: settled.height };
+        }
+      };
+    }
+
+    const animateSizeDirective = {
+      mounted(el, binding) {
+        el._animateSizeOpts = {
+          width: binding.modifiers.width || binding.modifiers.both || false,
+          height: !binding.modifiers.width || binding.modifiers.both || false,
+          fast: binding.modifiers.fast || false,
+        };
+        el._lastWatchedDep = cloneDep(binding.value);
+        const r = el.getBoundingClientRect();
+        el._lastSize = { width: r.width, height: r.height };
+      },
+      beforeUpdate(el, binding) {
+        if (binding.value !== undefined && depsEqual(binding.value, el._lastWatchedDep)) return;
+        const r = el.getBoundingClientRect();
+        if (r.width > 0 || r.height > 0) el._preSize = { width: r.width, height: r.height };
+      },
+      updated(el, binding) {
+        if (binding.value !== undefined && depsEqual(binding.value, el._lastWatchedDep)) return;
+        el._lastWatchedDep = cloneDep(binding.value);
+        el._animateSizeOpts = {
+          width: binding.modifiers.width || binding.modifiers.both || false,
+          height: !binding.modifiers.width || binding.modifiers.both || false,
+          fast: binding.modifiers.fast || false,
+        };
+        runSizeAnimation(el);
+      },
+      unmounted(el) {
+        if (el._sizeAnim) { el._sizeAnim.cancel(); el._sizeAnim = null; }
+      }
+    };
+
+    // =========================================================================
+    // WEB AUDIO TICK
+    // =========================================================================
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+    function playTick() {
+      if (!audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(850, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } catch (e) {}
+    }
+
+    // Fisher-Yates true random shuffle
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    const app = createApp({
+      setup() {
+        const currentPage = ref('main');
+        const showRules = ref(false);
+        const showHistory = ref(false);
+        const showConfirmDialog = ref(false);
+        const slotsCompleted = ref(false);
+
+        const drawnGroupId = ref(null);
+        const completedGroupIds = ref([]);
+
+        const currentQIndex = ref(0);
+        const selectedAnswerLetter = ref('');
+        const showFeedback = ref(false);
+        const isLastAnswerCorrect = ref(false);
+        const feedbackCorrectAnswerText = ref('');
+        const totalScore = ref(0);
+        const animatedScore = ref(0);
+        const correctCount = ref(0);
+        const timer = ref(15);
+        let timerInterval = null;
+        const feedbackTimeout = ref(null);
+
+        const gameHistory = ref([]);
+        const historySortBy = ref('time');
+
+        // 29 students -> 7 + 7 + 7 + 8 = 29
+        const allStudentNames = [
+          "ALOYSIUS NG YU YI", "ALVIN TANG ZHENG HAO", "CLEMENT SEAH JI WEN",
+          "ELVIS LOW YI HAO", "GAVIN CHUA WEN JIE", "GUI CEN EN",
+          "JEREMY TAN WEI REN", "JONATHAN ONG KAH FATT", "JOSEPH LIM",
+          "LAM YU YANG", "LEXUS KUEK CHEN XIAN", "LIM JIA QING",
+          "LOO CHIN SIANG", "LOUIS NG WEI SOONG", "NG JING KAI",
+          "NG YU JIN", "ONG ZHI XIAN", "PANG MIN ZE",
+          "RAYSON BANG WEI XIANG", "RYAN CHOK ZI INN", "SHADEESHAN A/L KATHIRAVAN",
+          "TAN GUAN HAN", "TAN YONG XI", "TAN YU ZHONG",
+          "TAY KIM YAW", "WEE KER SHENG", "WONG HUNG RUI",
+          "XANXUS TAI WEI XUAN", "YEOW JIA WEI"
+        ];
+
+        const remainingStudents = ref([...allStudentNames]);
+        const remainingStudentsCount = computed(() => remainingStudents.value.length);
+
+        const teamData = reactive([
+          { id: 1, name: "Group 1", playerCount: 7, members: [] },
+          { id: 2, name: "Group 2", playerCount: 7, members: [] },
+          { id: 3, name: "Group 3", playerCount: 7, members: [] },
+          { id: 4, name: "Group 4", playerCount: 8, members: [] }
+        ]);
+
+        const availableGroups = computed(() => {
+          return teamData.filter(g => !completedGroupIds.value.includes(g.id));
+        });
+
+        const getGroupScore = (groupName) => {
+          const found = gameHistory.value.find(h => h.groupName === groupName);
+          return found ? found.score : null;
+        };
+
+        const makeOpts = (a, b, c, d) => [
+          { letter: 'A', text: a },
+          { letter: 'B', text: b },
+          { letter: 'C', text: c },
+          { letter: 'D', text: d }
+        ];
+
+        // =========================================================================
+        // FORM 2 ENGLISH PRACTICE QUESTIONS (ALL 32 QUESTIONS + ANSWER KEY)
+        // =========================================================================
+        const readingPassage = {
+          title: 'A Day at the Community Recycling Centre',
+          paragraphs: [
+            'Last Saturday, 14-year-old Aisha and her classmates from SMK Taman Sejahtera visited the local community recycling centre. The visit was part of their school’s “Green Heroes” campaign to encourage students to care for the environment.',
+            'When they arrived, Mr. Rahman, the centre supervisor, welcomed them warmly. He explained that the centre collects paper, plastic, glass and metal. “Many people still throw recyclable items into the ordinary rubbish bin,” he said. “If everyone separated their waste at home, we could save a lot of resources.”',
+            'The students were divided into groups. Aisha’s group learned how to sort plastic bottles according to their codes. Another group helped weigh the collected paper. They were surprised to discover that one week’s collection of newspapers weighed more than 200 kilograms!',
+            'At the end of the visit, Mr. Rahman gave each student a reusable shopping bag and a small booklet on how to reduce, reuse and recycle at home. Aisha felt proud. “I never realised how much we can do with simple actions,” she told her friend. The class decided to start a recycling corner in their school the following week.'
+          ]
+        };
+
+        // Section A: Grammar (12 questions, 15s each)
+        const sectionAQuestions = [
+          { id: 1, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'My sister ___________ her homework every evening after dinner.', options: makeOpts('do', 'does', 'doing', 'did'), correctLetter: 'B' },
+          { id: 2, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'Look! The children ___________ in the playground right now.', options: makeOpts('play', 'plays', 'are playing', 'played'), correctLetter: 'C' },
+          { id: 3, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'Last weekend, we ___________ to Penang by bus.', options: makeOpts('go', 'went', 'goes', 'going'), correctLetter: 'B' },
+          { id: 4, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'She ___________ already finished her project before the teacher asked for it.', options: makeOpts('has', 'have', 'had', 'having'), correctLetter: 'C' },
+          { id: 5, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'I ___________ visit my grandparents next month if I have time.', options: makeOpts('am going to', 'going to', 'goes to', 'went to'), correctLetter: 'A' },
+          { id: 6, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'Would you like ___________ a cup of tea?', options: makeOpts('drink', 'to drink', 'drinking', 'drank'), correctLetter: 'B' },
+          { id: 7, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'There are ___________ students in the library today. It is almost empty.', options: makeOpts('much', 'many', 'a few', 'a little'), correctLetter: 'C' },
+          { id: 8, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'The movie was so ___________ that many people left early.', options: makeOpts('bored', 'boring', 'bore', 'boredom'), correctLetter: 'B' },
+          { id: 9, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'If it rains tomorrow, we ___________ cancel the picnic.', options: makeOpts('will', 'would', 'are', 'have'), correctLetter: 'A' },
+          { id: 10, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'He is the boy ___________ won the national storytelling competition.', options: makeOpts('which', 'who', 'whose', 'whom'), correctLetter: 'B' },
+          { id: 11, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'Please turn ___________ the lights when you leave the room.', options: makeOpts('on', 'off', 'up', 'down'), correctLetter: 'B' },
+          { id: 12, section: 'A', category: 'Section A · Grammar', timeLimit: 15, prompt: 'Neither Ali nor his brothers ___________ interested in football.', options: makeOpts('is', 'are', 'was', 'be'), correctLetter: 'B' }
+        ];
+
+        // Section B: Vocabulary (8 questions, 20s each)
+        const sectionBQuestions = [
+          { id: 13, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'We should ___________ electricity by switching off unused lights.', options: makeOpts('waste', 'conserve', 'produce', 'destroy'), correctLetter: 'B' },
+          { id: 14, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'The ___________ of the novel is a young girl who discovers a hidden talent.', options: makeOpts('setting', 'plot', 'character', 'theme'), correctLetter: 'C' },
+          { id: 15, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'Please ___________ your shoes before entering the house.', options: makeOpts('put on', 'take off', 'put away', 'take up'), correctLetter: 'B' },
+          { id: 16, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'Recycling helps to reduce the amount of ___________ that goes into landfills.', options: makeOpts('pollution', 'waste', 'smoke', 'noise'), correctLetter: 'B' },
+          { id: 17, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'She felt ___________ when she received the good news about her exam results.', options: makeOpts('disappointed', 'anxious', 'delighted', 'confused'), correctLetter: 'C' },
+          { id: 18, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'A ___________ is a person who buys goods or services.', options: makeOpts('producer', 'consumer', 'seller', 'manufacturer'), correctLetter: 'B' },
+          { id: 19, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'The doctor advised him to ___________ a balanced diet and exercise regularly.', options: makeOpts('maintain', 'avoid', 'ignore', 'delay'), correctLetter: 'A' },
+          { id: 20, section: 'B', category: 'Section B · Vocabulary', timeLimit: 20, prompt: 'During the festival, the streets were ___________ with colourful lights and decorations.', options: makeOpts('empty', 'crowded', 'decorated', 'filled'), correctLetter: 'D' }
+        ];
+
+        // Section C: Reading Comprehension (8 questions, 3 minutes = 180s TOTAL for the whole group)
+        const sectionCQuestions = [
+          { id: 21, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'What was the main purpose of the students’ visit to the recycling centre?', options: makeOpts('To collect money for the school', 'To learn about recycling and help the environment', 'To meet Mr. Rahman', 'To receive free shopping bags'), correctLetter: 'B' },
+          { id: 22, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'Who is Mr. Rahman?', options: makeOpts('Aisha’s teacher', 'The school principal', 'The centre supervisor', 'A parent volunteer'), correctLetter: 'C' },
+          { id: 23, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'According to Mr. Rahman, what problem do many people still have?', options: makeOpts('They do not visit recycling centres', 'They throw recyclable items into ordinary bins', 'They buy too many plastic bottles', 'They do not read newspapers'), correctLetter: 'B' },
+          { id: 24, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'What did Aisha’s group learn to do?', options: makeOpts('Weigh newspapers', 'Sort plastic bottles by codes', 'Make reusable bags', 'Write a booklet'), correctLetter: 'B' },
+          { id: 25, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'How much did one week’s collection of newspapers weigh?', options: makeOpts('Less than 100 kg', 'About 150 kg', 'More than 200 kg', 'Exactly 200 kg'), correctLetter: 'C' },
+          { id: 26, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'What did the students receive at the end of the visit?', options: makeOpts('Money and certificates', 'Reusable bags and booklets', 'Plastic bottles and paper', 'Free lunch'), correctLetter: 'B' },
+          { id: 27, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'The word “surprised” in the passage shows that the students _________.', options: makeOpts('expected the newspapers to be heavy', 'did not expect the newspapers to weigh so much', 'were unhappy with the weight', 'wanted to collect more paper'), correctLetter: 'B' },
+          { id: 28, section: 'C', isReading: true, category: 'Section C · Reading', prompt: 'What did the class decide to do after the visit?', options: makeOpts('Visit the centre every week', 'Start a recycling corner in their school', 'Invite Mr. Rahman to their school', 'Stop using plastic bottles'), correctLetter: 'B' }
+        ];
+
+        // Section D: Error Correction (4 questions, 15s each)
+        const sectionDQuestions = [
+          { id: 29, section: 'D', category: 'Section D · Error Correction', timeLimit: 15, prompt: "She don't like to eat spicy food because it makes her cough.", beforeText: 'She ', underlinedWord: "don’t", afterText: ' like to eat spicy food because it makes her cough.', options: makeOpts('doesn’t', 'didn’t', 'isn’t', 'wasn’t'), correctLetter: 'A' },
+          { id: 30, section: 'D', category: 'Section D · Error Correction', timeLimit: 15, prompt: 'Yesterday, my father buy a new bicycle for my birthday.', beforeText: 'Yesterday, my father ', underlinedWord: 'buy', afterText: ' a new bicycle for my birthday.', options: makeOpts('buys', 'bought', 'buying', 'has bought'), correctLetter: 'B' },
+          { id: 31, section: 'D', category: 'Section D · Error Correction', timeLimit: 15, prompt: 'There is many information about climate change on the internet.', beforeText: 'There is ', underlinedWord: 'many', afterText: ' information about climate change on the internet.', options: makeOpts('much', 'a few', 'several', 'lots'), correctLetter: 'A' },
+          { id: 32, section: 'D', category: 'Section D · Error Correction', timeLimit: 15, prompt: 'The students was excited when they heard about the school trip to Langkawi.', beforeText: 'The students ', underlinedWord: 'was', afterText: ' excited when they heard about the school trip to Langkawi.', options: makeOpts('is', 'are', 'were', 'be'), correctLetter: 'C' }
+        ];
+
+        // Holds the 4 groups' assigned 8-question sets for the current session
+        // (1 unlucky random group gets all 8 Section C questions; other 3 split A, B, D)
+        const groupQuestionData = reactive({ 1: [], 2: [], 3: [], 4: [] });
+        const groupMetaData = reactive({ 1: null, 2: null, 3: null, 4: null });
+
+        function buildGroupQuestionPlan() {
+          const groupIds = [1, 2, 3, 4];
+          const unluckyGroupId = groupIds[Math.floor(Math.random() * groupIds.length)];
+          const otherGroupIds = shuffleArray(groupIds.filter(id => id !== unluckyGroupId));
+
+          const shuffledA = shuffleArray(sectionAQuestions);
+          const shuffledB = shuffleArray(sectionBQuestions);
+          const shuffledD = shuffleArray(sectionDQuestions);
+
+          // Unlucky group gets Section C (all 8 Reading Comprehension questions, 3 mins total)
+          groupQuestionData[unluckyGroupId] = [...sectionCQuestions];
+          groupMetaData[unluckyGroupId] = {
+            isReadingGroup: true,
+            badgeText: 'unlucky draw! section c (reading) · 3:00 total'
+          };
+
+          // Other 3 groups split the 24 remaining questions (12A + 8B + 4D -> 8 each):
+          // Set 1: 4A + 4B | Set 2: 4A + 4B | Set 3: 4A + 4D
+          const set1 = [...shuffledA.slice(0, 4), ...shuffledB.slice(0, 4)];
+          const set2 = [...shuffledA.slice(4, 8), ...shuffledB.slice(4, 8)];
+          const set3 = [...shuffledA.slice(8, 12), ...shuffledD.slice(0, 4)];
+
+          groupQuestionData[otherGroupIds[0]] = set1;
+          groupMetaData[otherGroupIds[0]] = {
+            isReadingGroup: false,
+            badgeText: 'section a (15s) & section b (20s) · 8 questions'
+          };
+
+          groupQuestionData[otherGroupIds[1]] = set2;
+          groupMetaData[otherGroupIds[1]] = {
+            isReadingGroup: false,
+            badgeText: 'section a (15s) & section b (20s) · 8 questions'
+          };
+
+          groupQuestionData[otherGroupIds[2]] = set3;
+          groupMetaData[otherGroupIds[2]] = {
+            isReadingGroup: false,
+            badgeText: 'section a (15s) & section d (15s) · 8 questions'
+          };
+        }
+
+        const currentDrawnTeam = computed(() => teamData.find(t => t.id === drawnGroupId.value));
+        const currentQuestions = computed(() => groupQuestionData[drawnGroupId.value] || []);
+        const currentQuestion = computed(() => currentQuestions.value[currentQIndex.value]);
+        const currentGroupMeta = computed(() => groupMetaData[drawnGroupId.value] || null);
+        const isCurrentGroupReading = computed(() => Boolean(currentQuestion.value?.isReading));
+
+        const formattedTimer = computed(() => {
+          if (isCurrentGroupReading.value) {
+            const mins = Math.floor(timer.value / 60);
+            const secs = timer.value % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+          }
+          return `${timer.value}s`;
+        });
+
+        const isLowTime = computed(() => {
+          return isCurrentGroupReading.value ? timer.value <= 15 : timer.value <= 3;
+        });
+
+        // 8 x 12.5 = 100 pts
+        const calculateScore = (correct) => {
+          const total = currentQuestions.value.length || 8;
+          if (correct >= total) return 100;
+          return Math.min(100, Math.round((correct / total) * 100 * 10) / 10);
+        };
+
+        const finishGroupQuiz = () => {
+          clearInterval(timerInterval);
+          clearTimeout(feedbackTimeout.value);
+          showFeedback.value = false;
+          currentPage.value = 'result';
+          if (drawnGroupId.value && !completedGroupIds.value.includes(drawnGroupId.value)) {
+            completedGroupIds.value.push(drawnGroupId.value);
+          }
+          const recordTime = new Date();
+          gameHistory.value.unshift({
+            groupName: currentDrawnTeam.value.name,
+            members: [...(currentDrawnTeam.value.members || [])],
+            score: totalScore.value,
+            correctCount: correctCount.value,
+            totalQuestions: currentQuestions.value.length,
+            date: recordTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            timestamp: recordTime.getTime()
+          });
+          saveState();
+          animateFinalScore();
+        };
+
+        const proceedToNextQuestion = () => {
+          showFeedback.value = false;
+          if (currentPage.value !== 'quiz' || !drawnGroupId.value || currentQuestions.value.length === 0) {
+            return;
+          }
+
+          // For Section C, if the 3:00 group timer already hit 0, finish the group's quiz immediately
+          if (isCurrentGroupReading.value && timer.value <= 0) {
+            finishGroupQuiz();
+            return;
+          }
+
+          if (currentQIndex.value + 1 < currentQuestions.value.length) {
+            currentQIndex.value++;
+            saveState();
+            // Keep existing remaining timer for Section C (3:00 total), reset per-question timer for A/B/D
+            setupQuestion(isCurrentGroupReading.value ? timer.value : null);
+          } else {
+            finishGroupQuiz();
+          }
+        };
+
+        const sortedHistory = computed(() => {
+          const list = [...gameHistory.value];
+          if (historySortBy.value === 'score') {
+            return list.sort((a, b) => {
+              if (b.score !== a.score) return b.score - a.score;
+              return (b.timestamp || 0) - (a.timestamp || 0);
+            });
+          }
+          return list.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        });
+
+        const getMembersListForHistory = (item) => {
+          if (item.members && item.members.length > 0) return item.members;
+          const team = teamData.find(t => t.name.toLowerCase() === (item.groupName || '').toLowerCase());
+          return team && team.members ? team.members : [];
+        };
+
+        const canSubmit = computed(() => {
+          if (showFeedback.value) return true;
+          if (!currentQuestion.value) return false;
+          return !!selectedAnswerLetter.value;
+        });
+
+        const STORAGE_KEY_STATE = 'hr_english_active_state_v1_2026';
+        const STORAGE_KEY_HISTORY = 'hr_english_game_history_v1_2026';
+        const STORAGE_KEY_COMPLETED = 'hr_english_completed_groups_v1_2026';
+        const STORAGE_KEY_REMAINING_STUDENTS = 'hr_english_remaining_students_v1_2026';
+        const STORAGE_KEY_TEAM_MEMBERS = 'hr_english_team_members_v1_2026';
+        const STORAGE_KEY_QUESTION_PLAN = 'hr_english_question_plan_v1_2026';
+
+        const saveState = () => {
+          const state = {
+            currentPage: currentPage.value,
+            drawnGroupId: drawnGroupId.value,
+            currentQIndex: currentQIndex.value,
+            totalScore: totalScore.value,
+            correctCount: correctCount.value,
+            timer: timer.value,
+            selectedAnswerLetter: selectedAnswerLetter.value,
+            showFeedback: showFeedback.value,
+            isLastAnswerCorrect: isLastAnswerCorrect.value,
+            feedbackCorrectAnswerText: feedbackCorrectAnswerText.value
+          };
+          localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(state));
+          localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(gameHistory.value));
+          localStorage.setItem(STORAGE_KEY_COMPLETED, JSON.stringify(completedGroupIds.value));
+          localStorage.setItem(STORAGE_KEY_REMAINING_STUDENTS, JSON.stringify(remainingStudents.value));
+          localStorage.setItem(STORAGE_KEY_QUESTION_PLAN, JSON.stringify({
+            data: groupQuestionData,
+            meta: groupMetaData
+          }));
+          const membersMap = {};
+          teamData.forEach(t => { membersMap[t.id] = t.members; });
+          localStorage.setItem(STORAGE_KEY_TEAM_MEMBERS, JSON.stringify(membersMap));
+        };
+
+        const loadSavedState = () => {
+          const savedPlan = localStorage.getItem(STORAGE_KEY_QUESTION_PLAN);
+          let planLoaded = false;
+          if (savedPlan) {
+            try {
+              const parsed = JSON.parse(savedPlan);
+              if (parsed && parsed.data && parsed.data[1]?.length === 8) {
+                [1, 2, 3, 4].forEach(id => {
+                  groupQuestionData[id] = parsed.data[id];
+                  groupMetaData[id] = parsed.meta?.[id] || null;
+                });
+                planLoaded = true;
+              }
+            } catch (e) {}
+          }
+          if (!planLoaded) {
+            buildGroupQuestionPlan();
+          }
+
+          const savedHistory = localStorage.getItem(STORAGE_KEY_HISTORY);
+          if (savedHistory) {
+            try {
+              const parsed = JSON.parse(savedHistory);
+              gameHistory.value = parsed.map((item, idx) => ({
+                ...item,
+                timestamp: item.timestamp || (Date.now() - idx * 60000)
+              }));
+            } catch(e) {}
+          }
+
+          const savedCompleted = localStorage.getItem(STORAGE_KEY_COMPLETED);
+          if (savedCompleted) {
+            try { completedGroupIds.value = JSON.parse(savedCompleted); } catch(e) {}
+          }
+
+          const savedRemaining = localStorage.getItem(STORAGE_KEY_REMAINING_STUDENTS);
+          if (savedRemaining) {
+            try {
+              const parsed = JSON.parse(savedRemaining);
+              if (Array.isArray(parsed)) remainingStudents.value = parsed;
+            } catch(e) {}
+          }
+
+          const savedMembers = localStorage.getItem(STORAGE_KEY_TEAM_MEMBERS);
+          if (savedMembers) {
+            try {
+              const parsed = JSON.parse(savedMembers);
+              teamData.forEach(t => {
+                if (Array.isArray(parsed[t.id])) t.members = parsed[t.id];
+              });
+            } catch(e) {}
+          }
+
+          const savedState = localStorage.getItem(STORAGE_KEY_STATE);
+          if (savedState) {
+            try {
+              const parsed = JSON.parse(savedState);
+              if (parsed.drawnGroupId) drawnGroupId.value = parsed.drawnGroupId;
+              if (parsed.totalScore !== undefined) totalScore.value = parsed.totalScore;
+              if (parsed.correctCount !== undefined) correctCount.value = parsed.correctCount;
+              if (parsed.currentQIndex !== undefined) currentQIndex.value = parsed.currentQIndex;
+              if (parsed.selectedAnswerLetter) selectedAnswerLetter.value = parsed.selectedAnswerLetter;
+              if (parsed.showFeedback !== undefined) showFeedback.value = parsed.showFeedback;
+              if (parsed.isLastAnswerCorrect !== undefined) isLastAnswerCorrect.value = parsed.isLastAnswerCorrect;
+              if (parsed.feedbackCorrectAnswerText) feedbackCorrectAnswerText.value = parsed.feedbackCorrectAnswerText;
+
+              if (parsed.currentPage && parsed.currentPage !== 'picker') {
+                currentPage.value = parsed.currentPage;
+              }
+
+              if (currentPage.value === 'quiz') {
+                if (!drawnGroupId.value || currentQuestions.value.length === 0) {
+                  currentPage.value = 'main';
+                  return;
+                }
+                if (!showFeedback.value) {
+                  setupQuestion(parsed.timer !== undefined ? parsed.timer : null);
+                } else {
+                  feedbackTimeout.value = setTimeout(() => proceedToNextQuestion(), 2000);
+                }
+              } else if (currentPage.value === 'result') {
+                if (!drawnGroupId.value || currentQuestions.value.length === 0) {
+                  currentPage.value = 'main';
+                  return;
+                }
+                animatedScore.value = totalScore.value;
+              }
+            } catch(e) {}
+          }
+        };
+
+        const goToMain = () => {
+          clearInterval(timerInterval);
+          clearTimeout(feedbackTimeout.value);
+          showFeedback.value = false;
+          currentPage.value = 'main';
+          saveState();
+        };
+
+        const promptClearHistory = () => { showConfirmDialog.value = true; };
+
+        const confirmRemoveHistory = () => {
+          clearInterval(timerInterval);
+          clearTimeout(feedbackTimeout.value);
+          localStorage.removeItem(STORAGE_KEY_STATE);
+          localStorage.removeItem(STORAGE_KEY_HISTORY);
+          localStorage.removeItem(STORAGE_KEY_COMPLETED);
+          localStorage.removeItem(STORAGE_KEY_REMAINING_STUDENTS);
+          localStorage.removeItem(STORAGE_KEY_TEAM_MEMBERS);
+          localStorage.removeItem(STORAGE_KEY_QUESTION_PLAN);
+
+          gameHistory.value = [];
+          completedGroupIds.value = [];
+          remainingStudents.value = [...allStudentNames];
+          teamData.forEach(t => { t.members = []; });
+          drawnGroupId.value = null;
+          totalScore.value = 0;
+          correctCount.value = 0;
+          currentQIndex.value = 0;
+          selectedAnswerLetter.value = '';
+          showFeedback.value = false;
+          feedbackCorrectAnswerText.value = '';
+
+          buildGroupQuestionPlan();
+          showConfirmDialog.value = false;
+          showHistory.value = false;
+          currentPage.value = 'main';
+        };
+
+        const openMemberSlotPicker = () => {
+          if (!drawnGroupId.value) return;
+          initAudio();
+          currentPage.value = 'picker';
+          slotsCompleted.value = false;
+          saveState();
+
+          const pollContainer = () => {
+            const container = document.getElementById('pickerContainer');
+            if (container) {
+              runRandomMultiPicker(container);
+            } else {
+              requestAnimationFrame(pollContainer);
+            }
+          };
+          requestAnimationFrame(pollContainer);
+        };
+
+        function runRandomMultiPicker(container) {
+          if (!container || !currentDrawnTeam.value) return;
+          container.innerHTML = '';
+
+          const members = currentDrawnTeam.value.members;
+          const totalItems = 25;
+          const winnerIdx = 20;
+          let activeAnimations = members.length;
+
+          members.forEach((member, mIdx) => {
+            const winDiv = document.createElement('div');
+            winDiv.className = 'picker-window';
+
+            const highlight = document.createElement('div');
+            highlight.className = 'picker-highlight';
+            winDiv.appendChild(highlight);
+
+            const track = document.createElement('div');
+            track.className = 'picker-track';
+            winDiv.appendChild(track);
+            container.appendChild(winDiv);
+
+            const itemWidth = highlight.offsetWidth || 230;
+
+            for (let i = 0; i < totalItems; i++) {
+              let text = allStudentNames[Math.floor(Math.random() * allStudentNames.length)];
+              if (i === winnerIdx) text = member;
+
+              const itemDiv = document.createElement('div');
+              itemDiv.className = 'picker-item';
+              itemDiv.style.width = itemWidth + 'px';
+              itemDiv.innerText = text;
+              track.appendChild(itemDiv);
+            }
+
+            const initialX = -(itemWidth / 2);
+            track.style.transform = `translateX(${initialX}px)`;
+            void track.offsetWidth;
+
+            const finalX = -(winnerIdx * itemWidth + itemWidth / 2);
+            const spinDuration = 2800 + (mIdx * 320);
+
+            track.style.transition = `transform ${spinDuration}ms cubic-bezier(0.1, 0.9, 0.2, 1)`;
+            track.style.transform = `translateX(${finalX}px)`;
+
+            let startTime = performance.now();
+            let currentItem = 0;
+
+            function checkTick(time) {
+              let elapsed = time - startTime;
+              let progress = Math.min(elapsed / spinDuration, 1);
+              let eased = 1 - Math.pow(1 - progress, 3);
+              let currentPosX = initialX + (finalX - initialX) * eased;
+
+              let activeIndex = Math.floor(Math.abs(currentPosX) / itemWidth);
+              if (activeIndex !== currentItem) {
+                playTick();
+                currentItem = activeIndex;
+              }
+
+              if (progress < 1) {
+                requestAnimationFrame(checkTick);
+              } else {
+                track.children[winnerIdx].classList.add('active');
+                activeAnimations--;
+                if (activeAnimations === 0) {
+                  slotsCompleted.value = true;
+                }
+              }
+            }
+            requestAnimationFrame(checkTick);
+          });
+        }
+
+        // Sequential group order (Group 1 -> Group 2 -> Group 3 -> Group 4) + Random students
+        const startNewGame = () => {
+          clearInterval(timerInterval);
+          clearTimeout(feedbackTimeout.value);
+          const avail = availableGroups.value;
+          if (avail.length === 0) {
+            showHistory.value = true;
+            return;
+          }
+          initAudio();
+
+          const nextGroup = avail[0];
+          drawnGroupId.value = nextGroup.id;
+
+          const pool = remainingStudents.value.length >= nextGroup.playerCount
+            ? remainingStudents.value
+            : allStudentNames;
+          const shuffled = shuffleArray(pool);
+          const picked = shuffled.slice(0, nextGroup.playerCount);
+          nextGroup.members = picked;
+          remainingStudents.value = remainingStudents.value.filter(s => !picked.includes(s));
+
+          openMemberSlotPicker();
+        };
+
+        const startQuiz = () => {
+          clearInterval(timerInterval);
+          clearTimeout(feedbackTimeout.value);
+          currentQIndex.value = 0;
+          totalScore.value = 0;
+          correctCount.value = 0;
+          currentPage.value = 'quiz';
+          showFeedback.value = false;
+          const initialTimer = currentQuestions.value[0]?.isReading ? 180 : null;
+          saveState();
+          setupQuestion(initialTimer);
+        };
+
+        const selectOption = (letter) => {
+          if (showFeedback.value) return;
+          selectedAnswerLetter.value = letter;
+          playTick();
+        };
+
+        const setupQuestion = (customTimer = null) => {
+          clearInterval(timerInterval);
+          selectedAnswerLetter.value = '';
+          showFeedback.value = false;
+
+          const q = currentQuestion.value;
+          if (!q) return;
+
+          if (customTimer !== null) {
+            timer.value = customTimer;
+          } else {
+            timer.value = q.isReading ? 180 : (q.timeLimit || 15);
+          }
+
+          if (timer.value <= 0) {
+            handleActionClick(true);
+            return;
+          }
+
+          timerInterval = setInterval(() => {
+            if (currentPage.value !== 'quiz' || !currentQuestion.value) {
+              clearInterval(timerInterval);
+              return;
+            }
+            if (timer.value > 0) {
+              timer.value--;
+              if (timer.value === 0) {
+                clearInterval(timerInterval);
+                if (!showFeedback.value) {
+                  handleActionClick(true);
+                }
+              }
+            }
+          }, 1000);
+        };
+
+        const handleActionClick = (forceTimeout = false) => {
+          if (currentPage.value !== 'quiz' || !currentQuestion.value) return;
+          const isForced = forceTimeout === true;
+          if (showFeedback.value) return;
+          if (!canSubmit.value && !isForced) return;
+
+          clearInterval(timerInterval);
+          const q = currentQuestion.value;
+          const isCorrect = selectedAnswerLetter.value === q.correctLetter;
+
+          const correctOpt = q.options.find(o => o.letter === q.correctLetter);
+          feedbackCorrectAnswerText.value = `${q.correctLetter}${correctOpt && correctOpt.text ? '. ' + correctOpt.text : ''}`;
+
+          isLastAnswerCorrect.value = isCorrect;
+          if (isCorrect) {
+            correctCount.value++;
+            totalScore.value = calculateScore(correctCount.value);
+          }
+
+          showFeedback.value = true;
+          saveState();
+
+          clearTimeout(feedbackTimeout.value);
+          feedbackTimeout.value = setTimeout(() => {
+            proceedToNextQuestion();
+          }, 2000);
+        };
+
+        const animateFinalScore = () => {
+          animatedScore.value = 0;
+          const target = totalScore.value;
+          if (target === 0) return;
+          const step = Math.max(1, target / 20);
+          const counterTimer = setInterval(() => {
+            if (animatedScore.value + step < target) {
+              animatedScore.value = Math.round((animatedScore.value + step) * 10) / 10;
+            } else {
+              animatedScore.value = target;
+              clearInterval(counterTimer);
+            }
+          }, 35);
+        };
+
+        onMounted(() => {
+          loadSavedState();
+          setTimeout(() => {
+            const loader = document.getElementById('appLoadingScreen');
+            if (loader) {
+              loader.style.opacity = '0';
+              loader.style.pointerEvents = 'none';
+              setTimeout(() => { loader.style.display = 'none'; }, 520);
+            }
+          }, 350);
+        });
+
+        return {
+          currentPage, showRules, showHistory, showConfirmDialog,
+          slotsCompleted, gameHistory, historySortBy, sortedHistory, canSubmit,
+          teamData, availableGroups, completedGroupIds, drawnGroupId, currentDrawnTeam,
+          remainingStudentsCount, getGroupScore, readingPassage,
+          currentQuestions, currentQuestion, currentQIndex, currentGroupMeta,
+          isCurrentGroupReading, formattedTimer, isLowTime,
+          timer, selectedAnswerLetter, showFeedback, isLastAnswerCorrect, feedbackCorrectAnswerText,
+          totalScore, animatedScore, correctCount,
+          startNewGame, goToMain, openMemberSlotPicker, selectOption,
+          startQuiz, handleActionClick, promptClearHistory, confirmRemoveHistory, saveState,
+          getMembersListForHistory
+        };
+      }
+    });
+
+    app.directive('animate-size', animateSizeDirective);
+    app.mount('#app');
+  </script>
+</body>
+</html>
